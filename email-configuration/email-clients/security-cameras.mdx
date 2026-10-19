@@ -1,0 +1,122 @@
+---
+title: "Configure Security Cameras and NVRs to Send Email via mySMTP"
+sidebarTitle: "Security Cameras"
+description: "Set up Hikvision, Dahua, and generic IP cameras or NVRs to send alarm and motion emails through mySMTP. Use port 587 and STARTTLS."
+---
+
+Many cameras have limited TLS support, so test different ports and security options if needed.
+
+## SMTP settings
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | Your dedicated hostname from the setup email, e.g. `relayxx.mysmtp.com` |
+| Port | **587** (try 2525 if 587 is blocked) |
+| Security | **STARTTLS / TLS** |
+| Authentication | SMTP username and password from mySMTP |
+
+<Warning>
+  Many older cameras and NVRs only support legacy SSL or TLS 1.0/1.1, or no TLS at all. mySMTP requires TLS 1.2 or 1.3. If STARTTLS on 587 does not work, try port 2525 or disable encryption and use port 25 if your device requires it.
+</Warning>
+
+<Note>
+  Server (shared IP, DK only) | `mail.mysmtp.com` / Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configuring your camera or NVR
+
+<Tabs>
+  <Tab title="Hikvision">
+    <Steps>
+      <Step title="Open the email settings">
+        Log in to the camera or NVR web interface. Go to **Configuration** > **Network** > **Advanced Settings** > **Email**.
+      </Step>
+      <Step title="Enable SMTP and TLS">
+        1. Enter your relay hostname in **SMTP server**.
+        2. Set **SMTP port** to `587`.
+        3. Check **Enable SSL/TLS** and select **STARTTLS** if available; otherwise try **TLS**.
+        4. Enable **SMTP Authentication**.
+        5. Enter your mySMTP **username** and **password**.
+      </Step>
+      <Step title="Set sender and receivers">
+        1. **Sender** address: the address the alerts should appear from (must be a verified domain).
+        2. **Receivers** (Receiver 1-3): the email addresses that should receive alerts.
+      </Step>
+      <Step title="Configure the event linkage">
+        1. Go to the event settings for the relevant camera or channel.
+        2. Under **Linkage Method**, check **Send Email**.
+        3. Save the settings and trigger a test event (e.g. motion) to verify delivery.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Dahua">
+    <Steps>
+      <Step title="Open the email settings">
+        Log in to the device web interface. Go to **Setting** > **Network** > **Email**.
+      </Step>
+      <Step title="Enter the SMTP details">
+        1. **SMTP Server:** your relay hostname.
+        2. **Port:** `587`.
+        3. **Encrypt type:** select **TLS**.
+        4. **Username:** your mySMTP SMTP username.
+        5. **Password:** your mySMTP SMTP password.
+        6. **Sender email:** the address alerts should appear from (must be a verified domain).
+        7. **Receiver 1-3:** the addresses that should receive alerts.
+      </Step>
+      <Step title="Send a test email">
+        Click **Test** to send a test message. If it fails, try port **2525** or adjust the encryption type.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Generic (Axis, Reolink, etc.)">
+    <Steps>
+      <Step title="Find the SMTP or email section">
+        Open the camera or NVR web interface and look for **SMTP**, **Email**, or **Network** > **Email** settings. Exact menu names vary by brand and firmware.
+      </Step>
+      <Step title="Enter the SMTP server">
+        1. **Server / SMTP server:** your relay hostname (e.g. `relayxx.mysmtp.com`).
+        2. **Port:** `587`.
+        3. **Security:** **STARTTLS** or **TLS**.
+        4. **Authentication:** **Plain / LOGIN**.
+        5. **Username:** your mySMTP SMTP username.
+        6. **Password:** your mySMTP SMTP password.
+      </Step>
+      <Step title="Add sender and recipients">
+        Set the sender address (must use a verified domain) and one or more recipient addresses for alerts.
+      </Step>
+      <Step title="Send a test message">
+        Use the test email button if available. If there is no test button, trigger an alarm event (motion or tamper) and check the recipient inbox.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Snapshot attachments
+
+<Warning>
+  Snapshot images and video clips can make emails very large. Large attachments may be rejected by the receiving server or slow down delivery. Reduce the image resolution or disable attachments if alerts are not arriving.
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection fails on port 587">
+    Some cameras block port 587. Try port **2525** instead, or disable encryption and use port 25 if the device does not support TLS.
+  </Accordion>
+
+  <Accordion title="TLS errors">
+    If the camera only supports legacy SSL or TLS 1.0/1.1, mySMTP does not support that mode. Try disabling encryption and using port 2525, or upgrade the device firmware if a newer version supports STARTTLS.
+  </Accordion>
+
+  <Accordion title="Emails arrive but snapshots are missing">
+    The attachment may be too large. Reduce the snapshot resolution or disable the snapshot option in the event linkage settings.
+  </Accordion>
+
+  <Accordion title="Sender address rejected">
+    Make sure the sender email uses a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

@@ -1,0 +1,63 @@
+---
+title: "Using mySMTP with Shopify: What You Can and Cannot Do"
+sidebarTitle: "Shopify"
+description: "Shopify does not allow custom SMTP servers for store notifications, but you can still use mySMTP with backend integrations and marketing apps."
+---
+
+Store notifications such as order confirmations, shipping updates, and password resets always go through Shopify. This page explains where mySMTP fits in your email stack.
+
+## Why Shopify does not support custom SMTP
+
+Shopify manages all store notification emails internally. You cannot change the outgoing SMTP server, port, or credentials for these emails in the Shopify admin. Instead, Shopify sends notifications from its own infrastructure.
+
+## What you can do instead
+
+### Authenticate your domain with Shopify
+
+If you want store notifications to appear as if they come from your domain, add Shopify's DNS records to authenticate it. Shopify provides the exact DNS records (SPF, DKIM, and DMARC guidance) in your admin under **Settings → Notifications**.
+
+<Steps>
+  <Step title="Open Notifications settings">
+    In your Shopify admin, go to **Settings → Notifications**.
+  </Step>
+  <Step title="Verify your sender email">
+    Under **Sender email**, confirm or update the From address to an email on your domain (for example, `noreply@yourdomain.com`).
+  </Step>
+  <Step title="Add Shopify DNS records">
+    Shopify shows the DNS records you must add with your domain registrar. Add them exactly as shown, then return to Shopify and click **Authenticate**.
+  </Step>
+</Steps>
+
+## Where mySMTP still fits
+
+Even though Shopify controls store notifications, you can use mySMTP in the following scenarios:
+
+- **Custom backend or headless storefront:** if you manage a separate app or server that sends emails, configure it to relay through mySMTP using your credentials.
+- **Email marketing integrations:** some third-party marketing tools and apps support custom SMTP. Enter mySMTP settings there for campaigns, abandoned-cart flows, or newsletters.
+- **Separate applications:** anything outside Shopify's native notification system that supports SMTP can use mySMTP.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="I cannot find SMTP settings in Shopify">
+    Shopify does not expose SMTP server settings for store notifications. This is expected. If you need more control over transactional email, consider a custom backend integration or a marketing app that supports custom SMTP.
+  </Accordion>
+
+  <Accordion title="Shopify emails land in spam">
+    Domain authentication is the best fix. Add all Shopify DNS records and wait for propagation. Also check that your domain has clean SPF, DKIM, and DMARC records.
+
+    <Tip>
+      Use the mySMTP Deliverability Toolbox at [toolbox.smtp.ai](https://toolbox.smtp.ai/) to run checks on your domain setup.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Marketing app asks for SMTP credentials">
+    If a Shopify app asks for SMTP credentials, use the settings in your mySMTP setup email. The host is your real mySMTP hostname, port `587`, encryption `TLS`, and your mySMTP username and password.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials)
+- [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)

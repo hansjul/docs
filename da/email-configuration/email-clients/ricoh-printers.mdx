@@ -1,0 +1,60 @@
+---
+title: "Ricoh Printer SMTP-opsætning via Web Image Monitor"
+sidebarTitle: "Ricoh"
+description: "Konfigurer mySMTP på Ricoh-printere ved hjælp af Web Image Monitor. Indtast SMTP-serveren, port 587, STARTTLS, autentificering og administrator-email-adressen."
+---
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, DK kun) | `mail.mysmtp.com` |
+| Port | **587** |
+| Forbindelseskryptering | **STARTTLS** |
+| SMTP-autentificering | Aktiveret |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Kodeord | Dit mySMTP-kodeord |
+
+<Note>
+  Brug det præcise relay-hostnavn fra din mySMTP opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Note>
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark. Alle andre kunder bruger et dedikeret hostnavn.
+</Note>
+
+## Konfigurer printeren
+
+<Steps>
+  <Step title="Åbn Web Image Monitor">
+    Åbn en webbrowser og indtast printerens IP-adresse i adresselinjen. Log ind med administrator-credentials.
+  </Step>
+  <Step title="Naviger til SMTP-indstillinger">
+    Gå til **Device Management** > **Configuration** > **Network** > **SMTP**.
+  </Step>
+  <Step title="Indtast serveradressen">
+    I **SMTP Server** skal du indtaste dit mySMTP relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+  </Step>
+  <Step title="Sæt port og kryptering">
+    Sæt **SMTP Port** til **587** og sæt **SSL/TLS** eller **Connection Security** til **STARTTLS**.
+  </Step>
+  <Step title="Aktivér autentificering">
+    Slå **SMTP Authentication** til, og indtast dit mySMTP **SMTP User Name** og **SMTP Password**.
+  </Step>
+  <Step title="Sæt administrator-email">
+    Indtast **Administrator E-mail Address** (afsenderadressen, f.eks. `printer@yourdomain.com`). Denne skal matche et domæne, der er autentificeret for din mySMTP-konto.
+  </Step>
+  <Step title="Gem og test">
+    Klik på **OK** eller **Apply** for at gemme. Send en test scan-to-email eller testnotifikation for at verificere levering.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+- **Connection timed out:** tjek at dit netværk tillader udgående trafik på port 587. Hvis din firewall blokerer den, prøv port **2525** eller **25**.
+- **Authentication failed:** dobbelttjek dit mySMTP brugernavn og kodeord. Disse er case-sensitive.
+- **Relay access denied:** sørg for at **Administrator E-mail Address** bruger et domæne på din mySMTP-konto. Se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+- **STARTTLS ikke tilgængelig:** hvis din Ricoh-model ikke viser STARTTLS, skal du vælge **TLS** eller den højest tilgængelige krypteringsindstilling.
+
+For generel scan-to-email vejledning, se [Scan to Email](/da/email-configuration/email-clients/scan-to-email). For fejldetaljer, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

@@ -1,0 +1,57 @@
+---
+title: "CAN-SPAM & Email Compliance Guide"
+sidebarTitle: "CAN-SPAM"
+description: "CAN-SPAM Act requirements and best practices for legal email sending, covering opt-out rules, sender identification, and international regulations."
+---
+
+## What is the CAN-SPAM Act?
+
+The CAN-SPAM Act (2003) regulates commercial email in the United States. It applies to any email with a marketing or promotional component, not just bulk sends.
+
+## Key requirements
+
+| Requirement | Rule |
+| --- | --- |
+| Accurate headers | The From, To, and Reply-To fields must identify the real sender |
+| Honest subject lines | Subject lines must reflect the actual message content |
+| Ad disclosure | Clearly label the message as an advertisement when required |
+| Physical address | Include a valid postal address in every message |
+| Opt-out mechanism | Provide a clear unsubscribe link; honor requests within 10 business days |
+| Monitor third parties | You remain responsible for compliance even when using an external sender |
+
+## Best practices beyond the legal minimum
+
+- Use confirmed opt-in (double opt-in) when collecting email addresses
+- Keep your list clean by removing hard bounces and long-term inactive contacts
+- Avoid spammy formatting such as excessive caps, too many links, or misleading offers
+- Maintain a spam complaint rate under 0.3% to protect inbox placement
+
+## One-click unsubscribe
+
+For bulk marketing email, include a one-click unsubscribe link that complies with RFC 8058. This is now expected by major inbox providers and improves both compliance and deliverability.
+
+## Other countries and regions
+
+| Region | Law | Key feature |
+| --- | --- | --- |
+| Canada | CASL | Requires express opt-in (consent) before sending |
+| EU | GDPR + ePrivacy | Strict rules around data collection and consent |
+| Australia | Spam Act | Requires consent and a working opt-out option |
+
+<Warning>
+  If you send to recipients in the EU, CAN-SPAM alone is not enough. You must also comply with GDPR and the ePrivacy Directive, including lawful basis for processing and clear consent records.
+</Warning>
+
+## Quick compliance checklist
+
+- [ ] Accurate sender info in every message
+- [ ] Honest subject lines
+- [ ] Clear ad disclosure where applicable
+- [ ] Physical postal address included
+- [ ] Easy unsubscribe link present
+- [ ] Opt-out requests processed within 10 business days
+- [ ] Third-party senders monitored and vetted
+
+<Tip>
+  Before importing a new list, run it through the [mySMTP Email List Analyzer](https://toolbox.smtp.ai/) to catch syntax errors, duplicates, and role addresses. It runs in your browser and does not upload your data.
+</Tip>

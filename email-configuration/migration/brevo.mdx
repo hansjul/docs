@@ -1,0 +1,74 @@
+---
+title: "Migrate from Brevo to mySMTP"
+sidebarTitle: "Brevo"
+description: "Switch from Brevo SMTP to mySMTP. Update hostname, credentials, port, SPF, and DKIM. Export your suppression list and warm up your new IP for a clean cutover."
+---
+
+Moving from Brevo to mySMTP means updating your SMTP hostname, authentication method, and domain DNS records. This guide shows exactly what to change so nothing breaks during the transition.
+
+## What changes
+
+| Setting | Brevo (old) | mySMTP (new) |
+| --- | --- | --- |
+| SMTP server | `smtp-relay.brevo.com` | `relayxx.mysmtp.com` (from your setup email) |
+| Shared IP (DK only) | `smtp-relay.brevo.com` | `mail.mysmtp.com` |
+| Port | `587` (recommended) or `465` | `587` (STARTTLS, recommended) or `465` |
+| Username | Your Brevo SMTP login / API key name | Your mySMTP SMTP username |
+| Password | Your Brevo SMTP key / API key | Your mySMTP SMTP password |
+| SPF record | `v=spf1 include:spf.brevo.com ~all` (legacy: `include:spf.sendinblue.com`) | `v=spf1 include:spf1.mysmtp.com ~all` |
+| SPF during transition |  | `v=spf1 include:spf.brevo.com include:spf1.mysmtp.com ~all` |
+
+<Note>
+  Your real mySMTP hostname is in your setup email. Do not use `smtp.mysmtp.com`.
+</Note>
+
+## Before you cut over
+
+1. **Export your suppression list** from Brevo (bounces, spam complaints, unsubscribes). Do not send to those addresses from mySMTP. mySMTP does not import suppression lists automatically.
+2. **Verify DNS** for mySMTP. Add `include:spf1.mysmtp.com` to your existing SPF record (for example `v=spf1 include:spf.brevo.com include:spf1.mysmtp.com ~all`) and add mySMTP DKIM TXT/CNAME records. Keep Brevo's records in place until the transition is stable.
+3. **Test connectivity** with [test.smtp.ai](https://test.smtp.ai) using your mySMTP credentials.
+
+## Cutover steps
+
+<Steps>
+  <Step title="Update application SMTP settings">
+    Replace Brevo's `smtp-relay.brevo.com` with your mySMTP hostname, enter your mySMTP username and password, and use port `587` with STARTTLS.
+  </Step>
+  <Step title="Send test messages">
+    Send a few test emails to addresses you control. Verify headers, authentication passes, and messages land in the inbox.
+  </Step>
+  <Step title="Monitor delivery metrics">
+    Watch bounces, complaints, and inbox placement for 24 to 72 hours. Use the [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+  </Step>
+  <Step title="Warm up your dedicated IP">
+    If you are on a dedicated IP plan (default), ramp volume gradually. See [Warm up plans](/deliverability/warm-up-plans) and use the [warm-up generator](https://toolbox.smtp.ai/#warmup-generator).
+  </Step>
+  <Step title="Remove Brevo DNS records">
+    Once sending is stable and your reputation metrics are good, remove `include:spf.brevo.com` (and legacy `include:spf.sendinblue.com`) so your SPF record reads `v=spf1 include:spf1.mysmtp.com ~all`, and delete Brevo DKIM CNAME/TXT records.
+  </Step>
+</Steps>
+
+<AccordionGroup>
+  <Accordion title="I used Brevo's HTTP API, not SMTP. What do I do?">
+    mySMTP's HTTP API is coming in Q4 2026. For now, switch to SMTP by updating your integration to use the settings in the table above. See [Code examples](/email-configuration/code-examples) for libraries in PHP, Python, Node.js, .NET, and Java.
+  </Accordion>
+
+  <Accordion title="Can I keep Brevo as a backup during the transition?">
+    Yes. Keep Brevo DNS records and credentials active while you warm up mySMTP. Only remove them after you confirm stable delivery.
+  </Accordion>
+
+  <Accordion title="Do I need to change my from address?">
+    No. You can keep the same from addresses and domains. Just make sure the domain's SPF and DKIM include mySMTP.
+  </Accordion>
+
+  <Accordion title="What if I see a spike in bounces after switching?">
+    If you did not export and exclude your Brevo suppression list, you may be mailing known bad addresses. Pause sending, clean your list, and resume with a smaller volume.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [Migrate to mySMTP overview](/email-configuration/migration)
+- [Warm up plans](/deliverability/warm-up-plans)
+- [Code examples](/email-configuration/code-examples)
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)

@@ -1,0 +1,63 @@
+---
+title: "Opsæt mySMTP i Windows Mail og Kalender"
+sidebarTitle: "Windows Mail"
+description: "Konfigurer mySMTP i den udfasede Windows Mail og Kalender-app. Brug avancerede mailbox-indstillinger til at angive den udgående SMTP-server, port 587 og godkendelse."
+---
+
+Microsoft udfasede Mail- og Kalender-appen til Windows ved udgangen af 2024.
+
+<Warning>
+  Windows Mail og Kalender er udfaset. Microsoft anbefaler at skifte til [Nyt Outlook til Windows](/da/email-configuration/email-clients/new-outlook-windows).
+</Warning>
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server (dedikeret IP) | f.eks. `relayxx.mysmtp.com` (dit hostnavn står i opsætningsmailen) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** |
+| Kryptering | **TLS** (mærket "Kræv SSL" i Windows Mail) |
+| Udgående server kræver godkendelse | Til |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Delt IP-abonnementer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Konfigurer Windows Mail
+
+<Steps>
+  <Step title="Åbn kontoinstillinger">
+    Åbn Mail-appen, klik på **Indstillinger** (tandhjulsikon), og klik derefter på **Administrer konti**.
+  </Step>
+  <Step title="Vælg din konto">
+    Klik på den emailkonto, du vil konfigurere.
+  </Step>
+  <Step title="Åbn synkroniseringsindstillinger">
+    Klik på **Skift mailbox-synkroniseringsindstillinger**.
+  </Step>
+  <Step title="Åbn avancerede indstillinger">
+    Rul ned og klik på **Avancerede mailbox-indstillinger**.
+  </Step>
+  <Step title="Indtast udgående SMTP-oplysninger">
+    Udfyld felterne:
+
+    - **Udgående (SMTP) emailserver**: dit relay-hostnavn efterfulgt af porten, f.eks. `relayxx.mysmtp.com:587`
+    - **Udgående server kræver godkendelse**: marker afkrydsningsfeltet
+    - **Brug samme brugernavn og adgangskode til at sende email**: marker afkrydsningsfeltet, eller indtast dit mySMTP SMTP-brugernavn og -adgangskode
+    - **Kræv SSL til udgående email**: marker afkrydsningsfeltet
+  </Step>
+  <Step title="Gem og test">
+    Klik på **Færdig**, og derefter **Gem**. Send en testmail for at bekræfte levering.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+- **Kan ikke sende mail:** Bekræft, at den udgående server matcher hostnavnet i din opsætningsmail.
+- **Forbindelsen fejler:** Kontroller, at porten er **587**, og at **Kræv SSL** er markeret. Hvis dit netværk blokerer 587, prøv **2525**.
+- **Godkendelsesfejl:** Genindtast dit mySMTP-brugernavn og -adgangskode, og bekræft at **Udgående server kræver godkendelse** er markeret.
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

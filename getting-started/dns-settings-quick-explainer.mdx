@@ -1,0 +1,70 @@
+---
+title: "DNS Settings Quick Explainer"
+sidebarTitle: "DNS Explainer"
+description: "Add SPF, DKIM, and DMARC DNS records for your domain to authorize mySMTP sending and improve email deliverability."
+---
+
+## Required DNS records
+
+| Record type | Name / Host | Value |
+| --- | --- | --- |
+| TXT | @ or your apex domain | `v=spf1 include:spf1.mysmtp.com ~all` |
+| TXT | `mysmtp._domainkey` | The 2048-bit DKIM key from your mySMTP setup |
+| TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com` |
+
+<Note>
+  Use the exact DKIM record value from your mySMTP setup email. Do not use a placeholder key in production.
+</Note>
+
+## How to add the records
+
+<Steps>
+  <Step title="Log in to your DNS provider">
+    Go to the control panel for your domain registrar or DNS host (for example, GoDaddy, Namecheap, or One.com).
+  </Step>
+  <Step title="Open the DNS records section">
+    Look for **DNS Settings**, **Manage DNS**, or **DNS Records**.
+  </Step>
+  <Step title="Add or update the SPF record">
+    If your domain already has a TXT record for SPF, add `include:spf1.mysmtp.com` to it. There should only be one SPF record per domain. Do not publish a second SPF record.
+
+    Example single record:
+
+    ```text
+    v=spf1 include:spf1.mysmtp.com ~all
+    ```
+
+    Example combined with an existing provider:
+
+    ```text
+    v=spf1 include:spf1.mysmtp.com include:_spf.google.com ~all
+    ```
+  </Step>
+  <Step title="Add the DKIM record">
+    Create a new TXT record with the name `mysmtp._domainkey` and paste the DKIM key value from your mySMTP setup.
+  </Step>
+  <Step title="Add the DMARC record">
+    Create a new TXT record with the name `_dmarc`. Start with `p=none` so you can monitor results without impacting delivery. You can move to `p=quarantine` and later `p=reject` once you are confident your setup is correct.
+  </Step>
+  <Step title="Wait for DNS propagation">
+    DNS changes usually take effect within minutes, but full propagation can take up to 24 hours.
+  </Step>
+</Steps>
+
+## Verify your setup
+
+After propagation, use [test.smtp.ai](https://test.smtp.ai) to check that SPF, DKIM, and DMARC are passing. You can also review the **DNS verifications** section in the mySMTP dashboard after the records have had time to update.
+
+## DMARC rollout guidelines
+
+For 2026 sender requirements from Gmail, Yahoo, and Outlook, you need SPF and DKIM alignment and a valid DMARC record. Start with `p=none`, review aggregate reports, then move to `p=quarantine` and finally `p=reject` once you confirm legitimate mail is authenticating correctly.
+
+## Related articles
+
+- [SPF, DKIM, DMARC and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained)
+- [Improve email deliverability](/deliverability/improve-email-deliverability)
+- [Dedicated IP server dashboard](/getting-started/dedicated-ip-server-dashboard)
+
+<Tip>
+  Want a single pass/warn/fail summary of your SPF, DKIM, and DMARC setup? Use the free [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox. It checks alignment with your From domain and runs entirely in your browser.
+</Tip>

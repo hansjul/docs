@@ -1,0 +1,61 @@
+---
+title: "Email Setup Guides: Clients, Apps, and SMTP Configuration"
+sidebarTitle: "Overview"
+description: "Browse mySMTP setup guides for email clients, web applications, Gmail, SMTP limits, and sending rates. Find the configuration you need."
+---
+
+Each article includes the correct server settings, ports, and authentication steps for shared IP and dedicated IP accounts.
+
+## Quick reference
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated IP) | Your relay hostname from the setup email (e.g. `relayxx.mysmtp.com`) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** (primary), 2525 or 25 |
+| Encryption | **STARTTLS** (or TLS) |
+| Authentication | Normal password with your SMTP username |
+
+<Note>
+  Use the server hostname from your mySMTP setup email. Dedicated IP customers receive a specific relay hostname such as `relayxx.mysmtp.com`. Shared IP plans use `mail.mysmtp.com` and are only available in Denmark.
+</Note>
+
+## Setup guides
+
+<CardGroup cols={2}>
+  <Card title="Email Clients" icon="envelope" href="/email-configuration/email-clients">
+    Outlook, Mac Mail, Thunderbird, Exchange, and Android Mail
+  </Card>
+
+  <Card title="Web Applications" icon="globe" href="/email-configuration/web-applications">
+    Instantly, MailWizz, Mumara, Interspire, and more
+  </Card>
+
+  <Card title="Code Examples" icon="code" href="/email-configuration/code-examples">
+    PHP, Python, Node.js, .NET, Java, and command-line tests
+  </Card>
+
+  <Card title="CMS & Frameworks" icon="layer-group" href="/email-configuration/platforms">
+    WordPress, WooCommerce, Magento, Odoo, Laravel, Django, and more
+  </Card>
+
+  <Card title="Migration Guides" icon="right-left" href="/email-configuration/migration">
+    Switch from SendGrid, Mailgun, Amazon SES, Brevo, or Postmark
+  </Card>
+
+  <Card title="Gmail Setup" icon="google" href="/email-configuration/connect-gmail">
+    Send mail as through mySMTP
+  </Card>
+
+  <Card title="SMTP Limits" icon="gauge" href="/email-configuration/smtp-limits-and-sending-rates">
+    Sending rates, rate limits, and warm-up plans
+  </Card>
+
+  <Card title="Transactional vs Marketing" icon="envelope" href="/email-configuration/transactional-vs-marketing-emails">
+    When to use each type and how to optimize delivery
+  </Card>
+
+  <Card title="SMTP Status Codes" icon="code" href="/email-configuration/smtp-status-codes">
+    Understand 2xx, 4xx, and 5xx response codes
+  </Card>
+</CardGroup>

@@ -1,0 +1,87 @@
+---
+title: "Opsæt Android Mail og Gmail-app til afsendelse via mySMTP"
+sidebarTitle: "Android Mail"
+description: "Konfigurer mySMTP udgående serverindstillinger på Android Mail og Gmail-appen. Brug port 587, STARTTLS og dine mySMTP-legitimationsoplysninger."
+---
+
+Brug den indbyggede Mail-app eller Gmail-appen til at sende mail. Indstillingerne for indgående mail forbliver uændrede, hvis du kun skal ændre den udgående server.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** |
+| Sikkerhedstype | **STARTTLS** eller **TLS** |
+| Kræv login | Aktiveret |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Delt IP-abonnementer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+<Warning>
+  Brug ikke port 465. mySMTP kræver **STARTTLS på port 587**.
+</Warning>
+
+## Android Mail-app
+
+<Steps>
+  <Step title="Åbn kontoinstillinger">
+    Åbn appen **Mail**, tryk på menuen, og gå til **Indstillinger**. Vælg den konto, du vil konfigurere.
+  </Step>
+  <Step title="Rediger den udgående server">
+    Rul ned til **Indstillinger for udgående server**, og tryk på den.
+  </Step>
+  <Step title="Indtast mySMTP-oplysninger">
+    Udfyld felterne med værdierne fra tabellen ovenfor. For SMTP-serveren skal du indtaste relay-hostnavnet fra din mySMTP-opsætningsmail (for eksempel `relayxx.mysmtp.com`).
+  </Step>
+  <Step title="Gem og test">
+    Tryk på **Færdig** eller **Gem**. Appen kan køre en hurtig forbindelsestest. Send en testmail for at bekræfte levering.
+  </Step>
+</Steps>
+
+## Gmail-app
+
+<Steps>
+  <Step title="Åbn kontoinstillinger">
+    Åbn appen **Gmail**, tryk på dit profilbillede, og vælg **Administrer konti på denne enhed**. Vælg den konto, du vil redigere.
+  </Step>
+  <Step title="Ændr udgående indstillinger">
+    Tryk på **Kontoindstillinger**, og rul derefter ned til **Udgående indstillinger**.
+  </Step>
+  <Step title="Indtast mySMTP-oplysninger">
+    Opdater felterne med værdierne fra tabellen ovenfor, og tryk derefter på **Gem**.
+  </Step>
+  <Step title="Send en testbesked">
+    Skriv en mail og send den. Tjek modtagerens mailbox for at bekræfte, at den er ankommet.
+  </Step>
+</Steps>
+
+<Tip>
+  Generer en stærk SMTP-adgangskode sikkert med den gratis mySMTP [Password Generator](https://toolbox.smtp.ai/).
+</Tip>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Forbindelsestesten fejler">
+    Sørg for, at du har indtastet det korrekte relay-hostnavn, brugernavn og adgangskode fra din mySMTP-opsætningsmail. Bekræft, at dit netværk tillader udgående trafik på port 587.
+  </Accordion>
+
+  <Accordion title="Beskeder bliver i udbakken">
+    Genstart Mail- eller Gmail-appen. Hvis problemet fortsætter, skal du fjerne kontoen og tilføje den igen med indstillingerne ovenfor.
+  </Accordion>
+
+  <Accordion title="Emails ankommer, men havner i spam">
+    Kontroller, at dit afsenderdomæne har publiceret SPF-, DKIM- og DMARC-poster. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [Oversigt over emailklienter](/da/email-configuration/email-clients)
+- [SMTP-grænser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)

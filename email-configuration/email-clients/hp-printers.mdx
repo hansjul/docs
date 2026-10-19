@@ -1,0 +1,80 @@
+---
+title: "Configure HP Printers for Scan to Email with mySMTP"
+sidebarTitle: "HP Printers"
+description: "Set up Scan to Email on HP LaserJet, OfficeJet, and PageWide printers via the Embedded Web Server. Enter mySMTP relay, port 587, and SMTP credentials."
+---
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated) | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Encryption | STARTTLS |
+| Authentication | SMTP username and password from mySMTP |
+| From address | An address on your authenticated domain |
+
+<Note>
+  Use your exact dedicated relay hostname. Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Set up Scan to Email on HP LaserJet / OfficeJet / PageWide
+
+<Steps>
+  <Step title="Open the printer Embedded Web Server">
+    Print a network configuration page from the printer control panel to find its IP address. Enter the IP in a browser on the same network (for example, `http://192.168.1.50`). Log in with the printer admin password if prompted.
+  </Step>
+  <Step title="Navigate to Scan to Email settings">
+    Go to **Scan** > **Scan to Email** > **Outgoing Email Profiles** (or **Email Setup** on some models). The exact path varies by firmware.
+  </Step>
+  <Step title="Add or edit an outgoing email profile">
+    Click **Add** or select the default profile. Enter a profile name (for example, `mySMTP`).
+  </Step>
+  <Step title="Enter the SMTP server details">
+    Enter your mySMTP relay hostname in the **SMTP Server** field. Set the port to **587**.
+  </Step>
+  <Step title="Enable encryption">
+    If the printer offers a **Use TLS/SSL** or **Require TLS** checkbox, enable it. On some models this is labeled **Enable SMTP over TLS**.
+  </Step>
+  <Step title="Enter authentication">
+    Enable **SMTP Authentication** (or **Use authentication**). Enter your mySMTP username and password.
+  </Step>
+  <Step title="Set the sender address">
+    In the **From** or **Default From Address** field, enter an email address on a domain authenticated for your mySMTP account.
+  </Step>
+  <Step title="Save and test">
+    Save the profile and send a test scan to your own email address. Check your inbox and spam folder.
+  </Step>
+</Steps>
+
+## HP Smart app note
+
+The HP Smart mobile and desktop app lets you scan and send from your computer or phone, but it uses HP’s cloud relay by default. If you want the printer itself to send directly through mySMTP, configure the profile in the EWS as described above. You can still use HP Smart to scan to a file and then send the file from your email client.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="TLS connection fails on port 587">
+    Some older HP firmware does not support STARTTLS. Switch to port **2525** and disable TLS. Check HP’s support site for a firmware update.
+  </Accordion>
+
+  <Accordion title="Authentication failed">
+    Re-enter your mySMTP username and password. Make sure the printer is not adding spaces after the password.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Confirm the **From** address uses a domain authenticated on your mySMTP account.
+  </Accordion>
+
+  <Accordion title="Scans are rejected for size">
+    Large scans may exceed the attachment limit. Reduce the resolution or use color/grayscale settings that produce smaller files. See [Email Attachments Size](/troubleshooting/email-attachments-size).
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [Scan to Email generic guide](/email-configuration/email-clients/scan-to-email)
+- [Canon Printers](/email-configuration/email-clients/canon-printers)
+- [Email Attachments Size](/troubleshooting/email-attachments-size)
+- [Whitelisting and Security Best Practices](/getting-started/whitelisting-and-security-best-practices)

@@ -1,0 +1,73 @@
+---
+title: "Forbind Mumara til mySMTP til sikker kampagnelevering"
+sidebarTitle: "Mumara"
+description: "Konfigurer Mumara til at sende e-mailkampagner gennem mySMTP ved hjælp af port 587 og TLS-kryptering. Tilføj dine SMTP-legitimationsoplysninger, og test forbindelsen."
+---
+
+Du skal bruge dine mySMTP SMTP-legitimationsoplysninger og adgang til Mumara-administratoren.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Server Type | SMTP |
+| Port | `587` |
+| Sikkerhed | `STARTTLS` (TLS) |
+| Brugernavn | Dit fulde mySMTP-brugernavn |
+| Adgangskode | Dit mySMTP-adgangskode |
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Konfigurer SMTP-serveren
+
+<Steps>
+  <Step title="Åbn SMTP Management">
+    Log ind på dit Mumara-adminpanel. Gå til **Settings → SMTP Management → SMTP Servers**.
+  </Step>
+  <Step title="Tilføj eller rediger serveren">
+    For at tilføje en ny server skal du klikke på **Add New Server**. For at opdatere en eksisterende post skal du klikke på **Edit** ved siden af den.
+  </Step>
+  <Step title="Indtast mySMTP-legitimationsoplysninger">
+    Udfyld formularen med værdierne fra tabellen ovenfor:
+
+    - Sender Name: dit afsendernavn (for eksempel Marketing)
+    - Sender Email: `you@yourdomain.com`
+    - Server Host: `relayxx.mysmtp.com` (fra din opsætningsmail)
+    - Server Port: `587`
+    - Server Secure: `TLS`
+    - Username and Password: dine mySMTP-legitimationsoplysninger
+  </Step>
+  <Step title="Test og gem">
+    Klik på **Test SMTP Connection**. Når svaret er succesfuldt, skal du klikke på **Save** eller **Update SMTP**.
+  </Step>
+</Steps>
+
+## Send en testkampagne
+
+Efter gemning skal du oprette en lille testkampagne til din personlige e-mailadresse. Bekræft, at beskeden ankommer, og at headerne viser, at den blev sendt gennem mySMTP.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Forbindelsetest mislykkedes">
+    Dobbelttjek brugernavn og adgangskode. Bekræft, at TLS er valgt, og at porten er 587. Hvis din server blokerer 587, skal du skifte til 2525.
+  </Accordion>
+
+  <Accordion title="Godkendelsesfejl">
+    Sørg for, at du bruger dit fulde mySMTP-brugernavn, og at adgangskoden ikke har foranstillede eller efterfølgende mellemrum.
+  </Accordion>
+
+  <Accordion title="E-mails ender i spam">
+    Verificer, at dit afsenderdomæne har SPF, DKIM og DMARC konfigureret. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Kør [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox for hurtigt at spotte problemer.
+    </Tip>
+  </Accordion>
+</AccordionGroup>
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

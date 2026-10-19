@@ -1,0 +1,76 @@
+---
+title: "Introduction to the mySMTP Email Delivery Service"
+sidebarTitle: "Introduction"
+description: "Discover what mySMTP offers for sending marketing, transactional, and business emails with reliable deliverability and security."
+---
+
+mySMTP is an SMTP relay service built for sending all types of outgoing email, from business correspondence to transactional notifications. The infrastructure supports SPF, DKIM, and DMARC authentication and is hosted in the EU.
+
+## What you can send with mySMTP
+
+| Use case | Examples |
+| --- | --- |
+| Marketing emails | Newsletters, product updates, promotions |
+| Transactional emails | Order confirmations, password resets, alerts |
+| Business email | Support tickets, service updates, team communication |
+| Automated notifications | IoT alerts, system monitoring, billing reminders |
+
+## Why use mySMTP
+
+- **Deliverability focus.** SPF, DKIM, and DMARC are supported to help messages reach the inbox.
+- **EU hosting.** The SMTP infrastructure runs entirely in the EU, with no US cloud services involved.
+- **Fast setup.** Choose a plan, follow the setup guide, and send within minutes.
+- **Free toolbox.** Check authentication, plan IP warmup, and diagnose delivery issues with the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) at no cost.
+
+## Your data stays in the EU
+
+mySMTP runs its entire SMTP infrastructure within the EU. The emails you send, their content and attachments, and the sending logs are not stored or processed by external US cloud providers.
+
+<CardGroup cols={3}>
+  <Card title="EU-only infrastructure" icon="earth-europe">
+    SMTP servers, message data, and sending logs stay within the EU.
+  </Card>
+
+  <Card title="No US cloud services" icon="cloud-slash">
+    No external US cloud providers handle the emails you send through mySMTP.
+  </Card>
+
+  <Card title="GDPR by design" icon="shield-check" href="/security-compliance/gdpr-and-data-protection">
+    Processing follows the EU General Data Protection Regulation.
+  </Card>
+</CardGroup>
+
+<Note>
+  **Scope:** this applies to the SMTP infrastructure and the email data it handles. Customer support tools, such as the support chat, are separate third-party services and are not part of the email delivery platform.
+</Note>
+
+### What is the US CLOUD Act?
+
+The **CLOUD Act** (Clarifying Lawful Overseas Use of Data Act) is a US law from 2018. It allows US authorities to require US-based technology and cloud companies to hand over data in their possession, custody, or control, **regardless of where that data is stored**. This includes data held in data centers inside the EU.
+
+**What this means if you are in the EU:**
+
+- **An "EU region" is not enough on its own.** If your email provider is a US company, or relies on a US cloud platform, your email data can be subject to US data requests even when it is physically stored in Europe.
+- **Possible conflict with GDPR.** Under GDPR Article 48, a foreign authority's request only justifies a transfer of personal data when it is based on an international agreement, such as a mutual legal assistance treaty. A CLOUD Act request can put a US provider in a position where it cannot comply with both laws at the same time.
+- **You may not be told.** Requests can come with confidentiality orders, so the customer whose data is affected is not necessarily informed.
+- **An EU provider on EU infrastructure avoids this route.** When neither the provider nor its infrastructure is subject to US jurisdiction, the CLOUD Act gives US authorities no direct way to compel disclosure. Access then has to go through European legal processes and courts.
+
+Because mySMTP's SMTP infrastructure does not run on US cloud services, the emails you send and their logs are not exposed to the CLOUD Act through a US cloud provider.
+
+<Info>
+  This section is general information, not legal advice. Consult your data protection officer or legal advisor for decisions about your organization's compliance.
+</Info>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Sign up and activate" icon="user-plus" href="/getting-started/sign-up-and-activate-your-account">
+    Create your account and receive your SMTP credentials.
+  </Card>
+
+  <Card title="Dedicated vs Shared IP" icon="server" href="/getting-started/shared-ips-or-dedicated">
+    Understand the difference and pick the right plan. Shared IP plans are DK only.
+  </Card>
+</CardGroup>
+
+If you need help, contact [support@mysmtp.com](mailto:support@mysmtp.com).

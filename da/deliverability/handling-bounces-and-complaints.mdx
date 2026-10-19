@@ -1,0 +1,99 @@
+---
+title: "Håndter bounces og klager med mySMTP"
+sidebarTitle: "Bounces & Klager"
+description: "Lær hvordan mySMTP håndterer hard bounces, soft bounces og spam-klager. Beskyt din afsenderreputation med suppression lists og listehygiejne."
+---
+
+<Tip>
+  Dekod enhver SMTP bounce-svar med mySMTP [Bounce Code Decoder](https://toolbox.smtp.ai/) på toolbox.smtp.ai. Indsæt koden og få en årsag og løsning på almindeligt sproDekod enhver SMTP bounce-svar med mySMTP [Bounce Code Decoder](https://toolbox.smtp.ai/) på toolbox.smtp.ai. Indsæt koden og få en årsag og løsning på almindeligt sprog.
+</Tip>
+
+## Bounce-typer
+
+| Type | Betydning | Handling |
+| --- | --- | --- |
+| Hard bounce | Permanent fejl. Adressen findes ikke, eller domænet er ugyldigt. | Fjern med det samme. |
+| Soft bounce | Midlertidig fejl. Postkassen er fuld, serveren er nede, eller beskeden erPostkassen er fuld, serveren er nede, eller beskeden er for stor. | Prøv igen et par gange, og behandl derefter som hard bounce, hvis leveringenen fortsat fejler. |
+
+### Almindelige årsager til hard bouncesårsager til hard bounces
+
+- Modtagerens email-adresseens email-adresse findes ikke
+- Domænenavnet er stavet forkert eller ikke ikke længere aktivt
+- Modtagerens server har permanent blokeret leveringenens server har permanent blokeret leveringen
+
+### Almindelige årsager til soft bouncesårsager til soft bounces
+
+- Modtagerens postkasse er over kvotapostkasse er over kvota
+- Den modtagende mailserver er midlertidigt utilgængelig
+- Beskeden overskrider modtagerens størrelsesgrænse
+
+## Suppression lists lists
+
+mySMTP vedligeholder suppression lists for at forhindre fremtidige afsendelser til adresser, der allerede har bounced, klaget eller afmeldt sig. Dette forbedrer deliverability og overholdels lists for at forhindre fremtidige afsendelser til adresser, der allerede har bounced, klaget eller afmeldt sig. Dette forbedrer deliverability og overholdelse automatisk.
+
+### Automatisk suppression
+
+MailWizz tilføjer en adresse til suppression listen, når en af disse hændelser opstår listen, når en af disse hændelser opstår:
+
+- En hard bounce modtages
+- En modtager indsender en spam--klage via en feedback loop (FBL)
+- En modtager afmelder sigafmelder sig
+
+### Manuel suppression
+
+Du kan også tilføje adresser manuelt for at forhindre afsendelse til kontakter, du ikke længere ønsker at nå.
+
+## Håndtering af klager
+
+En klage opstår, når en modtager klikker på spam- eller junk-knappen i deres email-klient. mySMTP integrerer med feedback loops fra større udbydere for at opdagopstår, når en modtager klikker på spam- eller junk-knappen i deres email-klient. mySMTP integrerer med feedback loops fra større udbydere for at opdage disse hændelser og suppresser adressen automatisk.
+
+### Sådan reducerer du klager
+
+<Steps>
+  <Step title="Brug confirmedconfirmed opt-in">
+    Send kun til modtagere, der eksplicit har tilmeldt sig. Confirmed (dobbelteksplicit har tilmeldt sig. Confirmed (dobbelt) opt-in er den sikreste metode.
+  </Step>
+  <Step title="Brug en genkendelig afsender">
+    Brug et from name og en from address name og en from address, som modtagere vil genkende.
+  </Step>
+  <Step title="Gør afmelding nemafmelding nem">
+    Inkluder et synligt, one-click afmeldingslink i hver marketingsbesked. Efterlev afmeldingsafmeldingslink i hver marketingsbesked. Efterlev afmeldingsanmodninger med det samme.
+  </Step>
+  <Step title="Send relevant indhold">
+    Segmenter dine lister og send målrettet indhold. Undgå overdreven frekvens.
+  </Step>
+</Steps>
+
+<Warning>
+  Spam-klage-rater over 0,1% er bekymrende. Rater over 0,3% kan forårsage throttling eller blokeringer hos stør-klage-rater over 0,1% er bekymrende. Rater over 0,3% kan forårsage throttling eller blokeringer hos større udbydere som Gmail og Yahoo.
+</Warning>
+
+## Overvågning og bedste praksis
+
+- Gennemgå bounce- og klagrgå bounce- og klagrapporter i dit mySMTP dashboard regelmæssigt.
+- Fjern hard bounces med det samme. mySMTP suppresser dem automatisk.
+- Rengørgør dine lister periodisk for at fjerne inaktive eller ugyldige adresser.
+- Segmenter efter engagement og fjern abonnenter, der ikke har åbnet eller klikket inden fornden for 6 til 12 måneder.
+- Autentificer med SPF, DKIM og DMARC for at forbedre deliverability og reducere spoofing-klager.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Bounce--rate er pludselig høj">
+    Sæt kampagnen på pause og gennemgå bounce-årsagerne. Tjek foTjek for listeimportfejl, forældede data eller et dårligt domæne. Fjern ugyldige adresser, før du genoptager.
+  </Accordion>
+
+  <Accordion title="Klage-rate-rate stiger">
+    Reducer frekvens, stram opt-in-praksis, og gennemgå dit from name. Sørg for, at afmeldingslinket er synligt og fungerer. Segmenter kun til name. Sørg for, at afmeldingslinket er synligt og fungerer. Segmenter kun til engagerede modtagere.
+  </Accordion>
+
+  <Accordion title="Soft bounces konverterer ikke til hard bounces">
+    Hvis en adresse soft-bouncer gentagne gange over flere kampagner, behandl den som en hard bounce og fjern den manuelt.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [Forbedr email deliverability](/da/deliverability/improve-email-deliverability)
+- [DNS--opsætning til autentificering](/da/deliverability/dns-setup-for-authentication)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

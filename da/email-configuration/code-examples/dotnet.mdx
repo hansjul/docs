@@ -1,0 +1,115 @@
+---
+title: ".NET-kodeeksempel for mySMTP med MailKit"
+sidebarTitle: ".NET"
+description: "Send email fra .NET ved hjælp af MailKit med STARTTLS på port 587. Inkluderer installation, MIME-konstruktion og sikre socket-indstillinger for mySMTP."
+---
+
+Brug MailKit til at sende email fra .NET-applikationer gennem mySMTP. MailKit er det anbefalede bibliotek, da Microsoft ikke anbefaler `System.Net.Mail.SmtpClient` til ny udvikling.
+
+## Forudsætninger
+
+- .NET 6 eller nyere
+- Dit mySMTP-brugernavn og -adgangskode fra opsætningsemailen
+- Dit mySMTP-hostnavn fra opsætningsemailen (vist som `relayxx.mysmtp.com` i disse eksempler)
+
+## Installer MailKit
+
+```bash
+dotnet add package MailKit
+```
+
+## Grundlæggende afsendelseseksempel
+
+```csharp
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
+
+var host = Environment.GetEnvironmentVariable("MYSMTP_HOST") ?? "relayxx.mysmtp.com";
+var user = Environment.GetEnvironmentVariable("MYSMTP_USER");
+var pass = Environment.GetEnvironmentVariable("MYSMTP_PASS");
+
+var message = new MimeMessage();
+message.From.Add(new MailboxAddress("Dit navn", "dig@ditdomæne.com"));
+message.To.Add(new MailboxAddress("Modtagernavn", "modtager@example.com"));
+message.Subject = "Testemail fra .NET";
+message.Body = new TextPart("plain")
+{
+    Text = "Dette er en almindelig teksttestbesked sendt gennem mySMTP."
+};
+
+using var client = new SmtpClient();
+await client.ConnectAsync(host, 587, SecureSocketOptions.StartTls);
+await client.AuthenticateAsync(user, pass);
+await client.SendAsync(message);
+await client.DisconnectAsync(true);
+
+Console.WriteLine("Besked sendt succesfuldt");
+```
+
+<Note>
+  Erstat `relayxx.mysmtp.com` med dit rigtige hostnavn fra mySMTP-opsætningsemailen. Indlæs autentificeringsoplysninger fra miljøvariabler, og indsæt dem aldrig direkte i kildefiler.
+</Note>
+
+## HTML-email med vedhæftet fil
+
+```csharp
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
+
+var host = Environment.GetEnvironmentVariable("MYSMTP_HOST") ?? "relayxx.mysmtp.com";
+var user = Environment.GetEnvironmentVariable("MYSMTP_USER");
+var pass = Environment.GetEnvironmentVariable("MYSMTP_PASS");
+
+var message = new MimeMessage();
+message.From.Add(new MailboxAddress("Dit navn", "dig@ditdomæne.com"));
+message.To.Add(new MailboxAddress("Modtagernavn", "modtager@example.com"));
+message.Subject = "HTML-email med vedhæftet fil";
+
+var builder = new BodyBuilder
+{
+    TextBody = "Dette er fallback-teksten i almindeligt tekstformat.",
+    HtmlBody = "<h1>Hej</h1><p>Dette er en HTML-besked.</p>"
+};
+builder.Attachments.Add("/sti/til/faktura.pdf");
+message.Body = builder.ToMessageBody();
+
+using var client = new SmtpClient();
+await client.ConnectAsync(host, 587, SecureSocketOptions.StartTls);
+await client.AuthenticateAsync(user, pass);
+await client.SendAsync(message);
+await client.DisconnectAsync(true);
+
+Console.WriteLine("Besked sendt succesfuldt");
+```
+
+<Warning>
+  Microsoft anbefaler ikke at bruge `System.Net.Mail.SmtpClient` til ny udvikling, da det betragtes som forældet og ikke understøtter moderne protokoller. Brug i stedet MailKit.
+</Warning>
+
+## Almindelige fejl
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Dit brugernavn eller din adgangskode er forkert, eller din konto er endnu ikke aktiveret. Indtast autentificeringsoplysningerne præcis som vist i opsætningsemailen. Se [Opsætning af SMTP-oplysninger](/da/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout eller refused">
+    Dit netværk eller din vært kan blokere port 587. Prøv port 2525 med `SecureSocketOptions.StartTls`, eller port 465 med `SecureSocketOptions.SslOnConnect`. Se [Understøttede SMTP-porte og kryptering](/da/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    Værdien af `SecureSocketOptions` passer ikke til porten. Brug `StartTls` for porte 587 og 2525. Brug `SslOnConnect` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test din SPF-, DKIM- og DMARC-opsætning med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) inden du sender store mængder.
+</Tip>
+
+## Relaterede artikler
+
+- [Kodeeksempler - oversigt](/da/email-configuration/code-examples)
+- [SMTP-grænser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

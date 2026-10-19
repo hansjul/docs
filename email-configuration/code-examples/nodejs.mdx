@@ -1,0 +1,172 @@
+---
+title: "Node.js Code Example for mySMTP with Nodemailer"
+sidebarTitle: "Node.js"
+description: "Send email from Node.js using Nodemailer with STARTTLS on port 587. Includes async sendMail, connection verification, and error handling."
+---
+
+Nodemailer is the most popular email library for Node.js. You can connect to mySMTP with STARTTLS on port 587 and verify the connection before sending.
+
+## Prerequisites
+
+- Node.js 18 or later
+- Your mySMTP username and password from the setup email
+- Your mySMTP hostname from the setup email (shown as `relayxx.mysmtp.com` in these examples)
+
+## Install Nodemailer
+
+<CodeGroup>
+
+```bash npm
+npm install nodemailer
+```
+
+```bash yarn
+yarn add nodemailer
+```
+
+```bash pnpm
+pnpm add nodemailer
+```
+
+</CodeGroup>
+
+## Basic send example
+
+```javascript
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: process.env.MYSMTP_HOST || 'relayxx.mysmtp.com',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.MYSMTP_USER,
+    pass: process.env.MYSMTP_PASS,
+  },
+});
+
+async function sendEmail() {
+  const info = await transporter.sendMail({
+    from: '"Your Name" <you@yourdomain.com>',
+    to: 'recipient@example.com',
+    subject: 'Test email from Node.js',
+    text: 'This is a plain text test message sent through mySMTP.',
+  });
+
+  console.log('Message sent successfully');
+  console.log('Message ID:', info.messageId);
+}
+
+sendEmail().catch(console.error);
+```
+
+<Note>
+  Replace `relayxx.mysmtp.com` with your real hostname from the mySMTP setup email. Load credentials from environment variables, never hardcode them in source files.
+</Note>
+
+## Verify the connection before sending
+
+```javascript
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: process.env.MYSMTP_HOST || 'relayxx.mysmtp.com',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.MYSMTP_USER,
+    pass: process.env.MYSMTP_PASS,
+  },
+});
+
+async function verifyAndSend() {
+  try {
+    await transporter.verify();
+    console.log('Server is ready to take our messages');
+
+    const info = await transporter.sendMail({
+      from: '"Your Name" <you@yourdomain.com>',
+      to: 'recipient@example.com',
+      subject: 'Test email from Node.js',
+      text: 'This is a plain text test message sent through mySMTP.',
+    });
+
+    console.log('Message sent successfully');
+    console.log('Message ID:', info.messageId);
+  } catch (err) {
+    console.error('Error:', err.message);
+  }
+}
+
+verifyAndSend();
+```
+
+## HTML email with attachment
+
+```javascript
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: process.env.MYSMTP_HOST || 'relayxx.mysmtp.com',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.MYSMTP_USER,
+    pass: process.env.MYSMTP_PASS,
+  },
+});
+
+async function sendHtmlEmail() {
+  const info = await transporter.sendMail({
+    from: '"Your Name" <you@yourdomain.com>',
+    to: 'recipient@example.com',
+    subject: 'HTML email with attachment',
+    text: 'This is the plain text fallback.',
+    html: '<h1>Hello</h1><p>This is an HTML message.</p>',
+    attachments: [
+      {
+        filename: 'invoice.pdf',
+        path: '/path/to/invoice.pdf',
+      },
+    ],
+  });
+
+  console.log('Message sent successfully');
+  console.log('Message ID:', info.messageId);
+}
+
+sendHtmlEmail().catch(console.error);
+```
+
+<Warning>
+  Always set `requireTLS: true` when using port 587. This prevents Nodemailer from falling back to an unencrypted connection if TLS negotiation fails.
+</Warning>
+
+## Common errors
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Your username or password is incorrect, or your account is not yet activated. Re-enter credentials exactly as shown in the setup email. See [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Your network or host may block port 587. Try port 2525 with the same settings, or port 465 with `secure: true`. See [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    The `secure` and `requireTLS` settings do not match the port. For port 587, use `secure: false` and `requireTLS: true`. For port 465, use `secure: true` and remove `requireTLS`.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test your SPF, DKIM, and DMARC setup with the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) before sending large volumes.
+</Tip>
+
+## Related articles
+
+- [Code Examples overview](/email-configuration/code-examples)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

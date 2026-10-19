@@ -1,0 +1,117 @@
+---
+title: "Send Firewall and Router Alerts via mySMTP"
+sidebarTitle: "Firewalls & Routers"
+description: "Configure pfSense, Fortinet FortiGate, and UniFi devices to send system alerts and logs through mySMTP using port 587 and STARTTLS."
+---
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | Your dedicated hostname from the setup email, e.g. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Security | **STARTTLS** |
+| Authentication | SMTP username and password from mySMTP |
+
+<Note>
+  Server (shared IP, DK only) | `mail.mysmtp.com` / Shared IP plans are only available to customers in Denmark.
+</Note>
+
+<Tip>
+  Use the exact relay hostname from your setup email. `relayxx.mysmtp.com` is only an example.
+</Tip>
+
+## Configure your device
+
+<Tabs>
+  <Tab title="pfSense">
+    <Steps>
+      <Step title="Open Notifications">
+        Log in to the pfSense web interface. Go to **System** > **Advanced** > **Notifications**.
+      </Step>
+      <Step title="Enable SMTP notifications">
+        1. Check **Enable SMTP Notifications**.
+        2. **E-Mail server:** your relay hostname (e.g. `relayxx.mysmtp.com`).
+        3. **SMTP Port of E-Mail server:** `587`.
+        4. Check **Secure SMTP Connection** and select **STARTTLS**.
+        5. **SMTP Authentication Mechanism:** select **PLAIN** or **LOGIN**.
+        6. **Username:** your mySMTP SMTP username.
+        7. **Password:** your mySMTP SMTP password.
+        8. **Notification E-Mail address:** the address alerts should appear from (must be a verified domain).
+        9. Click **Save**.
+      </Step>
+      <Step title="Send a test notification">
+        Click **Test SMTP E-Mail** and verify the message arrives in the recipient inbox.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Fortinet FortiGate">
+    <Steps>
+      <Step title="Open Email Service settings">
+        Log in to the FortiGate web interface. Go to **System** > **Settings** > **Email Service**.
+      </Step>
+      <Step title="Configure custom SMTP">
+        1. Set **Email Service** to **Custom**.
+        2. **Server:** your relay hostname (e.g. `relayxx.mysmtp.com`).
+        3. **Port:** `587`.
+        4. **Security:** select **STARTTLS**.
+        5. **Authentication:** enable it.
+        6. **Username:** your mySMTP SMTP username.
+        7. **Password:** your mySMTP SMTP password.
+        8. Click **Apply**.
+      </Step>
+      <Step title="Set notification recipients">
+        Go to **System** > **Settings** > **Alert** and set the email addresses that should receive alerts.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="UniFi">
+    <Steps>
+      <Step title="Open SMTP settings">
+        The exact menu path varies by UniFi controller and firmware version. Try one of the following:
+
+        - **UniFi Network Settings** > **System** > **Notifications** > **SMTP Server**
+        - **UniFi OS Settings** > **System** > **SMTP Server**
+        - **Settings** (gear) > **Controller** > **Mail Server**
+      </Step>
+      <Step title="Enter the SMTP details">
+        1. **SMTP Server:** your relay hostname (e.g. `relayxx.mysmtp.com`).
+        2. **Port:** `587`.
+        3. **Enable encryption:** select the STARTTLS or TLS option (some devices label it "SSL/TLS").
+        4. **Username:** your mySMTP SMTP username.
+        5. **Password:** your mySMTP SMTP password.
+        6. **Sender Address:** the address alerts should appear from (must be a verified domain).
+        7. Click **Apply** or **Save**.
+      </Step>
+      <Step title="Send a test email">
+        If a test button is available, click it. Otherwise trigger an event (such as a device disconnect) and check your inbox.
+      </Step>
+    </Steps>
+
+    <Note>
+      UniFi firmware versions vary. If you do not see an SMTP section in one location, check the other paths listed above or consult the Ubiquiti documentation for your specific controller version.
+    </Note>
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Test email fails">
+    Double-check the server name matches the one in your mySMTP setup email exactly. Verify the username and password are correct. See [Common SMTP errors](/troubleshooting/common-smtp-errors).
+  </Accordion>
+
+  <Accordion title="Connection timeout on port 587">
+    Your upstream firewall or ISP may block outbound port 587. Try port **2525**.
+  </Accordion>
+
+  <Accordion title="Authentication rejected">
+    Confirm the authentication mechanism is set to **PLAIN** or **LOGIN** (not OAuth or NTLM). Re-enter the username and password carefully.
+  </Accordion>
+
+  <Accordion title="Sender address rejected">
+    Make sure the sender address uses a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

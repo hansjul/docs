@@ -1,0 +1,129 @@
+---
+title: "Dedicated IP Server Dashboard"
+sidebarTitle: "Server Dashboard"
+description: "Use the mySMTP dashboard to monitor dedicated IP sending activity, manage SMTP users, verify DNS records, and troubleshoot delivery issues."
+---
+
+The mySMTP dashboard at [app.mysmtp.com](https://app.mysmtp.com) gives you a single place to monitor sending, manage users, and troubleshoot delivery for your dedicated IP server.
+
+<Frame>
+  ![Dashboard overview](https://mysmtp.com/images/DB-KB/2026-09-29_11-16-23.png)
+</Frame>
+
+## Sign in and choose the right account
+
+The account owner signs in with the same account login used at [clients.mysmtp.com](https://clients.mysmtp.com). This account can view the full dashboard, including account and purchase information and all servers in the fleet.
+
+An SMTP user signs in with a user login created under **SMTP Users** in the dashboard. The user's view is restricted: it does not show email purchase history and consumption status, other servers in a multi-server fleet, or the account profile and upgrade options. Give each person or application its own SMTP user where practical, so activity can be identified separately.
+
+If you cannot sign in, use **Lost password?** on the login screen or contact [support@mysmtp.com](mailto:support@mysmtp.com). SMTP authentication details for an email application may differ from the account owner's client-area login.
+
+## Dashboard tab
+
+The Dashboard tab is the starting point for monitoring sending. The sending snapshot defaults to the last seven days. Change the date range with the calendar field to focus on a particular period. Switch between the line, bar, and donut chart to see the same activity in different ways.
+
+The chart groups messages by **Sent**, **Accepted**, **Bounced**, and **Expired**. Use it to spot changes in volume or an unusual rise in failures, then open Log Reports to investigate individual messages. The dashboard labels its hourly display as GMT+1 server time; check the displayed range when comparing a graph with your own application's logs.
+
+<Note>
+  **Accepted** means the receiving mail server accepted the message. It does not confirm that the message reached the inbox or was opened.
+</Note>
+
+## Log Reports
+
+Open **Log Reports** when you need to trace a particular send or understand a bounce. Review the timestamp, recipient, delivery status, and any available SMTP response. A temporary failure may be retried, while a permanent rejection needs a closer look at the address, domain authentication, or the receiver's response.
+
+Detailed sending logs are available for **30 days**. Where the report offers a CSV export, download it if you need to work through a larger set of messages or share a case with support. If you contact support, include the approximate send time, sender, recipient, and the SMTP response; avoid sending passwords.
+
+## SMTP Users
+
+Use **SMTP Users** to manage the logins used by people, applications, and email clients that send through mySMTP. Create a separate user for each integration or team where useful, and enter that user's SMTP credentials in the sending application. This makes it easier to identify which integration generated traffic and to limit the effect of a credential change.
+
+The account owner can also create a dashboard login for a subuser here. A subuser can inspect the sending information available to that login, with the account restrictions described above. Keep the owner login for account administration.
+
+## Bcc archive: keep a copy of every email
+
+Never lose track of what you have sent. With the **Bcc** option under **SMTP Users**, mySMTP sends a copy of every outgoing email to an address you choose, such as your email archive, a compliance mailbox, or a shared team inbox. Every message is captured automatically.
+
+<CardGroup cols={2}>
+  <Card title="Complete archive" icon="box-archive">
+    Keep a full record of every email sent through your server, ready to search when you need it.
+  </Card>
+
+  <Card title="Compliance and documentation" icon="scale-balanced">
+    Document what was sent and when, for audits, record keeping, and disputes with customers.
+  </Card>
+
+  <Card title="Faster troubleshooting" icon="magnifying-glass">
+    See exactly what your application or campaign tool sent, including content, headers, and attachments.
+  </Card>
+
+  <Card title="No code changes" icon="wand-magic-sparkles">
+    It is set on the server, so you don't need to change your applications, email clients, or printers.
+  </Card>
+</CardGroup>
+
+<Steps>
+  <Step title="Open SMTP Users">
+    Sign in to [app.mysmtp.com](https://app.mysmtp.com) and open **SMTP Users**.
+  </Step>
+  <Step title="Turn on Bcc">
+    Find the Bcc option and enter the address that should receive a copy of every email.
+  </Step>
+  <Step title="Send a test">
+    Send a test email and confirm the copy arrives in your archive mailbox.
+  </Step>
+</Steps>
+
+<Tip>
+  Use a dedicated archive mailbox with enough storage, and make sure it accepts high volumes. A full or blocked archive mailbox can cause the copies to bounce.
+</Tip>
+
+## DNS verifications
+
+Use **DNS verifications** to check the authentication records for your sending domain. SPF authorizes the sending infrastructure, DKIM signs outgoing messages, and DMARC sets a policy for messages that fail authentication and alignment checks.
+
+Add the exact records supplied for your account at your domain's DNS provider, then return to the dashboard to check their status after DNS has updated. If your domain already has an SPF record, update that record rather than publishing a second SPF record. A record that is present but not yet verified may simply need more time to propagate; also check for typing errors and the correct DNS host name.
+
+## IP Whitelisting
+
+Use **IP Whitelisting** to manage approved public source IP addresses for SMTP access when your setup uses this feature. Enter the public IP of the system that connects to mySMTP, such as an application server or office network, rather than a private LAN address. Keep the list limited to trusted senders and remove entries that are no longer used.
+
+If your internet connection has a changing public IP, check how your sending application authenticates before relying on a fixed whitelist entry. Contact support if you are unsure how whitelisting applies to your server.
+
+## Tools
+
+Expand **Tools** for the utilities available to your account. Use the relevant tool when checking setup or troubleshooting sending. The exact options may depend on your server and account configuration. For general domain and deliverability checks outside the dashboard, you can also use the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/).
+
+## Server Fleet
+
+**Server Fleet** shows the dedicated SMTP servers assigned to the account. If your account has more than one server, the account owner can select a server to review its own activity and settings. Check the selected server before interpreting a chart or log report. A subuser does not see the full multi-server fleet.
+
+## Account and support controls
+
+The **profile icon** at the top right leads to account options. The account owner has access to the account profile and upgrade options; these are hidden from subusers. Use [clients.mysmtp.com](https://clients.mysmtp.com) for the authoritative client account and billing login.
+
+The **support chat** icon connects you with support. The footer also links to the **Service Status** page, where you can check for a reported incident before troubleshooting a wider sending issue.
+
+## Troubleshoot a missing email
+
+<Steps>
+  <Step title="Select the right server">
+    Select the right server in **Server Fleet**, if your account has several.
+  </Step>
+  <Step title="Open Log Reports">
+    Open **Log Reports** and locate the message by time and recipient.
+  </Step>
+  <Step title="Read status and SMTP response">
+    Read its status and the receiver's SMTP response. An accepted message may still be filtered by the recipient's mailbox provider; a bounced or expired message needs the reported cause addressed.
+  </Step>
+  <Step title="Check DNS verifications">
+    Check **DNS verifications** if the response mentions authentication or domain policy.
+  </Step>
+  <Step title="Contact support if needed">
+    If the result is unclear, contact support with the message details and SMTP response.
+  </Step>
+</Steps>
+
+<Tip>
+  Use the free [PTR / rDNS Checker](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox to confirm your dedicated IP has a matching reverse and forward DNS record (FCrDNS). This is a key factor for inbox placement at major providers.
+</Tip>

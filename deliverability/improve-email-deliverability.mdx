@@ -1,0 +1,81 @@
+---
+title: "Improve Email Deliverability"
+sidebarTitle: "Improve Deliverability"
+description: "Implement key strategies with mySMTP to keep emails out of spam and reach inboxes consistently. Follow Gmail, Yahoo, and Microsoft sender requirements."
+---
+
+<Tip>
+  Run the <a href="https://toolbox.smtp.ai/">Sender Readiness Checklist</a> in the mySMTP Deliverability Toolbox before your next campaign to verify authentication, rDNS, unsubscribe setup, and list hygiene in one pass.
+</Tip>
+
+## Authentication setup
+
+Authenticate every domain you send from. ISPs use these records to verify you are a legitimate sender.
+
+| Record | Purpose | Quick setup |
+| --- | --- | --- |
+| SPF | Lists authorized sending servers | `v=spf1 include:spf1.mysmtp.com ~all` |
+| DKIM | Cryptographically signs each message | Add the TXT record mySMTP provides for `mysmtp._domainkey` |
+| DMARC | Tells receivers how to handle auth failures | Start with `v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com` |
+
+For step-by-step DNS instructions, see [DNS setup for authentication](/deliverability/dns-setup-for-authentication) and [SPF, DKIM, DMARC and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+## Major provider requirements (2025-2026)
+
+Gmail, Yahoo, and Microsoft enforce stricter sender standards. Meeting these protects your deliverability across all providers.
+
+| Requirement | Gmail / Yahoo | Microsoft (Outlook.com) | How to satisfy it |
+| --- | --- | --- | --- |
+| SPF | Required | Required | Publish an SPF record that includes mySMTP |
+| DKIM | Required | Required | Publish the DKIM record from your mySMTP setup email |
+| DMARC | Required | Recommended | Publish a DMARC record; plan to move from `p=none` to `p=quarantine` then `p=reject` |
+| One-click unsubscribe | Required for bulk | Recommended | Include `List-Unsubscribe` with RFC 8058 functionality |
+| Spam complaint rate | Under 0.3% | Under 0.3% | Remove complainers immediately; send only to engaged recipients |
+| Valid reverse DNS | Required | Required | Included with dedicated IPs |
+| TLS encryption | Required | Required | mySMTP uses STARTTLS on port 587 |
+
+<Note>
+  Bulk senders are typically those sending more than 5,000 messages per day to Gmail or Yahoo addresses.
+</Note>
+
+## IP strategy
+
+Choose the IP setup that matches your volume and control needs.
+
+| Factor | Shared IP (DK only) | Dedicated IP |
+| --- | --- | --- |
+| Best for | Under 100,000 emails per month, inconsistent volume | Over 100,000 emails per month, consistent sending |
+| Reputation control | Managed by mySMTP | Fully yours |
+| Warmup required | No | Yes, 21 to 45 days |
+| Cost | Lower | Higher |
+
+See [IP reputation: dedicated vs. shared IPs](/deliverability/ip-reputation-dedicated-vs-shared-ips) for details.
+
+## List hygiene
+
+- Remove hard bounces immediately. mySMTP suppresses them automatically.
+- Use confirmed (double) opt-in to ensure subscribers want your mail.
+- Segment by engagement and remove addresses that have not opened or clicked in 6 to 12 months.
+- Keep bounce rates under 2% and spam complaint rates under 0.1%.
+
+## Content and sending practices
+
+- Keep a healthy text-to-image ratio. Avoid image-only emails.
+- Use a recognizable from name and from address.
+- Include a clear unsubscribe link in every marketing message.
+- Avoid spam trigger phrases and excessive punctuation.
+- Send on a consistent schedule. Sudden volume spikes damage reputation.
+
+## Monitoring
+
+- Check [Google Postmaster Tools](https://postmaster.google.com/) for Gmail domain reputation, spam rate, and authentication results.
+- Check [Microsoft SNDS](https://postmaster.live.com/) for Outlook.com IP reputation and spam trap data.
+- Monitor blacklist status with the <a href="https://toolbox.smtp.ai/">Blacklist Checker</a> in the mySMTP Deliverability Toolbox.
+- Review bounce and complaint reports in your mySMTP dashboard regularly.
+
+## Related articles
+
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)
+- [IP reputation: dedicated vs. shared IPs](/deliverability/ip-reputation-dedicated-vs-shared-ips)
+- [Warm up plans](/deliverability/warm-up-plans)
+- [Handling bounces and complaints](/deliverability/handling-bounces-and-complaints)

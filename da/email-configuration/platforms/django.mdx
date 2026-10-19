@@ -1,0 +1,122 @@
+---
+title: "Konfigurer Django e-mail backend med mySMTP"
+sidebarTitle: "Django"
+description: "Sæt Django op til at sende e-mail via mySMTP ved at konfigurere SMTP-backend i settings.py og teste med send_mail eller en management-kommando."
+---
+
+Djangos e-mail-framework understøtter en SMTP-backend naturligt. Diriger al applikations-e-mail gennem mySMTP ved at opdatere dine indstillinger og køre en hurtig test.
+
+## Forudsætninger
+
+- Et Django-projekt
+- Dine mySMTP-legitimationsoplysninger (se [Opsætning af SMTP-legitimationsoplysninger](/da/getting-started/setting-up-smtp-credentials))
+- Et verificeret afsenderdomæne
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (fra din opsætnings-e-mail) |
+| Host (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Kryptering | STARTTLS |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Konfigurer settings.py
+
+<Steps>
+  <Step title="Tilføj SMTP-indstillinger">
+    I dit projekts `settings.py` tilføjer eller opdaterer du e-mail-backend-variablerne:
+
+    ```python
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'relayxx.mysmtp.com'  # erstat med dit rigtige hostnavn
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = 'your-mysmtp-username'
+    EMAIL_HOST_PASSWORD = 'your-mysmtp-password'
+    DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
+    SERVER_EMAIL = 'noreply@yourdomain.com'
+    ```
+
+    <Warning>
+      Brug `EMAIL_USE_TLS = True` med port 587. Aktiver ikke `EMAIL_USE_SSL` samtidig; den indstilling er til implicit TLS på port 465.
+    </Warning>
+  </Step>
+  <Step title="Indlæs legitimationsoplysninger fra miljøvariabler">
+    Af sikkerhedsmæssige årsager skal du indlæse følsomme værdier fra miljøvariabler i stedet for at hardkode dem:
+
+    ```python
+    import os
+    
+    EMAIL_HOST = os.environ.get('MYSMTP_HOST', 'relayxx.mysmtp.com')
+    EMAIL_HOST_USER = os.environ.get('MYSMTP_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('MYSMTP_PASSWORD')
+    ```
+  </Step>
+  <Step title="Send en test-e-mail">
+    Du kan teste fra Django-shell:
+
+    ```bash
+    python manage.py shell
+    ```
+
+    Kør derefter:
+
+    ```python
+    from django.core.mail import send_mail
+    send_mail(
+        'mySMTP Test',
+        'This is a test email from Django.',
+        'noreply@yourdomain.com',
+        ['your-email@example.com'],
+        fail_silently=False,
+    )
+    ```
+
+    Alternativt kan du bruge den indbyggede management-kommando, hvis den er tilgængelig i dit projekt:
+
+    ```bash
+    python manage.py sendtestemail your-email@example.com
+    ```
+  </Step>
+</Steps>
+
+<Warning>
+  Commit aldrig adgangskoder til versionskontrol. Brug miljøvariabler, en `.env`-fil med python-dotenv, eller din deployments platforms hemmelighedshåndtering.
+</Warning>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Forbindelse afvist eller timeout">
+    Bekræft, at du bruger dit rigtige mySMTP-hostnavn (ikke `relayxx.mysmtp.com`). Tjek, at dit hostingmiljø tillader udgående forbindelser på port 587. Hvis den er blokeret, prøv port 2525.
+  </Accordion>
+
+  <Accordion title="Godkendelse mislykkedes">
+    Genindtast dit mySMTP-brugernavn og -adgangskode. Verificer, at der ikke er ekstra mellemrum eller kodningsproblemer. Test de præcise legitimationsoplysninger med et selvstændigt script eller [test.smtp.ai](https://test.smtp.ai) først.
+  </Accordion>
+
+  <Accordion title="E-mails ender i spam">
+    Verificer, at SPF, DKIM og DMARC er konfigureret for dit afsenderdomæne. Se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Kør [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Test-e-mail ankommer ikke">
+    Tjek Django-serverloggene for SMTP-undtagelser. Bekræft også, at `DEFAULT_FROM_EMAIL` bruger et domæne, der er godkendt med mySMTP.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [SMTP-grænser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)
+- [Opsætning af SMTP-legitimationsoplysninger](/da/getting-started/setting-up-smtp-credentials)

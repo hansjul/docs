@@ -1,0 +1,80 @@
+---
+title: "IP Reputation & Dedikerede vs. Delte IP'er"
+sidebarTitle: "IP Reputation"
+description: "Lær hvordan IP-reputation påvirker email deliverability, og sammenlign dedikerede og delte IP'er for at vælge den rigtige afsendelsesopsætning til din mySMTP-konto."
+---
+
+<Tip>
+  Før du vælger en dedikeret IP, kør <a href="https://toolbox.smtp.ai/">PTR / rDNS Checker</a> og <a href="https://toolbox.smtp.ai/#warmup-generator">Warmup Plan Generator</a> i mySMTP Deliverability Toolbox for at verificere reverse DNS og bygge en dag-for-dag warmup-plan.
+</Tip>
+
+## Hvad er IP-reputation?
+
+IP-reputation er en tillidsscore, som ISP'er tildeler den IP-adresse, der sender din mail. Reputationsalgoritmer vægter flere signaler:
+
+| Signal | Påvirkning |
+| --- | --- |
+| Spamklager | Høj. Rater over 0,1% skader deliverability. |
+| Hard bounces | Høj. Rater over 2% tyder på dårlig listehygiejne. |
+| Engagement (opens, clicks) | Positiv. Stærkt engagement forbedrer inbox placement. |
+| Autentificering (SPF, DKIM, DMARC) | Påkrævet. Manglende auth forårsager filtrering eller afvisning. |
+| Blacklist-status | Høj. Listning på store blacklists forårsager blokeringer. |
+| Volumenkonsistens | Positiv. Gradvist, forudsigeligt volumen opbygger tillid. |
+
+## Delte IP'er (kun DK)
+
+På en delt IP rejser din mail fra samme adresse som andre mySMTP-kunder. mySMTP overvåger poolen og håndhæver best practices for at holde den delte reputation sund. Delte IP-planer er kun tilgængelige for kunder i Danmark.
+
+**Godt match for dig, hvis:**
+
+- Du sender færre end 100.000 emails om måneden.
+- Dit volumen svinger (for eksempel sæsonbestemte kampagner).
+- Du foretrækker at undgå IP warmup og reputation management overhead.
+- Du vil have en omkostningseffektiv afsendelsesopsætning.
+
+**Afrundinger:**
+
+- Din reputation påvirkes delvist af andre afsendere i poolen, selvom mySMTP aktivt administrerer dette.
+- Du kan ikke fuldt ud kontrollere IP'ens historiske reputation eller branding med modtagere.
+
+## Dedikerede IP'er
+
+En dedikeret IP er reserveret eksklusivt til din konto. Din afsende-adfærd alene bestemmer dens reputation.
+
+**Godt match for dig, hvis:**
+
+- Du sender høje volumener konsekvent (for eksempel 100.000 eller flere emails om måneden).
+- Du vil have fuld kontrol over afsenderreputation.
+- Du har brug for brugerdefineret autentificering og branding alignment med modtagere.
+- Du opererer i en reguleret branche med strenge compliance-krav.
+
+**Afrundinger:**
+
+- Du skal warme IP'en op i 21 til 45 dage, før du sender med fuldt volumen.
+- En dårlig afsendelsesstrategi (pludselige spikes, høje bounces, klager) kan skade IP'en hurtigt.
+
+## Sådan vælger du din IP-strategi
+
+| Faktor | Delte IP (kun DK) | Dedikeret IP |
+| --- | --- | --- |
+| Volumen | Under 100.000 / måned | Over 100.000 / måned |
+| Konsistens | Svingende eller sæsonbestemt | Stødig, daglig afsendelse |
+| Reputationskontrol | Administreret af mySMTP | Fuldt dit ansvar |
+| Warmup påkrævet | Nej | Ja, 21 til 45 dage |
+| Omkostning | Lavere | Højere |
+| Opsætningstid | Øjeblikkelig | Inkluderer warmup-periode |
+
+## Bedste praksis for stærk IP-reputation
+
+1. **Autentificer hver besked.** Publicer SPF, DKIM og DMARC-records for hvert sendedomæne. Se [DNS opsætning til autentificering](/da/deliverability/dns-setup-for-authentication).
+2. **Warm up dedikerede IP'er.** Brug [mySMTP Warmup Schedule Generator](/da/deliverability/warm-up-plans) til at opbygge ISP-tillid gradvist.
+3. **Overvåg metrics dagligt.** Hold øje med bounce-rater, klagerafer og engagement i dit mySMTP dashboard og i [Google Postmaster Tools](https://postmaster.google.com/).
+4. **Rens dine lister.** Fjern ugyldige adresser og ikke-engagere før hver stor afsendelse.
+5. **Følg compliance-regler.** Honorér opt-outs, inkluder unsubscribe-links, og overhold GDPR og CAN-SPAM retningslinjer. Se [CAN-SPAM og email compliance](/da/security-compliance/can-spam-and-email-compliance).
+
+## Relaterede artikler
+
+- [DNS opsætning til autentificering](/da/deliverability/dns-setup-for-authentication)
+- [Warm up planer](/da/deliverability/warm-up-plans)
+- [Blacklist overvågning og fjernelse](/da/deliverability/blacklist-monitoring-and-delisting)
+- [Håndtering af bounces og klager](/da/deliverability/handling-bounces-and-complaints)

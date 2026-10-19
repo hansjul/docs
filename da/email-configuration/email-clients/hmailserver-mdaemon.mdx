@@ -1,0 +1,109 @@
+---
+title: "hMailServer og MDaemon opsætning til mySMTP"
+sidebarTitle: "hMailServer / MDaemon"
+description: "Opsæt hMailServer eller MDaemon til at relaye udgående mail via mySMTP. Konfigurer smart host, SMTP-autentificering og STARTTLS-kryptering."
+---
+
+Du skal bruge dit SMTP-brugernavn, kodeord og relay-hostnavn fra din mySMTP opsætningsmail.
+
+## Før du går i gang
+
+Sørg for at have disse oplysninger klar:
+
+| Indstilling | Værdi |
+| --- | --- |
+| Smart host | Dit relay-hostnavn, f.eks. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Kryptering | **STARTTLS** |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Kodeord | Dit mySMTP SMTP-kodeord |
+
+<Note>
+  Brug det præcise relay-hostnavn fra din opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Note>
+
+<Tabs>
+  <Tab title="hMailServer">
+    <Steps>
+      <Step title="Åbn SMTP delivery indstillinger">
+        I hMailServer Administrator skal du gå til **Settings** > **Protocols** > **SMTP** > **Delivery of e-mail**.
+      </Step>
+      <Step title="Indtast remote host navn og port">
+        1. Indtast dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`) i **Remote host name**.
+        2. Indtast **587** i **Remote TCP/IP port**.
+      </Step>
+      <Step title="Aktivér SMTP-autentificering">
+        1. Sæt flueben i **Server requires authentication**.
+        2. Indtast dit mySMTP **username** og **password**.
+      </Step>
+      <Step title="Sæt forbindelsessikkerhed">
+        Vælg **STARTTLS (Required)** fra **Connection security** dropdown-menuen. Hvis STARTTLS ikke er tilgængelig som en mulighed, skal du sætte den til **TLS** eller den nærmeste ækvivalent og sikre at porten er 587.
+      </Step>
+      <Step title="Gem og test">
+        Klik på **Save** og send en testmail fra en klient tilsluttet hMailServer.
+      </Step>
+    </Steps>
+
+    <Warning>
+      Menulabels kan variere lidt afhængigt af din hMailServer-version. Led efter "Delivery of e-mail" eller "SMTP routes" under SMTP protocol indstillingerne.
+    </Warning>
+  </Tab>
+  <Tab title="MDaemon">
+    <Steps>
+      <Step title="Åbn serverindstillinger">
+        I MDaemon skal du gå til **Server** > **Server Settings**.
+      </Step>
+      <Step title="Aktivér smart host">
+        1. Vælg **Delivery**.
+        2. Sæt flueben i **Send all mail to smart host**.
+        3. Indtast dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`) i **Smart host**.
+      </Step>
+      <Step title="Aktivér SMTP-autentificering">
+        1. Sæt flueben i **Use SMTP AUTH**.
+        2. Indtast dit mySMTP **username** og **password**.
+      </Step>
+      <Step title="Sæt porten">
+        Indtast **587** som porten for smart host-forbindelsen.
+      </Step>
+      <Step title="Kræv STARTTLS">
+        1. Gå til **Server** > **Server Settings** > **Ports/SSL**.
+        2. Sørg for at smart host delivery-forbindelsen bruger **STARTTLS** eller TLS på port 587.
+      </Step>
+      <Step title="Gem og test">
+        Klik på **Apply** eller **OK** og send en testmail fra en klient tilsluttet MDaemon.
+      </Step>
+    </Steps>
+
+    <Warning>
+      Menulabels kan variere lidt afhængigt af din MDaemon-version. Led efter "Smart host" under Delivery eller Routing indstillinger.
+    </Warning>
+  </Tab>
+</Tabs>
+
+## Test forbindelsen
+
+1. Send en testmail fra en postkasse på din server til en ekstern adresse, f.eks. en Gmail-konto eller din egen.
+2. Bekræft at meddelelsen ankommer. I de modtagne besked-headers skal du kunne se, at den er gået gennem dit mySMTP relay.
+3. Hvis meddelelsen ikke ankommer, tjek serverens mailkø eller logs for leveringsfejl.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Login fejler">
+    Indtast igen dit mySMTP brugernavn og kodeord i smart host-indstillingerne. Sørg for at der ikke er ekstra mellemrum.
+  </Accordion>
+
+  <Accordion title="Forbindelsen udløb">
+    Tjek at udgående trafik på port **587** er tilladt af din firewall. Prøv port **2525**, hvis port 587 er blokeret, og opdater porten i dine serverindstillinger.
+  </Accordion>
+
+  <Accordion title="TLS ikke tilgængelig">
+    Hvis din serverversion ikke understøtter STARTTLS, skal du bekræfte at du bruger en aktuel udgave. Både hMailServer og MDaemon understøtter TLS på SMTP delivery i nylige versioner.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Sørg for at afsenderadressen bruger et domæne, der er autentificeret på din mySMTP-konto. Se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

@@ -1,0 +1,83 @@
+---
+title: "mySMTP Email API: Send via HTTPS (kommer i slutningen af Q4 2026)"
+sidebarTitle: "Email API"
+description: "mySMTP REST API til afsendelse af e-mail via HTTPS kommer i slutningen af Q4 2026. Lær hvad du kan forvente, og hvordan du sender med SMTP relay i mellemtiden."
+tag: "Kommer snart"
+---
+
+mySMTP Email API vil lade dig sende e-mail fra din applikation via HTTPS i stedet for SMTP. Den er planlagt til udgivelse i **slutningen af Q4 2026**. Indtil videre sender hver mySMTP-konto viavil lade dig sende e-mail fra din applikation via HTTPS i stedet for SMTP. Den er planlagt til udgivelse i **slutningen af Q4 2026**. Indtil videre sender hver mySMTP-konto via SMTP relay, som fungerer med enhver applikation, bibliotek eller enhed.
+
+<Info>
+  API'et er ikke tilgængeligt endnu. Denne side vil blive opdateret med endpoints, godkendelse og kodeeksempler ved lancering'et er ikke tilgængeligt endnu. Denne side vil blive opdateret med endpoints, godkendelse og kodeeksempler ved lancering.
+</Info>
+
+## API--komponenter
+
+API--platformen har fire primære funktionelle komponenter på tværs af synkrone og asynkrone kommunikationsparadigmer:
+
+<CardGroup cols={2}>
+  <Card title="1. Management API" icon="sliders">
+    Kontrolplansadministration, konfiguration, relay-lansadministration, konfiguration, relay-discovery.
+
+    - **API-type:** Synkron REST (med asynkront-type: Synkron REST (med asynkront opgaveudførelse)
+    - **Protokol:** HTTPS (JSON)
+    - **Mønster:** Request-Response (`202 Accepted` for baggrundstaskstasks)
+  </Card>
+
+  <Card title="2. Event API" icon="tower-broadcast">
+    Realtidssignalering fra serversiden, notifikationer om asynkron opgavefuldførelsenotifikationer om asynkron opgavefuldførelse.
+
+    - **API-type:** Asynkron / Event-drevet-type: Asynkron / Event-drevet
+    - **Protokol:** HTTPS (SSE / `text/event-stream`)
+    - **Mønster:** Unidirektionel server-push-strøserver-push-strøm
+  </Card>
+
+  <Card title="3. WebSocket feed API" icon="arrows-left-right">
+    Kontinuerlige dashboard-feeds, live logfiler, datatabeltilstand-feeds, live logfiler, datatabeltilstand, metrics.
+
+    - **API-type:** Asynkron / Event-drevet-type: Asynkron / Event-drevet
+    - **Protokol:** WSS (WebSockets)
+    - **Mønster:** Fuld-duplex / tovejs-strød-duplex / tovejs-strøm
+  </Card>
+
+  <Card title="4. Mail submission APIs" icon="paper-plane">
+    Direkte relay og global fleet-send mailafsendelse og køafsendelse og køaccept.
+
+    - **API--type:** Synkron Request-Response
+    - **Protokol:** HTTPS (REST / MIME)
+    - **Mønster:** Synkron Request-Response
+  </Card>
+</CardGroup>
+
+## Send medmed SMTP i dag
+
+Du behøver ikke vente på API'et. Ethvert sprog eller framework med et SMTP-bibliotek kan sende gennem'et. Ethvert sprog eller framework med et SMTP-bibliotek kan sende gennem mySMTP nu.
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | f.eks. `relayxx.mysmtp.com` (dit hostnavn står i opsætnings-e--e-mailen) |
+| Port | **587** (primær), 2525 eller 25 |
+| Kryptering | STARTTLS |
+| GodkendelseGodkendelse | Dit SMTP-brugernavn og din SMTP--brugernavn og din SMTP-adgangskode |
+
+<CardGroup cols={2}>
+  <Card title="Webapplikationer" icon="globe" href="/da/email-configuration/web-applications/index">
+    Tilslut e-mailmarketing- og afsendelseTilslut e-mailmarketing- og afsendelsesplatforme til mySMTP.
+  </Card>
+
+  <Card title="SMTP-legitimations-legitimationsoplysninger" icon="key" href="/da/getting-started/setting-up-smtp-credentials">
+    Find og administrer dit SMTP--brugernavn og din adgangskode.
+  </Card>
+
+  <Card title="Porte og kryptering" icon="lock" href="/da/getting-started/supported-smtp-ports-and-encryption">
+    Vælg den rigtige port og TLS--tilstand.
+  </Card>
+
+  <Card title="Webhooks" icon="bolt" href="/da/api/webhooks">
+    Realtidsleveringshændelser, kommer også i slutningen af Q4 2026.
+  </Card>
+</CardGroup>
+
+## Få beskedFå besked
+
+Vil du vide, når API'et lanceres, eller har du et brugsscenarie du ønsker understøttet? Kontakt [support@mysmtp.com](mailto:support@mysmtp.com) eller følg [mySMTP-'et lanceres, eller har du et brugsscenarie du ønsker understøttet? Kontakt ](https://mysmtp.com/blog)[support@mysmtp.com](mailto:support@mysmtp.com) eller følg [mySMTP-bloggen](https://mysmtp.com/blog).

@@ -1,0 +1,116 @@
+---
+title: "Configure mySMTP with Magento 2 SMTP settings"
+sidebarTitle: "Magento"
+description: "Send transactional emails from Magento 2 or Adobe Commerce using mySMTP by configuring the built-in SMTP mail settings with your credentials."
+---
+
+Magento 2 and Adobe Commerce can send transactional emails through mySMTP using the built-in SMTP transport, available in version 2.4.7 and above, or a third-party SMTP module for earlier versions.
+
+## Prerequisites
+
+- Admin access to the Magento admin panel
+- Your mySMTP credentials (see [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials))
+- A verified sending domain
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (from your setup email) |
+| Host (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Encryption | TLS (STARTTLS) |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Native SMTP configuration (Magento 2.4.7+)
+
+<Steps>
+  <Step title="Open Mail Sending Settings">
+    Log in to the Magento admin panel. Go to **Stores → Configuration → Advanced → System**.
+  </Step>
+  <Step title="Expand Mail Sending Settings">
+    Scroll to **Mail Sending Settings**. Open the section and set **Transport** to **SMTP**.
+  </Step>
+  <Step title="Enter mySMTP host and port">
+    Fill in the fields:
+
+    - **SMTP Host:** your real mySMTP hostname (from your setup email)
+    - **SMTP Port:** `587`
+  </Step>
+  <Step title="Enable authentication">
+    Set **Authentication** to **Login** and enter:
+
+    - **Username:** your mySMTP username
+    - **Password:** your mySMTP password
+  </Step>
+  <Step title="Save and flush cache">
+    Click **Save Config** in the top right. Then go to **System → Cache Management** and click **Flush Magento Cache**.
+  </Step>
+</Steps>
+
+<Tip>
+  Menu names can vary slightly between Magento versions. If you do not see SMTP options under Mail Sending Settings, check that you are running Magento 2.4.7 or later.
+</Tip>
+
+## For versions older than 2.4.7
+
+Magento versions before 2.4.7 do not include a built-in SMTP transport. Install a well-maintained third-party SMTP extension from the Magento Marketplace, then enter the same host, port, username, and password shown in the table above. Always choose an extension from a reputable vendor and keep it updated.
+
+## Set store email addresses
+
+Make sure the addresses Magento uses as senders are on your authenticated domain.
+
+<Steps>
+  <Step title="Open Store Email Addresses">
+    In the Magento admin panel, go to **Stores → Configuration → General → Store Email Addresses**.
+  </Step>
+  <Step title="Set sender addresses">
+    Update the addresses for **General Contact**, **Sales Representative**, **Customer Support**, and **Custom Email 1/2** to use your verified domain (for example, `sales@yourdomain.com` and `support@yourdomain.com`).
+  </Step>
+  <Step title="Save changes">
+    Click **Save Config**.
+  </Step>
+</Steps>
+
+<Warning>
+  Using a default address like `example.com` or an unauthenticated domain can cause mail to be rejected or filtered by mailbox providers.
+</Warning>
+
+## Send a test email
+
+Go to **Stores → Configuration → Advanced → System → Mail Sending Settings** (or your third-party SMTP extension test page) and send a test email to an address you control. Confirm it arrives and shows the correct sender domain.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="SMTP option is missing">
+    This means your Magento version is older than 2.4.7. Use a reputable third-party SMTP extension instead.
+  </Accordion>
+
+  <Accordion title="Connection test fails">
+    Double-check your real mySMTP hostname, port 587, and TLS selection. If your server firewall blocks 587, try port 2525.
+  </Accordion>
+
+  <Accordion title="Emails go to spam">
+    Verify SPF, DKIM, and DMARC records are set up correctly. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Sender address mismatch">
+    Confirm that the address under **Store Email Addresses** matches the authenticated domain in mySMTP. Mismatched domains hurt deliverability.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)

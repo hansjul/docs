@@ -1,0 +1,60 @@
+---
+title: "Ricoh Printer SMTP Setup via Web Image Monitor"
+sidebarTitle: "Ricoh"
+description: "Configure mySMTP on Ricoh printers using Web Image Monitor. Enter the SMTP server, port 587, STARTTLS, authentication, and administrator email address."
+---
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Connection encryption | **STARTTLS** |
+| SMTP authentication | Enabled |
+| User Name | Your mySMTP SMTP username |
+| Password | Your mySMTP password |
+
+<Note>
+  Use the exact relay hostname from your mySMTP setup email. `relayxx.mysmtp.com` is only an example.
+</Note>
+
+<Note>
+  Shared IP plans are only available to customers in Denmark. All other customers use a dedicated hostname.
+</Note>
+
+## Configure the printer
+
+<Steps>
+  <Step title="Open Web Image Monitor">
+    Open a web browser and enter the printer's IP address in the address bar. Log in with administrator credentials.
+  </Step>
+  <Step title="Navigate to SMTP settings">
+    Go to **Device Management** > **Configuration** > **Network** > **SMTP**.
+  </Step>
+  <Step title="Enter the server address">
+    In **SMTP Server**, enter your mySMTP relay hostname (e.g. `relayxx.mysmtp.com`).
+  </Step>
+  <Step title="Set the port and encryption">
+    Set **SMTP Port** to **587** and set **SSL/TLS** or **Connection Security** to **STARTTLS**.
+  </Step>
+  <Step title="Enable authentication">
+    Turn on **SMTP Authentication** and enter your mySMTP **SMTP User Name** and **SMTP Password**.
+  </Step>
+  <Step title="Set the administrator email">
+    Enter the **Administrator E-mail Address** (the sender address, such as `printer@yourdomain.com`). This must match a domain authenticated for your mySMTP account.
+  </Step>
+  <Step title="Save and test">
+    Click **OK** or **Apply** to save. Send a test scan-to-email or test notification to verify delivery.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+- **Connection timed out:** check that your network allows outbound traffic on port 587. If your firewall blocks it, try port **2525** or **25**.
+- **Authentication failed:** double-check your mySMTP username and password. These are case-sensitive.
+- **Relay access denied:** make sure the **Administrator E-mail Address** uses a domain on your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+- **STARTTLS not available:** if your Ricoh model does not list STARTTLS, select **TLS** or the highest available encryption setting.
+
+For shared scan-to-email guidance, see [Scan to email](/email-configuration/email-clients/scan-to-email). For error details, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

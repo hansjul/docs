@@ -1,0 +1,59 @@
+---
+title: "Branded rDNS: Use Your Own Domain as Your PTR Hostname"
+sidebarTitle: "Branded rDNS"
+description: "Replace the default relayXX.mysmtp.com reverse DNS on your dedicated IP with your own hostname, such as mail.yourdomain.com, using an A or CNAME record."
+---
+
+By default, your dedicated IP resolves to a mySMTP hostname such as `relay8.mysmtp.com`. With branded rDNS, it resolves to a hostname on your own domain instead, for example `mail.yourdomain.com`.
+
+## Why use branded rDNS
+
+Every sending IP must have active reverse DNS so receiving servers can recognize and identify it. mySMTP handles reverse DNS for all IPs and uses its own configuration and domains by default.
+
+Branded rDNS lets you show your own domain instead, which helps you comply with the rulesets some ISPs apply to delivery.
+
+<Note>
+  Branded rDNS is only available with a dedicated IP.
+</Note>
+
+## Set up branded rDNS
+
+<Steps>
+  <Step title="Choose your hostname">
+    Pick a subdomain on your sending domain, for example `mail.yourdomain.com`.
+  </Step>
+  <Step title="Add a DNS record">
+    In your domain's DNS, add **one** of these records:
+
+    | Type | Name | Points to |
+    |------|------|-----------|
+    | A | `mail.yourdomain.com` | Your dedicated IP on the mySMTP server, for example `185.163.189.xx` |
+    | CNAME | `mail.yourdomain.com` | Your mySMTP server hostname, for example `relayXX.mysmtp.com` |
+
+    Use your actual dedicated IP or server hostname from your setup email.
+  </Step>
+  <Step title="Tell mySMTP support">
+    Email [support@mysmtp.com](mailto:support@mysmtp.com) with the hostname you created. Branded rDNS is set up manually by the mySMTP team.
+  </Step>
+  <Step title="mySMTP completes the setup">
+    When the record is live in a DNS lookup, the team:
+
+    - activates the PTR configuration
+    - changes the server Hello banner
+    - generates a TLS certificate for your subdomain
+  </Step>
+</Steps>
+
+## What changes after setup
+
+You now send with your own domain in reverse DNS. Your hostname is only visible in the email header (message source) and in the TLS certificate as an alternative subject name. Recipients do not see it in their inbox.
+
+<Tip>
+  Confirm the result with the PTR/rDNS Checker in the [Deliverability Toolbox](https://toolbox.smtp.ai/), or run `dig -x YOUR_IP +short`.
+</Tip>
+
+## Related articles
+
+- [Reverse DNS (PTR)](/deliverability/reverse-dns-ptr)
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)
+- [IP reputation: dedicated vs shared IPs](/deliverability/ip-reputation-dedicated-vs-shared-ips)

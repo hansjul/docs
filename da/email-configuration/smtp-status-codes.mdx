@@ -1,0 +1,132 @@
+---
+title: "SMTP statuskoder: Dekod 2xx, 4xx og 5xx svar"
+sidebarTitle: "Statuskoder"
+description: "Dekod SMTP responskoder fra 2xx succes til 5xx permanente fejl. Inkluderer udvidede statuskoder og eksempel transaktions gennemgange."
+---
+
+SMTP servere svarer på hver kommando med en tresifret numerisk responskode. Den første ciffer angiver resultatkategorien: succes, midlertidig fejl eller permanent fejl. De næste to cifre giver flere detaljer.
+
+Nogle svar inkluderer også en udvidet statuskode som `5.7.1` efter basis koden. Dette giver dig mere præcis information om, hvorfor en besked blev afvist, så du kan rette fejlen hurtigere.
+
+## 2xx – Succeskoder
+
+| Kode | Udvidet | Betydning |
+| --- | --- | --- |
+| 200 |  | Ikke-standard succeshåndtering |
+| 211 |  | Systemstatus eller hjælp svar |
+| 214 |  | Hjælpemeddelelse |
+| 220 |  | Service klar |
+| 221 |  | Service lukker transmissionskanal |
+| 235 |  | Autentificering lykkedes |
+| 250 |  | Anmodet handling udført |
+| 251 |  | Bruger ikke lokal; vil videresende til `<forward path>` |
+| 252 |  | Kan ikke verificere bruger; vil forsøge levering alligevel |
+
+## 3xx – Data og autentificering
+
+| Kode | Betydning |
+| --- | --- |
+| 334 | Svar på en autentificeringsudfordring; base64 prompt |
+| 354 | Start mail input; afslut med `<CRLF>.<CRLF>` |
+
+## 4xx – Midlertidige fejl
+
+Disse fejl betyder, at handlingen fejlede nu, men kan lykkes, hvis du prøver igen senere.
+
+| Kode | Udvidet | Betydning |
+| --- | --- | --- |
+| 421 |  | Service ikke tilgængelig; lukker forbindelse |
+| 450 |  | Mailbox utilgængelig; prøv igen senere |
+| 451 |  | Lokal fejl i behandling |
+| 452 |  | Utilstrækkelig systemlagerplads |
+| 454 |  | Midlertidig autentificeringsfejl |
+| 4.7.23 |  | PTR record mangler eller stemmer ikke overens (Gmail) |
+| 4.7.27 |  | SPF autentificering bestod ikke (Gmail) |
+| 4.7.29 |  | Besked ikke sendt over TLS (Gmail) |
+| 4.7.30 |  | DKIM autentificering bestod ikke (Gmail) |
+| 4.7.31 |  | DMARC record mangler eller er ugyldig (Gmail) |
+| 4.7.32 |  | From header stemmer ikke overens med SPF eller DKIM (Gmail) |
+
+## 5xx – Permanente fejl
+
+Disse fejl betyder, at beskeden blev afvist, og ikke bør forsøges igen uden ændringer.
+
+| Kode | Udvidet | Betydning |
+| --- | --- | --- |
+| 500 |  | Syntaksfejl, kommando genkendes ikke |
+| 501 |  | Syntaksfejl i parametre eller argumenter |
+| 502 |  | Kommando ikke implementeret |
+| 503 |  | Forkert rækkefølge af kommandoer |
+| 504 |  | Kommandoparameter ikke implementeret |
+| 521 |  | Server accepterer ikke e-mail |
+| 535 |  | Autentificering mislykkedes; forkerte legitimationsoplysninger |
+| 550 |  | Mailbox utilgængelig; modtager afvist |
+| 550 | 5.1.1 | Bruger ukendt; mailbox eksisterer ikke |
+| 551 |  | Bruger ikke lokal; prøv venligst `<forward path>` |
+| 552 |  | Overskredet lagerpladsallokering |
+| 553 |  | Mailbox navn ikke tilladt |
+| 554 |  | Transaktion mislykkedes eller ingen SMTP service her |
+| 5.7.1 |  | Levering ikke autoriseret; besked afvist |
+| 5.7.25 |  | PTR record mangler eller stemmer ikke overens (Gmail) |
+| 5.7.26 |  | Sender ID politik mismatch |
+| 5.7.27 |  | SPF autentificering bestod ikke (Gmail) |
+| 5.7.28 |  | SPF politik fiasko |
+| 5.7.29 |  | Besked ikke sendt over TLS (Gmail) |
+| 5.7.30 |  | DKIM autentificering bestod ikke (Gmail) |
+
+<Tip>
+  Indsæt en bounce kode i mySMTP [Bounce Code Decoder](https://toolbox.smtp.ai/) for en letforståelig forklaring og løsning.
+</Tip>
+
+<Note>
+  Gmail udvidede statuskoder som `4.7.23` og `5.7.27` hjælper dig med at identificere præcis, hvilken afsenderkrav der fejler. Du kan også slå autentificeringsproblemer op med [Google Postmaster Tools](https://postmaster.google.com).
+</Note>
+
+<Note>
+  Transaktionseksemplerne nedenfor bruger et dedikeret relay hostnavn som `relayxx.mysmtp.com`. Delt IP planer bruger `mail.mysmtp.com` og er kun tilgængelige i Danmark.
+</Note>
+
+## Eksempel SMTP transaktioner
+
+### Succesfuld levering
+
+```plaintext
+S: 220 relayxx.mysmtp.com ESMTP ready
+C: HELO client.example.com
+S: 250 relayxx.mysmtp.com Hello client.example.com
+C: MAIL FROM:<sender@example.com>
+S: 250 OK
+C: RCPT TO:<recipient@example.com>
+S: 250 OK
+C: DATA
+S: 354 Start mail input; end with <CRLF>.<CRLF>
+C: Subject: Hello
+C:
+C: This is a test message.
+C: .
+S: 250 OK, message accepted for delivery
+C: QUIT
+S: 221 Goodbye
+```
+
+### Autentificeringsfejl
+
+```plaintext
+S: 220 relayxx.mysmtp.com ESMTP ready
+C: AUTH LOGIN
+S: 334 VXNlcm5hbWU6
+C: <base64 username>
+S: 334 UGFzc3dvcmQ6
+C: <base64 password>
+S: 535 Authentication failed
+```
+
+<Warning>
+  Hvis du modtager gentagne 535 fejl, skal du verificere dit SMTP brugernavn og din adgangskode i mySMTP dashboard. Se [Opsætning af SMTP oplysninger](/da/getting-started/setting-up-smtp-credentials).
+</Warning>
+
+## Relaterede artikler
+
+- [Almindelige SMTP fejl](/da/troubleshooting/common-smtp-errors)
+- [SMTP grænser og sendehastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Hurtig forklaring af DNS indstillinger](/da/getting-started/dns-settings-quick-explainer)

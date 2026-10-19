@@ -1,0 +1,57 @@
+---
+title: "CAN-SPAM og e-mail compliance guide"
+sidebarTitle: "CAN-SPAM"
+description: "CAN-SPAM Act krav og best practices til lovlig e-mail afsendelse, med fokus på afmeldingsregler, afsender identifikation og internationale regler."
+---
+
+## Hvad er CAN-SPAM Act?
+
+CAN-SPAM Act (2003) regulerer kommerciel e-mail i USA. Den gælder for enhver e-mail med et marketing- eller promotionskomponent, ikke kun bulk afsendelser.
+
+## Centrale krav
+
+| Krav | Regel |
+| --- | --- |
+| Nøjagtige headers | From, To og Reply-To felter skal identificere den rigtige afsender |
+| Ærlige emnelinjer | Emnelinjer skal afspejle det faktiske beskedindhold |
+| Reklamegørelse | Mærk tydeligt beskeden som en reklame, når det kræves |
+| Fysisk adresse | Medtag en gyldig postadresse i hver besked |
+| Afmeldingsmekanisme | Medtag et klart unsubscribe link; respekter anmodninger inden for 10 hverdage |
+| Overvåg tredjeparter | Du er stadig ansvarlig for compliance, selv når du bruger en ekstern afsender |
+
+## Best practices ud over det juridiske minimum
+
+- Brug bekræftet opt-in (dobbelt opt-in) ved indsamling af e-mail adresser
+- Hold din liste ren ved at fjerne hard bounces og langvarigt inaktive kontakter
+- Undgå spammy formatering som overdreven caps, for mange links eller vildledende tilbud
+- Vedligehold en spam klagetakst under 0,3% for at beskytte indbakkeplaceringen
+
+## One-click unsubscribe
+
+For bulk marketing e-mail, medtag et one-click unsubscribe link, der overholder RFC 8058. Dette forventes nu af store indbakkeudbydere og forbedrer både compliance og leveringsevne.
+
+## Andre lande og regioner
+
+| Region | Lov | Nøglefunktion |
+| --- | --- | --- |
+| Canada | CASL | Kræver udtrykkelig opt-in (samtykke) før afsendelse |
+| EU | GDPR + ePrivacy | Strikte regler om dataindsamling og samtykke |
+| Australien | Spam Act | Kræver samtykke og en fungerende afmeldingsmulighed |
+
+<Warning>
+  Hvis du sender til modtagere i EU, er CAN-SPAM alene ikke nok. Du skal også overholde GDPR og ePrivacy Direktivet, herunder lovligt grundlag for behandling og klare samtykkeregistreringer.
+</Warning>
+
+## Hurtig compliance tjekliste
+
+- [ ] Nøjagtig afsenderinformation i hver besked
+- [ ] Ærlige emnelinjer
+- [ ] Klar reklamegørelse, hvor det er relevant
+- [ ] Fysisk postadresse inkluderet
+- [ ] Nemt unsubscribe link til stede
+- [ ] Afmeldingsanmodninger behandlet inden for 10 hverdage
+- [ ] Tredjeparts afsendere overvåget og revideret
+
+<Tip>
+  Før du importerer en ny liste, kør den gennem [mySMTP Email List Analyzer](https://toolbox.smtp.ai/) for at fange syntaksfejl, dubletter og rolleadresser. Den kører i din browser og uploader ikke dine data.
+</Tip>

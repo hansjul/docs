@@ -1,0 +1,74 @@
+---
+title: "Connect MailWizz to mySMTP for bulk email delivery"
+sidebarTitle: "MailWizz"
+description: "Follow this guide to connect MailWizz to mySMTP by configuring SMTP server settings with port 587 and TLS encryption for secure delivery."
+---
+
+You need your mySMTP credentials and admin access to MailWizz.
+
+<Tip>
+  Your mySMTP dedicated IP works with your own self-hosted MailWizz. Prefer not to run MailWizz yourself? mySMTP offers [Hosted MailWizz](/email-configuration/web-applications/hosted-mailwizz) on its own infrastructure, sending through mySMTP IPs only and ready within an hour.
+</Tip>
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Protocol/Encryption | TLS (or STARTTLS) |
+| Username | Your mySMTP username |
+| Password | Your mySMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Add an SMTP delivery server
+
+<Steps>
+  <Step title="Open Delivery Servers">
+    Log in to your MailWizz admin panel. Go to **Servers → Delivery Servers**.
+  </Step>
+  <Step title="Create an SMTP server">
+    Click **Create New Server**. Select **SMTP** from the list of delivery server types.
+  </Step>
+  <Step title="Enter mySMTP settings">
+    Fill in the SMTP configuration form with the information from the table above and these additional fields:
+
+    - From Email: e.g. `you@yourdomain.com` (must be valid)
+    - From Name: Your brand or company name
+    - Reply-To Email: Optional, usually same as From Email
+    - Force From/Reply-To: Yes (recommended to ensure deliverability)
+    - Timeout: 5–10 seconds
+  </Step>
+  <Step title="Test and activate">
+    Scroll to the bottom of the form and click **Test Connection**. If successful, click **Save and Activate**. The server appears in your delivery server list and is ready to send.
+  </Step>
+</Steps>
+
+<Tip>
+  Optimize batch sizes and delivery schedules with the [MailWizz Quota Optimizer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+</Tip>
+
+## Send a test campaign
+
+Create a small test campaign to a personal email address. Confirm that the message arrives and that the headers show it passed through mySMTP.
+
+## Troubleshooting
+
+- **Connection test fails:** double-check the hostname, port 587, and TLS selection. If your network blocks 587, try port 2525.
+- **Authentication error:** re-enter your mySMTP username and password. Make sure there are no extra spaces.
+- **Emails going to spam:** verify SPF, DKIM, and DMARC are configured for your domain. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+  <Tip>
+    Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+  </Tip>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).
+
+## Related articles
+
+- [Web applications overview](/email-configuration/web-applications)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)

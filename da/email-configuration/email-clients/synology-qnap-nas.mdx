@@ -1,0 +1,82 @@
+---
+title: "Send e-mailalarmer fra Synology og QNAP NAS med mySMTP"
+sidebarTitle: "Synology & QNAP"
+description: "Konfigurer mySMTP på Synology DSM 7 og QNAP QTS / QuTS NAS-enheder. Angiv server, port 587, TLS og legitimationsoplysninger til notifikationsmails."
+---
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | Dit dedikerede hostnavn fra opsætningsmailen, f.eks. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Sikkerhed | **STARTTLS** |
+| Godkendelse | SMTP-brugernavn og adgangskode fra mySMTP |
+
+<Note>
+  Server (delt IP, DK only) | `mail.mysmtp.com` / Delt IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+<Tip>
+  Brug det præcise relay-hostnavn fra din opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Tip>
+
+## Konfigurer din NAS
+
+<Tabs>
+  <Tab title="Synology DSM 7">
+    <Steps>
+      <Step title="Åbn notifikationsindstillinger">
+        Åbn **Control Panel** > **Notification** > **Email**.
+      </Step>
+      <Step title="Tilføj en brugerdefineret SMTP-udbyder">
+        1. Klik på **Add** > **Add provider**.
+        2. Vælg **Custom SMTP server**.
+      </Step>
+      <Step title="Indtast SMTP-indstillingerne">
+        1. **SMTP server:** dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+        2. **SMTP port:** `587`.
+        3. **Secure connection (SSL/TLS):** vælg **STARTTLS**.
+        4. **Username:** dit mySMTP SMTP-brugernavn.
+        5. **Password:** dit mySMTP SMTP-adgangskode.
+        6. **Sender email:** den adresse, som alarmer skal sendes fra (skal være et verificeret domæne).
+        7. Klik på **Save**.
+      </Step>
+      <Step title="Send en testmail">
+        Klik på **Send a test email** og tjek modtagerens indbakke. Juster afsenderadressen eller modtageren om nødvendigt.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="QNAP QTS / QuTS hero">
+    <Steps>
+      <Step title="Åbn Notification Center">
+        Åbn **Control Panel** > **System** > **Notification Center**.
+      </Step>
+      <Step title="Tilføj en SMTP-service">
+        1. Gå til **Service Account and Device Pairing**.
+        2. Klik på **E-mail**.
+        3. Klik på **Add SMTP Service**.
+        4. Vælg **Custom**.
+      </Step>
+      <Step title="Indtast SMTP-indstillingerne">
+        1. **SMTP server:** dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+        2. **Port:** `587`.
+        3. **Security:** vælg **TLS** (dette bruger STARTTLS på port 587).
+        4. **Username:** dit mySMTP SMTP-brugernavn.
+        5. **Password:** dit mySMTP SMTP-adgangskode.
+        6. Klik på **Apply**.
+      </Step>
+      <Step title="Send en testmail">
+        Klik på **Test** for at sende en testbesked til den konfigurerede notifikationsmodtager.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Fejlfinding
+
+- **Testmail mislykkes:** dobbelttjek, at servernavnet er kopieret præcist fra opsætningsmailen, og at brugernavn og adgangskode er korrekte.
+- **Forbindelsesfejl på port 587:** dit netværk kan blokere den. Prøv port **2525**.
+- **Afsenderadresse afvist:** sørg for, at afsender-e-mailen bruger et domæne, der er godkendt for din mySMTP-konto. Se [Hurtig forklaring af DNS-indstillinger](/da/getting-started/dns-settings-quick-explainer).
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

@@ -1,0 +1,66 @@
+---
+title: "Opsæt mySMTP i Nyt Outlook til Windows"
+sidebarTitle: "Nyt Outlook"
+description: "Konfigurer mySMTP i Nyt Outlook til Windows ved hjælp af Avancerede indstillinger under kontotilføjelse. Angiv den brugerdefinerede SMTP-server, port 587 og godkendelse."
+---
+
+Nyt Outlook til Windows giver dig mulighed for at angive en brugerdefineret udgående SMTP-server under kontotilføjelse i Avancerede indstillinger.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server (dedikeret IP) | f.eks. `relayxx.mysmtp.com` (dit hostnavn står i opsætningsmailen) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** |
+| Kryptering | **STARTTLS** |
+| Godkendelse | Til, med dit SMTP-brugernavn og -adgangskode |
+
+<Note>
+  Delt IP-abonnementer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Tilføj en konto med mySMTP
+
+<Steps>
+  <Step title="Åbn kontoinstillinger">
+    I Nyt Outlook skal du klikke på **Indstillinger** > **Konti** > **Email-konti**.
+  </Step>
+  <Step title="Begynd at tilføje en konto">
+    Klik på **Administrer**, og klik derefter på **Tilføj konto**.
+  </Step>
+  <Step title="Indtast din emailadresse">
+    Indtast din emailadresse, og klik derefter på **Fortsæt** eller **Avanceret opsætning**.
+  </Step>
+  <Step title="Vælg kontotype">
+    Vælg **IMAP** eller **POP**.
+  </Step>
+  <Step title="Indtast indstillinger for indgående server">
+    Udfyld dine indgående mailserverindstillinger som angivet af din emailudbyder.
+  </Step>
+  <Step title="Indtast udgående SMTP-oplysninger">
+    I sektionen for den udgående server skal du indtaste:
+
+    - **SMTP-server**: dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`)
+    - **Port**: **587**
+    - **Krypteringsmetode**: **STARTTLS**
+    - **Godkendelse**: til
+    - **Brugernavn**: dit mySMTP SMTP-brugernavn
+    - **Adgangskode**: dit mySMTP SMTP-adgangskode
+  </Step>
+  <Step title="Afslut opsætningen">
+    Klik på **Næste** eller **Færdig** for at afslutte. Send en testmail for at verificere levering.
+  </Step>
+</Steps>
+
+<Warning>
+  Nyt Outlook giver dig ikke mulighed for at redigere SMTP-serveren på en eksisterende konto. For at ændre den udgående server senere skal du fjerne kontoen og tilføje den igen med trinnene ovenfor.
+</Warning>
+
+## Fejlfinding
+
+- **Kan ikke tilføje kontoen:** Bekræft, at du valgte **Avanceret opsætning** og valgte **IMAP** eller **POP**. Microsoft 365- og Exchange-konti tillader ikke brugerdefineret SMTP.
+- **Forbindelsen fejler:** Kontroller, at porten er **587** og krypteringen er **STARTTLS**. Hvis dit netværk blokerer 587, prøv **2525**.
+- **Godkendelsesfejl:** Genindtast dit mySMTP-brugernavn og -adgangskode.
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

@@ -1,0 +1,156 @@
+---
+title: "Kommandolinje-SMTP-test til mySMTP"
+sidebarTitle: "Kommandolinje"
+description: "Test mySMTP fra kommandolinjen ved hjælp af swaks, OpenSSL, telnet og PowerShell. Verificer porte, godkendelse og TLS, før du sender fra en applikation."
+---
+
+Du kan teste mySMTP-forbindelse og -godkendelse direkte fra terminalen, før du integrerer det i en applikation. Brug swaks til hurtige tests, OpenSSL til TLS-inspektion, og telnet eller PowerShell til portverifikation.
+
+## Forudsætninger
+
+- Dit mySMTP-brugernavn og -adgangskode fra opsætningsmailen
+- Dit mySMTP-værtsnavn fra opsætningsmailen (vist som `relayxx.mysmtp.com` i disse eksempler)
+- swaks, OpenSSL eller telnet installeret på dit system
+
+## Test med swaks
+
+swaks er et kommandolinjeværktøj til SMTP-test, der håndterer godkendelse og TLS automatisk.
+
+### Installer swaks
+
+<CodeGroup>
+
+```bash Debian/Ubuntu
+sudo apt-get install swaks
+```
+
+```bash macOS (Homebrew)
+brew install swaks
+```
+
+```bash Fedora/RHEL
+sudo dnf install swaks
+```
+
+</CodeGroup>
+
+### Send en testmail
+
+```bash
+swaks \
+  --server relayxx.mysmtp.com \
+  --port 587 \
+  --tls \
+  --auth LOGIN \
+  --auth-user YOUR_USERNAME \
+  --auth-password YOUR_PASSWORD \
+  --from you@yourdomain.com \
+  --to recipient@example.com \
+  --header "Subject: Test from swaks" \
+  --body "This is a test message sent through mySMTP."
+```
+
+<Note>
+  Erstat `relayxx.mysmtp.com`, `YOUR_USERNAME` og `YOUR_PASSWORD` med dit rigtige værtsnavn og dine legitimationsoplysninger fra opsætningsmailen.
+</Note>
+
+## Test TLS med OpenSSL
+
+Brug OpenSSL til at inspicere TLS-handshaken og sende en manuel SMTP-session.
+
+### STARTTLS på port 587
+
+```bash
+openssl s_client -starttls smtp -connect relayxx.mysmtp.com:587
+```
+
+Efter TLS-handshaken er fuldført, skal du starte SMTP-sessionen:
+
+```text
+EHLO yourdomain.com
+AUTH LOGIN
+```
+
+Serveren svarer med `334 VXNlcm5hbWU6`, som er Base64-promptet for brugernavn. Koder dit brugernavn og din adgangskode i Base64:
+
+```bash
+echo -n 'YOUR_USERNAME' | base64
+echo -n 'YOUR_PASSWORD' | base64
+```
+
+Indsæt hver kodet streng ved prompten. Send derefter beskeden:
+
+```text
+MAIL FROM:<you@yourdomain.com>
+RCPT TO:<recipient@example.com>
+DATA
+Subject: Test from OpenSSL
+
+This is a test message.
+.
+QUIT
+```
+
+### Implicit TLS på port 465
+
+```bash
+openssl s_client -connect relayxx.mysmtp.com:465
+```
+
+Efter handshaken skal du bruge de samme SMTP-kommandoer som ovenfor.
+
+## Verificer portrækkevidde
+
+### Windows (PowerShell)
+
+```powershell
+Test-NetConnection -ComputerName relayxx.mysmtp.com -Port 587
+```
+
+### Linux og macOS (telnet)
+
+```bash
+telnet relayxx.mysmtp.com 587
+```
+
+Hvis forbindelsen lykkes, ser du en SMTP-hilsen som `220 relayxx.mysmtp.com ESMTP`. Skriv `QUIT` for at lukke. Hvis forbindelsen udløber, er porten blokeret af en firewall eller internetudbyder.
+
+### Linux og macOS (nc)
+
+```bash
+nc -vz relayxx.mysmtp.com 587
+```
+
+<Warning>
+  Indsæt aldrig rigtige adgangskoder i delte terminaler eller logfiler. Brug testlegitimationsoplysninger eller en dedikeret testkonto, når det er muligt.
+</Warning>
+
+## Automatiseret onlinetest
+
+Kør en fuld deliverability- og godkendelsestest på [test.smtp.ai](https://test.smtp.ai). Den tjekker portforbindelse, TLS-forhandling, godkendelse og DNS-poster i ét trin.
+
+<Tip>
+  Efter at have bekræftet, at forbindelsen virker, skal du verificere din domænegodkendelse med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/). Den indeholder 19 gratis værktøjer inklusive SPF-validering og sender readiness checks.
+</Tip>
+
+## Almindelige fejl
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Dit brugernavn eller din adgangskode er forkert, eller din konto er endnu ikke aktiveret. Genindtast legitimationsoplysningerne nøjagtigt som vist i opsætningsmailen. Se [Opsætning af SMTP-legitimationsoplysninger](/da/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Dit netværk eller din vært kan blokere port 587. Prøv port 2525 med den samme swaks-kommando, eller port 465 med OpenSSL. Se [Understøttede SMTP-porte og -kryptering](/da/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    OpenSSL-flagene matcher ikke porten. Brug `-starttls smtp` for porte 587 og 2525. Brug `-connect` uden `-starttls` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [Kodeeksempler, oversigt](/da/email-configuration/code-examples)
+- [Understøttede SMTP-porte og -kryptering](/da/getting-started/supported-smtp-ports-and-encryption)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

@@ -1,0 +1,37 @@
+---
+title: "Frequently Asked Questions About Getting Started"
+sidebarTitle: "FAQs"
+description: "Find answers to common questions about mySMTP. Visit our general FAQ page for more information about our email delivery service."
+---
+
+For general questions about mySMTP, visit the [general FAQ page](https://mysmtp.com/solutions/faq). The questions below can be answered from the guides in this help center.
+
+<AccordionGroup>
+  <Accordion title="How do I choose between a shared IP and a dedicated IP?">
+    Choose a shared IP (DK only) if you send lower volumes and want a managed reputation with no warm-up period. Choose a dedicated IP if you send larger volumes and want full control over your sender reputation. For a full comparison, see [Shared IPs or Dedicated?](/getting-started/shared-ips-or-dedicated).
+  </Accordion>
+
+  <Accordion title="Which SMTP port should I use?">
+    Use port 587 with STARTTLS for outgoing mail. Ports 2525 and 25 are alternatives if 587 is blocked. See [SMTP Ports and Encryption](/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="What DNS records do I need to add?">
+    Add SPF, DKIM, and DMARC records for your sending domain. These authorize mySMTP to send on your behalf and improve deliverability. See the [DNS Settings Quick Explainer](/getting-started/dns-settings-quick-explainer) for the exact records.
+  </Accordion>
+
+  <Accordion title="How do I create additional SMTP users?">
+    If you have a dedicated IP, create new SMTP users in the dashboard under **SMTP Users**. This helps you separate traffic by team member or integration. See the [Dedicated IP Server Dashboard](/getting-started/dedicated-ip-server-dashboard).
+  </Accordion>
+
+  <Accordion title="Can I restrict SMTP access to specific IP addresses?">
+    Yes. Use IP whitelisting to allow only approved source addresses. This is available in the dashboard under **IP Whitelisting** for dedicated IP accounts. See [Whitelisting and Security](/getting-started/whitelisting-and-security-best-practices).
+  </Accordion>
+
+  <Accordion title="Where can I check the status of an email?">
+    For dedicated IP accounts, open **Log Reports** in the dashboard to view timestamps, recipients, and delivery status. Logs are retained for 30 days. See the [Dedicated IP Server Dashboard](/getting-started/dedicated-ip-server-dashboard).
+  </Accordion>
+
+  <Accordion title="How do I get help if my email is not arriving?">
+    Start with [Common SMTP Errors](/troubleshooting/common-smtp-errors) and [Emails Going to Spam](/troubleshooting/emails-going-to-spam). If you still need help, contact [support@mysmtp.com](mailto:support@mysmtp.com) with the send time, sender, recipient, and any SMTP response.
+  </Accordion>
+</AccordionGroup>

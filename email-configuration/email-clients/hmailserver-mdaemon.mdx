@@ -1,0 +1,109 @@
+---
+title: "hMailServer and MDaemon Setup for mySMTP"
+sidebarTitle: "hMailServer / MDaemon"
+description: "Set up hMailServer or MDaemon to relay outbound mail through mySMTP. Configure smart host, SMTP authentication, and STARTTLS encryption."
+---
+
+You need your SMTP username, password, and relay hostname from your mySMTP setup email.
+
+## Before you start
+
+Have these details ready:
+
+| Setting | Value |
+| --- | --- |
+| Smart host | Your relay hostname, e.g. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Encryption | **STARTTLS** |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Use the exact relay hostname from your setup email. `relayxx.mysmtp.com` is only an example.
+</Note>
+
+<Tabs>
+  <Tab title="hMailServer">
+    <Steps>
+      <Step title="Open SMTP delivery settings">
+        In hMailServer Administrator, go to **Settings** > **Protocols** > **SMTP** > **Delivery of e-mail**.
+      </Step>
+      <Step title="Set the remote host name and port">
+        1. Enter your relay hostname (e.g. `relayxx.mysmtp.com`) in **Remote host name**.
+        2. Enter **587** in **Remote TCP/IP port**.
+      </Step>
+      <Step title="Enable SMTP authentication">
+        1. Check **Server requires authentication**.
+        2. Enter your mySMTP **username** and **password**.
+      </Step>
+      <Step title="Set connection security">
+        Select **STARTTLS (Required)** from the **Connection security** dropdown. If STARTTLS is not available as an option, set it to **TLS** or the nearest equivalent and ensure the port is 587.
+      </Step>
+      <Step title="Save and test">
+        Click **Save** and send a test email from a client connected to hMailServer.
+      </Step>
+    </Steps>
+
+    <Warning>
+      Menu labels may vary slightly depending on your hMailServer version. Look for "Delivery of e-mail" or "SMTP routes" under the SMTP protocol settings.
+    </Warning>
+  </Tab>
+  <Tab title="MDaemon">
+    <Steps>
+      <Step title="Open server settings">
+        In MDaemon, go to **Server** > **Server Settings**.
+      </Step>
+      <Step title="Enable the smart host">
+        1. Select **Delivery**.
+        2. Check **Send all mail to smart host**.
+        3. Enter your relay hostname (e.g. `relayxx.mysmtp.com`) in **Smart host**.
+      </Step>
+      <Step title="Enable SMTP authentication">
+        1. Check **Use SMTP AUTH**.
+        2. Enter your mySMTP **username** and **password**.
+      </Step>
+      <Step title="Set the port">
+        Enter **587** as the port for the smart host connection.
+      </Step>
+      <Step title="Require STARTTLS">
+        1. Go to **Server** > **Server Settings** > **Ports/SSL**.
+        2. Make sure the smart host delivery connection uses **STARTTLS** or TLS on port 587.
+      </Step>
+      <Step title="Save and test">
+        Click **Apply** or **OK** and send a test email from a client connected to MDaemon.
+      </Step>
+    </Steps>
+
+    <Warning>
+      Menu labels may vary slightly depending on your MDaemon version. Look for "Smart host" under Delivery or Routing settings.
+    </Warning>
+  </Tab>
+</Tabs>
+
+## Test the connection
+
+1. Send a test email from a mailbox on your server to an external address, such as a Gmail account or your own.
+2. Confirm the message arrives. In the received message headers you should see it passed through your mySMTP relay.
+3. If the message does not arrive, check the server's mail queue or logs for delivery errors.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Login fails">
+    Re-enter your mySMTP username and password in the smart host settings. Make sure there are no extra spaces.
+  </Accordion>
+
+  <Accordion title="Connection timed out">
+    Check that outbound traffic on port **587** is allowed by your firewall. Try port **2525** if port 587 is blocked, and update the port in your server settings.
+  </Accordion>
+
+  <Accordion title="TLS not available">
+    If your server version does not support STARTTLS, confirm you are using a current release. hMailServer and MDaemon both support TLS on SMTP delivery in recent versions.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Make sure the sender address uses a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

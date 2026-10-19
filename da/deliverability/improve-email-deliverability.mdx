@@ -1,0 +1,81 @@
+---
+title: "Forbedr Email Deliverability"
+sidebarTitle: "Forbedr Deliverability"
+description: "Implementer nøglestrategier med mySMTP for at holde mails ude af spam og nå indbakker konsekvent. Følg Gmail, Yahoo og Microsoft afsenderkrav."
+---
+
+<Tip>
+  Kør <a href="https://toolbox.smtp.ai/">Sender Readiness Checklist</a> i mySMTP Deliverability Toolbox før din næste kampagne for at verificere autentificering, rDNS, unsubscribe-opsætning og listehygiejne i ét hug.
+</Tip>
+
+## Autentificeringsopsætning
+
+Autentificer hvert domæne, du sender fra. ISP'er bruger disse records til at verificere, at du er en legitim afsender.
+
+| Record | Formål | Hurtig opsætning |
+| --- | --- | --- |
+| SPF | Lister autoriserede sendende servere | `v=spf1 include:spf1.mysmtp.com ~all` |
+| DKIM | Kryptografisk signerer hver besked | Tilføj TXT-recorden mySMTP leverer for `mysmtp._domainkey` |
+| DMARC | Fortæller modtagere, hvordan de skal håndtere auth-fejl | Start med `v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com` |
+
+For trin-for-trin DNS-instruktioner, se [DNS opsætning til autentificering](/da/deliverability/dns-setup-for-authentication) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+## Store udbyderkrav (2025-2026)
+
+Gmail, Yahoo og Microsoft håndhæver strengere afsenderstandarder. At opfylde disse beskytter din deliverability på tværs af alle udbydere.
+
+| Krav | Gmail / Yahoo | Microsoft (Outlook.com) | Sådan opfylder du det |
+| --- | --- | --- | --- |
+| SPF | Påkrævet | Påkrævet | Publicer en SPF-record, der inkluderer mySMTP |
+| DKIM | Påkrævet | Påkrævet | Publicer DKIM-recorden fra din mySMTP opsætningsmail |
+| DMARC | Påkrævet | Anbefalet | Publicer en DMARC-record; planlæg at gå fra `p=none` til `p=quarantine` og derefter `p=reject` |
+| One-click unsubscribe | Påkrævet for bulk | Anbefalet | Inkluder `List-Unsubscribe` med RFC 8058 funktionalitet |
+| Spam klagerafer | Under 0,3% | Under 0,3% | Fjern klager med det samme; send kun til engagerede modtagere |
+| Gyldig reverse DNS | Påkrævet | Påkrævet | Inkluderet med dedikerede IP'er |
+| TLS kryptering | Påkrævet | Påkrævet | mySMTP bruger STARTTLS på port 587 |
+
+<Note>
+  Bulk-afsendere er typisk dem, der sender mere end 5.000 beskeder om dagen til Gmail eller Yahoo-adresser.
+</Note>
+
+## IP-strategi
+
+Vælg den IP-opsætning, der matcher dit volumen og dine kontrolbehov.
+
+| Faktor | Delte IP (kun DK) | Dedikeret IP |
+| --- | --- | --- |
+| Bedst til | Under 100.000 emails om måneden, uregelmæssigt volumen | Over 100.000 emails om måneden, konsekvent afsendelse |
+| Reputationskontrol | Administreret af mySMTP | Fuldt din |
+| Warmup påkrævet | Nej | Ja, 21 til 45 dage |
+| Omkostning | Lavere | Højere |
+
+Se [IP-reputation: dedikerede vs. delte IP'er](/da/deliverability/ip-reputation-dedicated-vs-shared-ips) for detaljer.
+
+## Listehygiejne
+
+- Fjern hard bounces med det samme. mySMTP undertrykker dem automatisk.
+- Brug bekræftet (double) opt-in for at sikre, at abonnenter ønsker din mail.
+- Segmenter efter engagement og fjern adresser, der ikke har åbnet eller klikket i 6 til 12 måneder.
+- Hold bounce-rater under 2% og spam klagerafer under 0,1%.
+
+## Indhold og afsendelsespraksis
+
+- Hold et sundt tekst-til-billede-forhold. Undgå billeder-only emails.
+- Brug et genkendeligt from-navn og from-adresse.
+- Inkluder et tydeligt unsubscribe-link i hver marketingbesked.
+- Undgå spam-udløsende sætninger og overdreven tegnsætning.
+- Send på en konsekvent tidsplan. Pludselige volumenspidser skader reputation.
+
+## Overvågning
+
+- Tjek [Google Postmaster Tools](https://postmaster.google.com/) for Gmail-domænereputation, spamrate og autentificeringsresultater.
+- Tjek [Microsoft SNDS](https://postmaster.live.com/) for Outlook.com IP-reputation og spam trap-data.
+- Overvåg blacklist-status med <a href="https://toolbox.smtp.ai/">Blacklist Checker</a> i mySMTP Deliverability Toolbox.
+- Gennemse bounce- og klagernapporter i dit mySMTP dashboard regelmæssigt.
+
+## Relaterede artikler
+
+- [DNS opsætning til autentificering](/da/deliverability/dns-setup-for-authentication)
+- [IP-reputation: dedikerede vs. delte IP'er](/da/deliverability/ip-reputation-dedicated-vs-shared-ips)
+- [Warm up planer](/da/deliverability/warm-up-plans)
+- [Håndtering af bounces og klager](/da/deliverability/handling-bounces-and-complaints)

@@ -1,0 +1,70 @@
+---
+title: "DNS-indstillinger, hurtig forklaring"
+sidebarTitle: "DNS-forklarer"
+description: "Tilføj SPF, DKIM og DMARC DNS-poster for dit domæne for at godkende mySMTP-afsendelse og forbedre e-mail deliverability."
+---
+
+## Påkrævede DNS-poster
+
+| Posttype | Navn / Host | Værdi |
+| --- | --- | --- |
+| TXT | @ eller dit apex-domæne | `v=spf1 include:spf1.mysmtp.com ~all` |
+| TXT | `mysmtp._domainkey` | Den 2048-bit DKIM-nøgle fra din mySMTP-opsætning |
+| TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com` |
+
+<Note>
+  Brug den eksakte DKIM-postværdi fra din mySMTP-opsætnings-e-mail. Brug ikke en pladsholder-nøgle i produktion.
+</Note>
+
+## Sådan tilføjer du posterne
+
+<Steps>
+  <Step title="Log ind hos din DNS-udbyder">
+    Gå til kontrolpanelet for din domæneregistrator eller DNS-vært (for eksempel GoDaddy, Namecheap eller One.com).
+  </Step>
+  <Step title="Åbn DNS-poster-sektionen">
+    Led efter **DNS-indstillinger**, **Administrer DNS** eller **DNS-poster**.
+  </Step>
+  <Step title="Tilføj eller opdater SPF-posten">
+    Hvis dit domæne allerede har en TXT-post til SPF, tilføj `include:spf1.mysmtp.com` til den. Der bør kun være én SPF-post per domæne. Udgiv ikke en anden SPF-post.
+
+    Eksempel på en enkelt post:
+
+    ```text
+    v=spf1 include:spf1.mysmtp.com ~all
+    ```
+
+    Eksempel kombineret med en eksisterende udbyder:
+
+    ```text
+    v=spf1 include:spf1.mysmtp.com include:_spf.google.com ~all
+    ```
+  </Step>
+  <Step title="Tilføj DKIM-posten">
+    Opret en ny TXT-post med navnet `mysmtp._domainkey` og indsæt DKIM-nøgleværdien fra din mySMTP-opsætning.
+  </Step>
+  <Step title="Tilføj DMARC-posten">
+    Opret en ny TXT-post med navnet `_dmarc`. Start med `p=none`, så du kan overvåge resultaterne uden at påvirke levering. Du kan gå videre til `p=quarantine` og senere `p=reject`, når du er sikker på at din opsætning er korrekt.
+  </Step>
+  <Step title="Vent på DNS-propagering">
+    DNS-ændringer træder normalt i kraft inden for få minutter, men fuld propagering kan tage op til 24 timer.
+  </Step>
+</Steps>
+
+## Verificer din opsætning
+
+Efter propagering, brug [test.smtp.ai](https://test.smtp.ai) til at tjekke at SPF, DKIM og DMARC består. Du kan også gennemgå sektionen **DNS verifications** i mySMTP-dashboardet, efter posterne har haft tid til at opdatere sig.
+
+## DMARC-overgangsguide
+
+For 2026-afsenderkrav fra Gmail, Yahoo og Outlook har du brug for SPF- og DKIM-justering og en gyldig DMARC-post. Start med `p=none`, gennemgå aggregerede rapporter, gå derefter videre til `p=quarantine` og til sidst `p=reject`, når du bekræfter at legitim mail godkendes korrekt.
+
+## Relaterede artikler
+
+- [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained)
+- [Forbedr e-mail deliverability](/da/deliverability/improve-email-deliverability)
+- [Dedikeret IP-server-dashboard](/da/getting-started/dedicated-ip-server-dashboard)
+
+<Tip>
+  Vil du have et enkelt pass/advar/fejl-resumé af din SPF, DKIM og DMARC-opsætning? Brug den gratis [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox. Den tjekker justering med dit From-domæne og kører fuldstændigt i din browser.
+</Tip>

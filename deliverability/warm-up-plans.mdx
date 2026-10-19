@@ -1,0 +1,122 @@
+---
+title: "IP Warmup Plans for mySMTP Dedicated IPs"
+sidebarTitle: "Warm Up Plans"
+description: "Why IP warmup matters and how to build a day-by-day schedule with the mySMTP Warmup Generator. Domain requirements, inputs, speeds, and metrics to watch."
+---
+
+<Card title="Open the Warmup Generator" icon="chart-line" href="https://toolbox.smtp.ai/#warmup-generator">
+  Build a custom day-by-day warmup schedule for your dedicated IP in seconds. Free, no account required.
+</Card>
+
+<Warning>
+  The sending domain you use on a dedicated IP must have at least 6 months of sending history. New or recently registered domains have no reputation of their own and cannot be warmed up reliably on a new IP.
+</Warning>
+
+## Why warmup matters
+
+- **Reputation starts at zero.** Mailbox providers judge a new IP by its first sending patterns. Sudden high volume looks like a spammer or a compromised server.
+- **Providers throttle unknown senders.** Without warmup, much of your mail is deferred or rejected (4xx/5xx responses) before reaching the inbox.
+- **Early damage is hard to undo.** A blocklisting or poor reputation in week one can take weeks to repair.
+- **Good habits stick.** A steady ramp with engaged recipients gives your IP a strong reputation that carries your full volume long term.
+
+## Domain requirements
+
+Before you start, make sure your domain:
+
+| Requirement | Details |
+| --- | --- |
+| Domain history | 6+ months of real sending history |
+| SPF | Published and includes mySMTP. See [SPF, DKIM, DMARC & BIMI](/deliverability/spf-dkim-dmarc-and-bimi-explained) |
+| DKIM | Signing active for your domain |
+| DMARC | Published, starting with `p=none` |
+| Blocklists | Domain is not listed. See [Blacklist monitoring](/deliverability/blacklist-monitoring-and-delisting) |
+
+## Build your schedule with the generator
+
+<Steps>
+  <Step title="Open the generator">
+    Go to [toolbox.smtp.ai/#warmup-generator](https://toolbox.smtp.ai/#warmup-generator).
+  </Step>
+  <Step title="Enter your details">
+    | Input | What to enter |
+    | --- | --- |
+    | Server / IP | `relayxx.mysmtp.com` (from your mySMTP setup email) |
+    | Email Type | Marketing, Transactional, Mixed, or Cold Outreach |
+    | Target Daily Volume | The daily volume you want to reach |
+    | Warmup Speed | Conservative, Moderate, or Aggressive |
+    | Starting Volume | Emails on day 1 (default 50) |
+    | Domain Reputation | Your domain's sending history and reputation |
+  </Step>
+  <Step title="Choose a warmup speed">
+    | Speed | Duration | Best for |
+    | --- | --- | --- |
+    | Conservative | 45 days | Cold outreach, or when inbox placement is critical |
+    | Moderate | 30 days | Most senders with clean lists |
+    | Aggressive | 21 days | Domains with a strong reputation and high engagement |
+  </Step>
+  <Step title="Generate and export">
+    The generator shows overview cards, a daily volume chart, a day-by-day table (target volume, increase, and progress), and recommendations for your email type. Export the schedule as CSV to track it in a spreadsheet or your sending platform.
+  </Step>
+  <Step title="Send every day">
+    Follow the schedule daily, starting with your most engaged recipients. Don't skip days or jump ahead.
+  </Step>
+</Steps>
+
+<Note>
+  The schedule grows exponentially for roughly the first 70% of the days, then linearly up to your target. This mirrors how a real email program grows, which providers recognize as legitimate behavior.
+</Note>
+
+## Metrics to watch
+
+Check these daily. If a metric hits the warning level, pause or slow down.
+
+| Metric | Healthy | Warning | Action |
+| --- | --- | --- | --- |
+| Bounce rate | Under 2% | Over 5% | Pause and clean your list |
+| Spam complaint rate | Under 0.1% | Over 0.3% | Pause immediately |
+| Inbox placement | Over 95% | Under 70% | Slow down the ramp |
+| Open rate | Over 20% | Under 10% | Review content and list quality |
+
+<Tip>
+  Track Gmail reputation in [Google Postmaster Tools](https://postmaster.google.com/) and Microsoft reputation in [SNDS](https://sendersupport.olc.protection.outlook.com/snds/).
+</Tip>
+
+## Common mistakes
+
+<AccordionGroup>
+  <Accordion title="Using a new or recently registered domain">
+    A domain with less than 6 months of history has no reputation to carry. Use an established domain with at least 6 months of sending history. Do not use a new domain for warmup.
+  </Accordion>
+
+  <Accordion title="Skipping days">
+    Gaps create irregular volume patterns. Send every day during warmup, even small amounts.
+  </Accordion>
+
+  <Accordion title="Increasing volume too fast">
+    Big jumps trigger filters and throttling. Follow the generated schedule.
+  </Accordion>
+
+  <Accordion title="Sending to your full list right away">
+    Start with recent, engaged recipients and add less engaged segments later.
+  </Accordion>
+
+  <Accordion title="Ignoring warning signs">
+    High complaints, rising bounces, or low opens mean you should pause, not push through.
+  </Accordion>
+</AccordionGroup>
+
+## Re-warming after a pause
+
+| Inactive period | How to resume |
+| --- | --- |
+| 1 to 2 weeks | Resume at 50% of previous volume, ramp back over 1 week |
+| 1 to 2 months | Resume at 25% of volume, follow a 2-week ramp |
+| 3+ months | Treat as a new IP and run the full warmup |
+
+If you warm up several IPs, stagger the start dates by 1 to 2 weeks and generate a separate schedule for each IP.
+
+## Related articles
+
+- [IP reputation: dedicated vs. shared IPs](/deliverability/ip-reputation-dedicated-vs-shared-ips)
+- [Improve email deliverability](/deliverability/improve-email-deliverability)
+- [Handling bounces and complaints](/deliverability/handling-bounces-and-complaints)

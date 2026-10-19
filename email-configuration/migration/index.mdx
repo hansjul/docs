@@ -1,0 +1,71 @@
+---
+title: "Migrate to mySMTP from any email provider"
+sidebarTitle: "Migrate to mySMTP"
+description: "Switch your email sending to mySMTP safely without hurting deliverability. Follow this migration checklist covering DNS, credentials, warm-up, and monitoring."
+---
+
+Switching SMTP providers can affect deliverability if domain authentication and IP reputation are not handled carefully. This guide walks you through a safe cutover so your messages keep landing in the inbox.
+
+## Before you start
+
+- Keep your old provider active until cutover is complete and stable. Removing it too early can leave you without a working sending path.
+- If you use a dedicated IP with mySMTP (the default plan), plan to warm it up gradually. Sending full volume from a cold IP can trigger blocks.
+- If you use a shared IP plan (DK only), you can send at normal volume once DNS is verified.
+
+## Migration checklist
+
+<Steps>
+  <Step title="Sign up and get credentials">
+    Create your account at [clients.mysmtp.com](https://clients.mysmtp.com), complete activation, and note your SMTP hostname, username, and password from the setup email. See [Sign up and activate your account](/getting-started/sign-up-and-activate-your-account) and [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials).
+  </Step>
+  <Step title="Add SPF and DKIM for mySMTP">
+    Add `include:spf1.mysmtp.com` to your domain SPF record. A new record looks like `v=spf1 include:spf1.mysmtp.com ~all`; during migration, keep the old provider's include in the same record. Add mySMTP DKIM TXT/CNAME records as shown in your dashboard or setup email. Keep your old provider's records in place for now. See [DNS setup for authentication](/deliverability/dns-setup-for-authentication).
+  </Step>
+  <Step title="Set up your application">
+    Update the SMTP hostname, port, and credentials in your apps, CMS, or code. Use the hostname from your setup email (for example `relayxx.mysmtp.com`) on port `587` with STARTTLS. See [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption).
+  </Step>
+  <Step title="Warm up your dedicated IP gradually">
+    Start with a small daily volume and increase slowly over days or weeks. This builds sender reputation on your new IP. See [Warm up plans](/deliverability/warm-up-plans) and use the [warm-up generator](https://toolbox.smtp.ai/#warmup-generator) in the mySMTP Deliverability Toolbox.
+  </Step>
+  <Step title="Monitor bounces, complaints, and delivery">
+    Watch your sending dashboard and inbox placement during the transition. Use the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox to verify authentication and headers.
+  </Step>
+  <Step title="Remove old provider DNS records last">
+    Only after sending is stable and reputation metrics look good, remove the old provider's SPF include and DKIM CNAME/TXT records. Updating DNS too early can break authentication if you need to roll back.
+  </Step>
+</Steps>
+
+<Tip>
+  Use the free [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) with 19 tools including SPF Validator, One-Click SPF/DKIM/DMARC Checker, and Email Header Analyzer.
+</Tip>
+
+## Provider-specific migration guides
+
+<CardGroup cols={2}>
+  <Card title="SendGrid" icon="arrow-right-arrow-left" href="/email-configuration/migration/sendgrid">
+    Move from SendGrid SMTP to mySMTP. Update hostname, credentials, and SPF/DKIM records.
+  </Card>
+
+  <Card title="Mailgun" icon="arrow-right-arrow-left" href="/email-configuration/migration/mailgun">
+    Move from Mailgun SMTP to mySMTP. Update hostname, credentials, and SPF/DKIM records.
+  </Card>
+
+  <Card title="Amazon SES" icon="arrow-right-arrow-left" href="/email-configuration/migration/amazon-ses">
+    Move from Amazon SES SMTP to mySMTP. Update hostname, credentials, and SPF/DKIM records.
+  </Card>
+
+  <Card title="Brevo" icon="arrow-right-arrow-left" href="/email-configuration/migration/brevo">
+    Move from Brevo SMTP to mySMTP. Update hostname, credentials, and SPF/DKIM records.
+  </Card>
+
+  <Card title="Postmark" icon="arrow-right-arrow-left" href="/email-configuration/migration/postmark">
+    Move from Postmark SMTP to mySMTP. Update hostname, credentials, and SPF/DKIM records.
+  </Card>
+</CardGroup>
+
+## Related articles
+
+- [Warm up plans](/deliverability/warm-up-plans)
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)
+- [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)

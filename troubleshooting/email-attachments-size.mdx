@@ -1,0 +1,35 @@
+---
+title: "Email Attachments Size"
+sidebarTitle: "Attachment Limits"
+description: "Learn mySMTP's email attachment size limit, how Base64 encoding affects file size, and calculate the real maximum attachment size you can send."
+---
+
+## Size limit
+
+| Limit | Value |
+| --- | --- |
+| Maximum email size (including attachments) | **25 MB** |
+| Realistic maximum file size after Base64 overhead | **~18 MB** |
+
+## Why the real limit is lower
+
+Email protocols encode binary attachments into Base64 text before transmission. This process adds roughly **33% overhead** to the file size. A 18 MB file becomes approximately 24 MB when encoded, which fits within the 25 MB boundary.
+
+Use this formula to calculate the safe maximum file size:
+
+```text
+Max file size = 25 MB / 1.33 ≈ 18.75 MB
+```
+
+In practice, keep attachments under **18 MB** to stay safely within the limit.
+
+## Tips for sending large files
+
+- Use a cloud storage link instead of attaching large files. Most modern clients display link previews.
+- Compress images and PDFs before attaching them.
+- Split very large content across multiple emails only if a link is not an option.
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Emails going to spam](/troubleshooting/emails-going-to-spam)

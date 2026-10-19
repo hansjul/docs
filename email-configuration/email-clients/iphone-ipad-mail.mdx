@@ -1,0 +1,65 @@
+---
+title: "Set up mySMTP on iPhone and iPad Mail"
+sidebarTitle: "iPhone/iPad Mail"
+description: "Configure mySMTP in the iPhone and iPad Mail app for iOS and iPadOS 17 and 18. Set the outgoing SMTP server, port 587, and authentication."
+---
+
+Use the Mail app on iPhone or iPad to send mail through mySMTP. Choose IMAP during account setup.Use the Mail app on iPhone or iPad to send mail through mySMTP. Choose IMAP during account setup.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated IP) | e.g. `relayxx.mysmtp.com` (your hostname is in the setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Security | **STARTTLS** (the "Use SSL" switch on) |
+| Authentication | Password |
+| User Name | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure iPhone or iPad Mail
+
+<Steps>
+  <Step title="Open Mail account settings">
+    Open **Settings**, then go to **Apps** > **Mail** > **Mail Accounts**.
+
+    <Tip>
+      On older iOS versions, the path is **Settings** > **Mail** > **Accounts**.
+    </Tip>
+  </Step>
+  <Step title="Select your account">
+    Tap the email account you want to configure.
+  </Step>
+  <Step title="Open SMTP settings">
+    Tap **Account**, then tap **SMTP** under **Outgoing Mail Server**.
+  </Step>
+  <Step title="Add or edit the primary server">
+    Tap the existing primary server, or tap **Add Server** to create a new one.
+  </Step>
+  <Step title="Enter the server details">
+    Fill in the fields:
+
+    - **Host Name**: your relay hostname (e.g. `relayxx.mysmtp.com`)
+    - **User Name**: your mySMTP SMTP username
+    - **Password**: your mySMTP SMTP password
+    - **Use SSL**: turn **on**
+    - **Authentication**: select **Password**
+    - **Server Port**: **587**
+  </Step>
+  <Step title="Save and verify">
+    Tap **Done**, then tap **Account** > **Done** to save. Send a test email to confirm delivery.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+- **Cannot send mail:** verify the host name matches the one in your setup email.
+- **Connection fails:** check that **Use SSL** is on and the port is **587**. If your network blocks 587, try **2525**.
+- **Authentication error:** re-enter your mySMTP username and password. Make sure **Authentication** is set to **Password**.
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

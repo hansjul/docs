@@ -1,0 +1,82 @@
+---
+title: "Send Email Alerts from Synology and QNAP NAS with mySMTP"
+sidebarTitle: "Synology & QNAP"
+description: "Configure mySMTP on Synology DSM 7 and QNAP QTS / QuTS NAS devices. Set server, port 587, TLS, and credentials for notification emails."
+---
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | Your dedicated hostname from the setup email, e.g. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Security | **STARTTLS** |
+| Authentication | SMTP username and password from mySMTP |
+
+<Note>
+  Server (shared IP, DK only) | `mail.mysmtp.com` / Shared IP plans are only available to customers in Denmark.
+</Note>
+
+<Tip>
+  Use the exact relay hostname from your setup email. `relayxx.mysmtp.com` is only an example.
+</Tip>
+
+## Configure your NAS
+
+<Tabs>
+  <Tab title="Synology DSM 7">
+    <Steps>
+      <Step title="Open Notification settings">
+        Open **Control Panel** > **Notification** > **Email**.
+      </Step>
+      <Step title="Add a custom SMTP provider">
+        1. Click **Add** > **Add provider**.
+        2. Choose **Custom SMTP server**.
+      </Step>
+      <Step title="Enter the SMTP settings">
+        1. **SMTP server:** your relay hostname (e.g. `relayxx.mysmtp.com`).
+        2. **SMTP port:** `587`.
+        3. **Secure connection (SSL/TLS):** select **STARTTLS**.
+        4. **Username:** your mySMTP SMTP username.
+        5. **Password:** your mySMTP SMTP password.
+        6. **Sender email:** the address alerts should appear from (must be a verified domain).
+        7. Click **Save**.
+      </Step>
+      <Step title="Send a test email">
+        Click **Send a test email** and check the recipient inbox. Adjust the sender address or recipient if needed.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="QNAP QTS / QuTS hero">
+    <Steps>
+      <Step title="Open Notification Center">
+        Open **Control Panel** > **System** > **Notification Center**.
+      </Step>
+      <Step title="Add an SMTP service">
+        1. Go to **Service Account and Device Pairing**.
+        2. Click **E-mail**.
+        3. Click **Add SMTP Service**.
+        4. Choose **Custom**.
+      </Step>
+      <Step title="Enter the SMTP settings">
+        1. **SMTP server:** your relay hostname (e.g. `relayxx.mysmtp.com`).
+        2. **Port:** `587`.
+        3. **Security:** select **TLS** (this uses STARTTLS on port 587).
+        4. **Username:** your mySMTP SMTP username.
+        5. **Password:** your mySMTP SMTP password.
+        6. Click **Apply**.
+      </Step>
+      <Step title="Send a test email">
+        Click **Test** to send a test message to the configured notification recipient.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+- **Test email fails:** double-check the server name is copied exactly from the setup email, and that the username and password are correct.
+- **Connection error on port 587:** your network may block it. Try port **2525**.
+- **Sender address rejected:** make sure the sender email uses a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

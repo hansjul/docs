@@ -1,0 +1,59 @@
+---
+title: "Branded rDNS: Brug dit eget domaene som din PTR-hostnavn"
+sidebarTitle: "Branded rDNS"
+description: "Erstat det standard relayXX.mysmtp.com reverse DNS pa din dedikeret IP med dit eget hostnavn, sa som mail.yourdomain.com, ved hjaelp af en A- eller CNAME-post."
+---
+
+Som standard peger din dedikeret IP pa et mySMTP-hostnavn som `relay8.mysmtp.com`. Med branded rDNS peger den i stedet pa et hostnavn pa dit eget domaene, f.eks. `mail.yourdomain.com`.
+
+## Hvorfor bruge branded rDNS
+
+Hver afsendelses-IP skal have aktivt reverse DNS, sa modtagende servere kan genkende og identificere den. mySMTP handterer reverse DNS for alle IP'er og bruger sine egne konfigurationer og domaener som standard.
+
+Branded rDNS gor, at du kan vise dit eget domaene i stedet, hvilket hjalper dig med at opfylde de regelsaet, som nogle ISP'er anvender for levering.
+
+<Note>
+  Branded rDNS er kun tilgaengelig med en dedikeret IP.
+</Note>
+
+## Saet branded rDNS op
+
+<Steps>
+  <Step title="Vaelg dit hostnavn">
+    Vaelt et underdomaene pa dit afsenderdomaene, f.eks. `mail.yourdomain.com`.
+  </Step>
+  <Step title="Tilfoej en DNS-post">
+    I dit domaenes DNS skal du tilfoje **et** af disse poster:
+
+    | Type | Navn | Peger pa |
+    | --- | --- | --- |
+    | A | `mail.yourdomain.com` | Din dedikeret IP pa mySMTP-serveren, f.eks. `185.163.189.xx` |
+    | CNAME | `mail.yourdomain.com` | Dit mySMTP-server-hostnavn, f.eks. `relayXX.mysmtp.com` |
+
+    Brug din faktiske dedikeret IP eller server-hostnavn fra dit opsaetnings-e-mail.
+  </Step>
+  <Step title="Fortael mySMTP-support">
+    Send en e-mail til [support@mysmtp.com](mailto:support@mysmtp.com) med det hostnavn, du har oprettet. Branded rDNS saettes op manuelt af mySMTP-teamet.
+  </Step>
+  <Step title="mySMTP fuldforer opsaetningen">
+    Nar posten er live i et DNS-opslag:
+
+    - aktiverer teamet PTR-konfigurationen
+    - aendrer serverens Hello-banner
+    - genererer et TLS-certifikat til dit underdomaene
+  </Step>
+</Steps>
+
+## Hvad aendrer sig efter opsaetning
+
+Du afsender nu med dit eget domaene i reverse DNS. Dit hostnavn er kun synligt i e-mail-headeren (meddelelseskilden) og i TLS-certifikatet som et alternativt emnenavn. Modtagere ser det ikke i deres indbakke.
+
+<Tip>
+  Bekraeft resultatet med PTR/rDNS Checker i [Deliverability Toolbox](https://toolbox.smtp.ai/), eller kør `dig -x DIN_IP +short`.
+</Tip>
+
+## Relaterede artikler
+
+- [Reverse DNS (PTR)](/da/deliverability/reverse-dns-ptr)
+- [DNS-opsaetning til autentificering](/da/deliverability/dns-setup-for-authentication)
+- [IP-reputation: dedikeret vs delte IP'er](/da/deliverability/ip-reputation-dedicated-vs-shared-ips)

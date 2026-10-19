@@ -1,0 +1,52 @@
+---
+title: "Thunderbird SMTP Setup Guide"
+sidebarTitle: "Thunderbird"
+description: "Set up mySMTP in Mozilla Thunderbird. Configure outgoing SMTP server settings, authentication, and enter your mySMTP username and password."
+---
+
+You need your SMTP username and password to configure Thunderbird. These are separate from your mailbox credentials.You need your SMTP username and password to configure Thunderbird. These are separate from your mailbox credentials.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Connection security | **STARTTLS** |
+| Authentication method | Normal password |
+| User Name | Your mySMTP SMTP username |
+
+## Configure Thunderbird
+
+<Steps>
+  <Step title="Open account settings">
+    Open Thunderbird and go to **Account Settings** (menu ☰ > **Account Settings**).
+  </Step>
+  <Step title="Add the outgoing server">
+    At the bottom of the left-hand list, click **Outgoing Server (SMTP)**, then click **Add...**
+  </Step>
+  <Step title="Enter the SMTP settings">
+    Fill in the values from the table above and click **OK**.
+  </Step>
+  <Step title="Assign the server to your account">
+    Select the account you want to use with mySMTP in the left-hand list. Under **Outgoing Server (SMTP)**, choose the mySMTP server you just added.
+  </Step>
+  <Step title="Send a test email">
+    When done, you will be prompted by Thunderbird next time you send an email for the SMTP password. This should happen one time to activate SMTP account.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+- **Login fails:** check the authentication method is **Normal password** and the user name is your mySMTP SMTP username.
+- **Connection times out:** your network may block port 587. Try port **2525**.
+- **Relay denied:** make sure the sender address uses a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).
+
+## Related articles
+
+- [Email clients overview](/email-configuration/email-clients)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)

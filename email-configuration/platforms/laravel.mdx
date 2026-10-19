@@ -1,0 +1,117 @@
+---
+title: "Send emails from Laravel through mySMTP"
+sidebarTitle: "Laravel"
+description: "Configure Laravel to send email through mySMTP by updating your .env file with SMTP host, port, and credentials, then test with Tinker."
+---
+
+Laravel's built-in mail system supports SMTP out of the box. Point it to mySMTP by editing your environment file and clearing the configuration cache.
+
+## Prerequisites
+
+- A Laravel application
+- Your mySMTP credentials (see [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials))
+- A verified sending domain
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (from your setup email) |
+| Host (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Encryption | TLS (STARTTLS) |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure Laravel SMTP
+
+<Steps>
+  <Step title="Update .env">
+    Open `.env` in the root of your Laravel project and set the mail variables. Use the version-specific encryption setting:
+
+    ```bash
+    MAIL_MAILER=smtp
+    MAIL_HOST=relayxx.mysmtp.com
+    MAIL_PORT=587
+    MAIL_USERNAME=your-mysmtp-username
+    MAIL_PASSWORD=your-mysmtp-password
+    MAIL_FROM_ADDRESS="noreply@yourdomain.com"
+    MAIL_FROM_NAME="Your App Name"
+    ```
+
+    For Laravel 11 and later, set `MAIL_SCHEME=tls` instead of `MAIL_ENCRYPTION`:
+
+    ```bash
+    MAIL_SCHEME=tls
+    ```
+
+    For Laravel 10 and earlier, set:
+
+    ```bash
+    MAIL_ENCRYPTION=tls
+    ```
+  </Step>
+  <Step title="Clear config cache">
+    Run the following command so Laravel picks up the new values:
+
+    ```bash
+    php artisan config:clear
+    ```
+  </Step>
+  <Step title="Send a test email with Tinker">
+    Start Tinker:
+
+    ```bash
+    php artisan tinker
+    ```
+
+    Then run:
+
+    ```php
+    Mail::raw('This is a test email from Laravel through mySMTP.', function ($message) {
+        $message->to('your-email@example.com')
+                ->subject('mySMTP Test');
+    });
+    ```
+
+    Check your inbox for the message.
+  </Step>
+</Steps>
+
+<Warning>
+  Do not commit `.env` files with real passwords to version control. Load credentials from environment variables, or use Laravel's encrypted environment files (Laravel 11+) when possible.
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection refused or timeout">
+    Make sure you are using your real mySMTP hostname (not `relayxx.mysmtp.com`). Check that your server allows outbound connections on port 587. If the port is blocked, try 2525 or 465.
+  </Accordion>
+
+  <Accordion title="Authentication failed">
+    Re-enter your mySMTP username and password in `.env`, then run `php artisan config:clear` again. Verify there are no extra spaces or quotes.
+  </Accordion>
+
+  <Accordion title="Emails go to spam">
+    Verify SPF, DKIM, and DMARC are configured for your sending domain. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Test email does not arrive">
+    Check your Laravel logs (`storage/logs/laravel.log`) for SMTP error details. Also confirm `MAIL_FROM_ADDRESS` uses a domain authenticated with mySMTP.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+- [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials)

@@ -1,0 +1,132 @@
+---
+title: "Postfix Smart Host opsætning til mySMTP"
+sidebarTitle: "Postfix"
+description: "Konfigurer Linux Postfix til at relaye mail via mySMTP ved hjælp af en smart host. Opsæt SMTP-autentificering, TLS og credentials for sikker levering."
+---
+
+Du skal bruge dit SMTP-brugernavn, kodeord og relay-hostnavn fra din mySMTP opsætningsmail.
+
+## Før du går i gang
+
+Sørg for at have disse oplysninger klar:
+
+| Indstilling | Værdi |
+| --- | --- |
+| Relay host | Dit relay-hostnavn, f.eks. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Kryptering | **STARTTLS** |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Kodeord | Dit mySMTP SMTP-kodeord |
+
+<Note>
+  Brug det præcise relay-hostnavn fra din opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Note>
+
+## Installer nødvendige pakker
+
+<Tabs>
+  <Tab title="Debian / Ubuntu">
+    ```bash
+    sudo apt update
+    sudo apt install libsasl2-modules
+    ```
+  </Tab>
+  <Tab title="RHEL / CentOS / Rocky">
+    ```bash
+    sudo yum install cyrus-sasl-plain
+    ```
+  </Tab>
+</Tabs>
+
+## Konfigurer smart host'en
+
+<Steps>
+  <Step title="Rediger main.cf">
+    Åbn `/etc/postfix/main.cf` i din editor og tilføj eller opdater disse linjer:
+
+    ```ini
+    relayhost = [relayxx.mysmtp.com]:587
+    smtp_sasl_auth_enable = yes
+    smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+    smtp_sasl_security_options = noanonymous
+    smtp_tls_security_level = encrypt
+    ```
+
+    Erstat `relayxx.mysmtp.com` med dit faktiske relay-hostnavn.
+  </Step>
+  <Step title="Opret SASL kodeord-filen">
+    Opret `/etc/postfix/sasl_passwd` med dette indhold:
+
+    ```ini
+    [relayxx.mysmtp.com]:587    username:password
+    ```
+
+    Erstat `relayxx.mysmtp.com`, `username` og `password` med dine faktiske værdier.
+  </Step>
+  <Step title="Hash kodeord-filen">
+    Kør:
+
+    ```bash
+    sudo postmap /etc/postfix/sasl_passwd
+    ```
+
+    Dette opretter `sasl_passwd.db`. Af sikkerhedshensyn skal du begrænse rettighederne på begge filer:
+
+    ```bash
+    sudo chmod 600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+    ```
+  </Step>
+  <Step title="Genstart Postfix">
+    ```bash
+    sudo systemctl restart postfix
+    ```
+  </Step>
+</Steps>
+
+## Test forbindelsen
+
+Send en testmail ved at bruge `mail` eller `sendmail` kommandoen:
+
+```bash
+echo "Test message body" | mail -s "Test subject" -a "From: you@yourdomain.com" recipient@example.com
+```
+
+<Note>
+  Hvis dit system ikke har `mail`-kommandoen, skal du installere `mailutils` (Debian/Ubuntu) eller `mailx` (RHEL).
+</Note>
+
+Tjek mailloggen for leveringsstatus:
+
+```bash
+sudo tail -f /var/log/mail.log
+```
+
+Led efter en succesfuld forbindelse til dit relay-hostnavn og en `status=sent` indgang.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Autentificering fejlede (SASL authentication failed)">
+    Dobbelttjek brugernavn og kodeord i `/etc/postfix/sasl_passwd`. Kør `sudo postmap /etc/postfix/sasl_passwd` igen efter enhver ændring, og genstart derefter Postfix.
+  </Accordion>
+
+  <Accordion title="Forbindelsen udløb">
+    Tjek at udgående trafik på port **587** er tilladt af din firewall. Prøv port **2525**, hvis port 587 er blokeret:
+
+    ```ini
+    relayhost = [relayxx.mysmtp.com]:2525
+    ```
+
+    Opdater porten i `/etc/postfix/sasl_passwd` også, og kør derefter `sudo postmap /etc/postfix/sasl_passwd` og genstart Postfix.
+  </Accordion>
+
+  <Accordion title="TLS handshake fejlede">
+    Bekræft at `smtp_tls_security_level = encrypt` er sat i `main.cf`. Nogle ældre systemer kan have brug for `smtp_tls_wrappermode = yes` for port 465, men mySMTP bruger STARTTLS på port 587.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Sørg for at afsenderadressen bruger et domæne, der er autentificeret på din mySMTP-konto. Se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

@@ -1,0 +1,80 @@
+---
+title: "Transactional vs Marketing Emails: Key Differences"
+sidebarTitle: "Transactional vs Marketing"
+description: "Learn the differences between transactional and marketing emails, plus best practices for SMTP setup, compliance, and deliverability."
+---
+
+Separating these two streams protects your sender reputation and keeps critical messages out of the spam folder.
+
+## What is a transactional email?
+
+A transactional email is triggered by a specific user action or system event. It delivers information the recipient expects and needs.
+
+### Common examples
+
+| Type | Example subject |
+| --- | --- |
+| Order confirmation | Your order #12345 has been received |
+| Password reset | Reset your password now |
+| Account verification | Verify your email address |
+| Shipping update | Your package is on the way |
+| Payment receipt | Payment processed |
+
+### Best practices for transactional email
+
+- **Use a dedicated SMTP server or dedicated IP** so promotional sending does not delay password resets or receipts.
+- **Send from a subdomain** such as `notifications.yourdomain.com` to isolate reputation.
+- **Authenticate with SPF, DKIM, and DMARC** to prevent spoofing and improve trust with mailbox providers.
+- **Deliver within seconds** of the trigger event. Use a high-performance relay with low latency.
+- **Avoid promotional content** inside transactional messages. Mixing marketing language can cause spam foldering.
+
+## What is a marketing email?
+
+A marketing email promotes a product, service, or brand and is sent in bulk to a list. It requires explicit user consent under regulations such as GDPR, CAN-SPAM, and CCPA.
+
+### Common examples
+
+| Type | Example subject |
+| --- | --- |
+| Newsletter | February industry insights |
+| Promotion | Save 20% on your next order |
+| Product announcement | Introducing our new feature |
+| Re-engagement | We miss you. Here is a special offer |
+| Event invitation | Join our webinar on email security |
+
+### Best practices for marketing email
+
+- **Send from a separate subdomain** such as `marketing.yourdomain.com`.
+- **Include a working unsubscribe link** in every message. For bulk senders, implement RFC 8058 one-click unsubscribe headers.
+- **Use confirmed opt-in** so only users who explicitly subscribe receive your emails.
+- **Warm up your IP** before high-volume campaigns to build sender reputation gradually.
+- **Monitor sender reputation** with Google Postmaster Tools and keep spam complaints below 0.3%.
+
+## Side-by-side comparison
+
+| Feature | Transactional emails | Marketing emails |
+| --- | --- | --- |
+| Purpose | Provide account or transaction updates | Promote products, services, or brand |
+| Trigger | User action or system event | Scheduled campaign or automation |
+| Opt-in required | No (implied by relationship) | Yes (explicit consent required) |
+| Unsubscribe link | Optional | Mandatory in every message |
+| Delivery speed | Immediate (within seconds) | Batched over minutes or hours |
+| SMTP setup | Dedicated transactional relay | Bulk sending platform or marketing IP |
+| Sender domain | `notifications.yourdomain.com` | `marketing.yourdomain.com` |
+| Promotional content | Avoid | Expected and encouraged |
+
+## Testing your authentication setup
+
+Whether you send transactional or marketing emails, always verify your authentication before launching.
+
+- Check SPF, DKIM, and DMARC records using the mySMTP [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/).
+- Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) to review authentication, rDNS, unsubscribe setup and list hygiene.
+- Verify your HTML templates with the [Email Template Verifier](https://toolbox.smtp.ai/) before a major campaign.
+- Send a test message to a Gmail and Outlook mailbox and inspect the headers.
+
+## Related articles
+
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)
+- [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [CAN-SPAM and email compliance](/security-compliance/can-spam-and-email-compliance)

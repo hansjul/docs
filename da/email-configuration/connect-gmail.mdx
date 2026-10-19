@@ -1,0 +1,80 @@
+---
+title: "Tilslut Gmail til mySMTP via SMTP-relæ med brugerdefineret domæne"
+sidebarTitle: "Gmail-opsætning"
+description: "Konfigurer Gmail til at sende e-mails gennem mySMTP med dit eget domæne. Opsæt SMTP-serverindstillinger, porte, TLS-kryptering og bekræft din afsenderadresse."
+---
+
+Dette giver dig mulighed for at skrive e-mails i Gmail, mens de leveres via dit autentificerede relæ.
+
+<Steps>
+  <Step title="Åbn Gmail-indstillinger">
+    1. Gå til [https://mail.google.com](https://mail.google.com).
+    2. Klik på **tandhjul-ikonet** i øverste højre hjørne.
+    3. Vælg **Se alle indstillinger**.
+  </Step>
+  <Step title="Tilføj en anden e-mailadresse">
+    1. Klik på fanen **Konti og import**.
+    2. I afsnittet **Send e-mail som** skal du klikke på **Tilføj en anden e-mailadresse**.
+  </Step>
+  <Step title="Angiv din identitet">
+    Udfylder pop op-vinduet:
+
+    | Felt | Værdi |
+    | --- | --- |
+    | Navn | Dit afsendernavn (for eksempel "Support") |
+    | E-mailadresse | Din adresse, for eksempel `you@yourdomain.com` |
+    | Behandle som en alias | Ja |
+
+    Klik på **Næste trin**.
+  </Step>
+  <Step title="Indtast mySMTP-serverindstillinger">
+    Brug legitimationsoplysningerne fra din opsætnings-e-mail:
+
+    | Felt | Værdi |
+    | --- | --- |
+    | SMTP-server | Dit relæ-værtsnavn (for eksempel `relayxx.mysmtp.com`) |
+    | Port | **587** |
+    | Brugernavn | Dit mySMTP SMTP-brugernavn |
+    | Adgangskode | Dit mySMTP SMTP-adgangskode |
+    | Sikret forbindelse | **TLS** |
+
+    Klik på **Tilføj konto**.
+
+    <Note>
+      Brug det præcise relæ-værtsnavn fra din mySMTP-opsætnings-e-mail. Gæt ikke servernavnet.
+    </Note>
+
+    <Note>
+      Delte IP-planer bruger `mail.mysmtp.com`.
+    </Note>
+  </Step>
+  <Step title="Bekræft adressen">
+    1. Gmail sender en bekræftelseskode til den adresse, du lige har tilføjet.
+    2. Hent koden fra din indbakke eller fra mySMTP-loggene.
+    3. Indtast koden i Gmail og klik på **Verificer**.
+  </Step>
+</Steps>
+
+Efter verificering vælger du [**you@yourdomain.com**](mailto:you@yourdomain.com) fra rullemenuen **Fra** ved komponering af en besked i Gmail.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Gmail afviser serveren eller legitimationsoplysningerne">
+    Bekræft, at du bruger port **587** med **TLS**, ikke port 465. Dobbelttjek, at relæ-værtsnavnet og adgangskoden matcher værdierne i din mySMTP-opsætnings-e-mail.
+  </Accordion>
+
+  <Accordion title="Bekræftelses-e-mailen ankommer aldrig">
+    Kontroller, at afsenderdomænet er autentificeret i mySMTP, og at DNS-posterne (SPF, DKIM, DMARC) er publicerede. Du kan verificere dine poster med mySMTP [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/). Se [DNS-indstillinger - hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+
+  <Accordion title="Beskederne havner i spam">
+    Autentificering og listehygiejne betyder noget, selv for Gmail-til-Gmail-relæ. Sørg for, at SPF, DKIM og DMARC er konfigureret. Se [Forbedr e-mail-leverbarhed](/da/deliverability/improve-email-deliverability).
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [SMTP-begrænsninger og afsendelsesrater](/da/email-configuration/smtp-limits-and-sending-rates)
+- [DNS-indstillinger - hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)
+- [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained)

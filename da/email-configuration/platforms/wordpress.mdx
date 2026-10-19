@@ -1,0 +1,117 @@
+---
+title: "Konfigurer mySMTP med WordPress og WP Mail SMTP"
+sidebarTitle: "WordPress"
+description: "Send WordPress-emails paalideligt via mySMTP ved at konfigurere WP Mail SMTP-pluginet med dine SMTP-loginoplysninger og autentificeret domaene."
+---
+
+Send WordPress-emails paalideligt via mySMTP ved at konfigurere WP Mail SMTP-pluginet med dine SMTP-loginoplysninger og autentificeret domaene.
+
+## Forudsaetninger
+
+- Admin-adgang til dit WordPress-site
+- Dit mySMTP-brugernavn og -adgangskode (se [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials))
+- Et verificeret afsenderdomaene
+
+## SMTP-indstillinger
+
+| Indstilling | Vaerdi |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (fra din opsaetningsmail) |
+| Host (shared IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Kryptering | TLS |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Shared IP-planer er kun tilgaengelige for kunder i Danmark.
+</Note>
+
+## Konfigurer WP Mail SMTP
+
+WP Mail SMTP er det mest udbredte plugin til at route WordPress-emails via en brugerdefineret SMTP-server.
+
+<Steps>
+  <Step title="Installer WP Mail SMTP">
+    I dit WordPress-admin gaar du til **Plugins → Tilfoej nyt plugin**. Sog efter **WP Mail SMTP by WPForms**, og installer og aktiver det.
+  </Step>
+  <Step title="Start opsaetningsguiden">
+    Efter aktivering klikker du pa **Launch Setup Wizard**. Vaelg **Skip** for at springe guiden over og ga direkte til indstillingssiden, eller fortsaet med **Other SMTP**, naar du bliver spurgt efter en mailer.
+  </Step>
+  <Step title="Vaelg Other SMTP">
+    Fra WP Mail SMTP-indstillingerne, under **Mailer**, vaelger du **Other SMTP**. Dette lader dig indtaste enhver brugerdefineret SMTP-server.
+  </Step>
+  <Step title="Indtast mySMTP-indstillinger">
+    Udfyld følgende felter:
+
+    - **SMTP Host:** `relayxx.mysmtp.com` (erstat med dit reelle hostname fra mySMTP-opsaetningsmailen)
+    - **Encryption:** TLS
+    - **SMTP Port:** `587`
+    - **Authentication:** On
+    - **SMTP Username:** Dit mySMTP-brugernavn
+    - **SMTP Password:** Dit mySMTP-adgangskode
+  </Step>
+  <Step title="Saet From-email og -navn">
+    Paa den samme indstillingsside saetter du **From Email** til en adresse paa dit autentificerede domaene (for eksempel `noreply@ditdomaene.dk`). Saet **From Name** til dit brand eller site-navn. Marker **Force From Email** og **Force From Name**, saa plugins og temaer ikke kan overskrive dem.
+  </Step>
+  <Step title="Gem indstillinger og send en testmail">
+    Klik pa **Save Settings**. Ga derefter til fanen **Email Test**, indtast en personlig email-adresse, og klik pa **Send Email**. Bekraeft, at beskeden ankommer, og viser den korrekte afsender.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="WP Mail SMTP">
+    Trinene ovenfor bruger WP Mail SMTP. Dette er det plugin, vi anbefaler til de fleste WordPress-sites paa grund af dets store brugerbase, opsaetningsguide og indbyggede email-testvaerktoej.
+  </Tab>
+  <Tab title="FluentSMTP">
+    FluentSMTP er et populart alternativ. Efter installation gaar du til **Settings → FluentSMTP**, tilfoejer **SMTP** som en forbindelse, og udfylder den samme host, port, brugernavn og adgangskode. FluentSMTP understotter ogsaa flere forbindelser og fallback-providere.
+  </Tab>
+</Tabs>
+
+## Sikr din adgangskode med wp-config.php-konstanter
+
+At gemme din SMTP-adgangskode i WordPress-databasen er acceptabelt for mange sites, men du kan ogsaa definere den som en PHP-konstant i `wp-config.php`, saa den ikke er synlig i admin-graensefladen.
+
+Tilfoej disse linjer ovenover `/* That's all, stop editing! */` i `wp-config.php`:
+
+```php
+// WP Mail SMTP: brug konstanter i stedet for databaseindstillinger
+define( 'WPMS_ON', true );
+define( 'WPMS_SMTP_PASS', 'dit-mysmtp-adgangskode' );
+```
+
+Naar `WPMS_ON` er `true`, laeser WP Mail SMTP indstillinger fra konstanter i stedet for databasen. Se WP Mail SMTP-dokumentationen for den fulde liste af konstanter (for eksempel `WPMS_MAIL_FROM`, `WPMS_MAIL_FROM_NAME`, `WPMS_SMTP_HOST` og saa videre).
+
+<Warning>
+  Commit aldrig `wp-config.php` med en hardcodet adgangskode til versionsstyring. Indlaes adgangskoden fra miljøvariable, naar det er muligt, eller hold filen uden for dit repository.
+</Warning>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Testmailen fejler med forbindelsesfejl">
+    Bekraeft, at du bruger dit reelle mySMTP-hostname (ikke `relayxx.mysmtp.com`). Tjek, at port 587 er aben i din hosting-firewall. Hvis din host blokerer 587, saa prov port 2525.
+  </Accordion>
+
+  <Accordion title="Godkendelse fejlede">
+    Genindtast dit mySMTP-brugernavn og -adgangskode, og sorg for, at der ikke er foranstillede eller efterfølgende mellemrum. Kopier vaerdierne fra en adgangskodehåndtering, hvis det er muligt.
+  </Accordion>
+
+  <Accordion title="Emails havner i spam">
+    Bekraeft, at dit afsenderdomaene har SPF, DKIM og DMARC konfigureret. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Koer [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="WordPress bruger stadig standard-mail-funktionen">
+    Sorg for, at WP Mail SMTP er aktiv, og at **Mailer**-indstillingen er sat til **Other SMTP**, ikke **Default (none)**. Andre plugins kan ogsaa overskrive `wp_mail`; deaktiver dem et ad gangen for at finde konflikter.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [SMTP-graenser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)
+- [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials)

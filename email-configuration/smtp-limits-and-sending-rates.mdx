@@ -1,0 +1,110 @@
+---
+title: "SMTP Limits, Rate Optimization, and IP Warm-Up Guide"
+sidebarTitle: "Limits & Rates"
+description: "Understand mySMTP sending limits, rate controls, IP warming, and best practices for high-volume email delivery without reputation damage."
+---
+
+Limits vary by plan, IP type, destination domain, and sending history.
+
+## How limits are determined
+
+| Factor | Effect |
+| --- | --- |
+| Plan | Higher-tier plans include larger daily or monthly allowances |
+| IP type | Dedicated IPs have higher limits than shared IPs (shared IPs are DK only) |
+| Sending volume | Sudden spikes can trigger temporary throttling |
+| Recipient domain | Each provider enforces its own hourly and daily caps |
+| Bounce and spam rate | High rates lead to automatic rate reductions or blocks |
+
+<Warning>
+  Exceeding limits may result in temporary throttling, deferrals, or blocking. mySMTP monitors bounce and complaint rates automatically.
+</Warning>
+
+## IP warming strategy
+
+New IPs have no reputation. Sending a large volume immediately looks suspicious to Gmail, Outlook, Yahoo, and other providers.
+
+<Steps>
+  <Step title="Start small">
+    Send to your most engaged recipients first. Users who open and click build positive reputation signals.
+  </Step>
+  <Step title="Increase volume gradually">
+    Double or triple your daily volume every few days rather than jumping to your full quota.
+  </Step>
+  <Step title="Monitor bounces and complaints">
+    Remove invalid addresses and suppress users who mark spam. Both metrics should stay below 2% and 0.3% respectively.
+  </Step>
+  <Step title="Authenticate every message">
+    Use SPF, DKIM, and DMARC on your sending domain. See [DNS setup for authentication](/deliverability/dns-setup-for-authentication).
+  </Step>
+</Steps>
+
+<Tip>
+  Use the free mySMTP [Warmup Plan Generator](https://toolbox.smtp.ai/#warmup-generator) to build a day-by-day schedule for a new IP or domain, and check your IP against major blocklists with the [Blacklist Checker](https://toolbox.smtp.ai/).
+</Tip>
+
+## Rate limits by destination provider
+
+These are estimates based on current industry practice. Actual limits change and depend on your IP reputation.
+
+| Provider | New IP (per hour) | Warmed-up IP (per hour) | Approximate daily cap |
+| --- | --- | --- | --- |
+| Gmail | 500–1,000 | 5,000+ | 50,000 |
+| Yahoo / AOL | 1,000 | 10,000+ | 100,000 |
+| Outlook / Hotmail | 500 | 3,000+ | 30,000 |
+| iCloud Mail | 500 | 2,000+ | 10,000 |
+
+<Note>
+  Separate your email streams by type and domain. For example, send transactional mail from `notifications.yourdomain.com` and marketing mail from `marketing.yourdomain.com`. This protects the reputation of each stream.
+</Note>
+
+## Bulk sender requirements (2025)
+
+Gmail, Yahoo, and Microsoft now enforce minimum standards for bulk senders. Meeting them improves delivery through mySMTP.
+
+| Requirement | Detail |
+| --- | --- |
+| Authentication | Both SPF and DKIM required for bulk senders; DMARC at `p=none` minimum |
+| Alignment | From domain must align with SPF or DKIM |
+| TLS | All messages must be sent over TLS |
+| One-click unsubscribe | Marketing messages need RFC 8058 List-Unsubscribe headers |
+| Spam rate | Keep user-reported spam below 0.3%; ideally below 0.1% |
+| Unsubscribe latency | Honor unsubscribe requests within 48 hours |
+
+<Warning>
+  Bulk senders who spoof gmail.com or send without TLS will receive temporary or permanent failures and may lose access to Gmail mitigation support.
+</Warning>
+
+## Throttling and error codes
+
+When you hit a limit, the SMTP response tells you what happened.
+
+| Error | Meaning | Next step |
+| --- | --- | --- |
+| 421 | Too many connections | Lower connection count; retry with backoff |
+| 450 | Mailbox unavailable | Retry later; may be a temporary provider issue |
+| 451 | Local server overload | Slow down sending rate |
+| 550 | Blocked or rejected | Remove bad addresses; check reputation |
+| 554 | Marked as spam | Review content and authentication setup |
+
+Enable SMTP logging in your application to capture these codes. If you see repeated blocks, pause sending and review your list hygiene and authentication setup.
+
+## Scaling to enterprise volume
+
+If you need to send one million or more emails per day, consider:
+
+- Multiple mySMTP dedicated IPs rotated for load distribution
+- Postmulti server setups to spread traffic across relays
+- Segregated sending domains for each mail stream
+- Engagement-based sending strategies that reduce volume to inactive subscribers
+
+<Note>
+  Enterprise users can request custom rate limits and priority SMTP queues through mySMTP support.
+</Note>
+
+## Related articles
+
+- [Warm-up plans](/deliverability/warm-up-plans)
+- [Handling bounces and complaints](/deliverability/handling-bounces-and-complaints)
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

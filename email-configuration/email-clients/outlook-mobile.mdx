@@ -1,0 +1,62 @@
+---
+title: "Set up mySMTP in Outlook for iOS and Android"
+sidebarTitle: "Outlook Mobile"
+description: "Configure mySMTP in Outlook for iOS and Android using Advanced settings when adding an IMAP account. Set the custom SMTP host, port 587, and authentication."
+---
+
+Outlook for iOS and Android lets you configure mySMTP during IMAP account setup in Advanced settings. Choose the IMAP option instead of Microsoft 365 when prompted.Outlook for iOS and Android lets you configure mySMTP during IMAP account setup in Advanced settings. Choose the IMAP option instead of Microsoft 365 when prompted.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated IP) | e.g. `relayxx.mysmtp.com` (your hostname is in the setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Encryption | **STARTTLS** |
+| Authentication | On, with your SMTP username and password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Add an IMAP account with mySMTP
+
+<Steps>
+  <Step title="Open account settings">
+    In Outlook, tap your profile icon, then tap **Settings** > **Accounts** > **Add account**.
+  </Step>
+  <Step title="Enter your email address">
+    Type your email address, then tap **Add account** or **Advanced**.
+  </Step>
+  <Step title="Select IMAP">
+    Choose **IMAP account**.
+  </Step>
+  <Step title="Enter incoming server details">
+    Fill in your incoming mail server settings as provided by your email provider.
+  </Step>
+  <Step title="Enter outgoing SMTP details">
+    In the outgoing server section, enter:
+
+    - **SMTP host name**: your relay hostname (e.g. `relayxx.mysmtp.com`)
+    - **Port**: **587**
+    - **Security**: **STARTTLS**
+    - **User Name**: your mySMTP SMTP username
+    - **Password**: your mySMTP SMTP password
+  </Step>
+  <Step title="Complete setup">
+    Tap **Done** or the checkmark to finish. Send a test email to verify delivery.
+  </Step>
+</Steps>
+
+<Warning>
+  Outlook Mobile does not let you edit the SMTP server on an existing account. To change the outgoing server later, remove the account and add it again with the steps above.
+</Warning>
+
+## Troubleshooting
+
+- **Cannot send mail:** verify the SMTP host name matches the one in your setup email.
+- **Connection fails:** check that the port is **587** and security is **STARTTLS**. If your network blocks 587, try **2525**.
+- **Authentication error:** re-enter your mySMTP username and password.
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

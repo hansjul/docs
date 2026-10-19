@@ -1,0 +1,130 @@
+---
+title: "Almindelige SMTP-fejl og løsninger"
+sidebarTitle: "SMTP-fejl"
+description: "Løs hyppige mySMTP-forbindelsesproblemer inklusive tidsudløb, godkendelsesfejl, TLS-fejl og begrænsninger. Trin-for-trin-løsninger til hvert problem."
+---
+
+<AccordionGroup>
+  <Accordion title="Forbindelsen udløb">
+    **Fejleksempel:** `Connection timed out` eller `Could not connect to SMTP host`
+
+    **Årsag:** Din klient kan ikke nå SMTP-serveren. Det skyldes normalt netværksproblemer, firewall-regler der blokerer porten, eller at serveren ikke kan nås.
+
+    **Løsning:**
+
+    1. Tjek din internetforbindelse.
+    2. Bekræft at SMTP-serveradressen er korrekt. Brug `relayxx.mysmtp.com` for dedikerede IP-adresser (fra din opsætningsmail), eller `mail.mysmtp.com` for delt IP (kun DK).
+    3. Bekræft at den relevante port er åben på dit netværk. mySMTP understøtter port **587** (STARTTLS) og port **2525** som alternativ.
+    4. Test forbindelsen med telnet eller openssl:
+       ```text
+       telnet relayxx.mysmtp.com 587
+       ```
+       Eller for en TLS-test:
+       ```text
+       openssl s_client -starttls smtp -connect relayxx.mysmtp.com:587
+       ```
+
+    <AccordionGroup>
+      <Accordion title="Hvad nu hvis telnet ikke er installeret?">
+        Installer det fra din pakkehåndtering (for eksempel `sudo apt install telnet` på Ubuntu, `brew install telnet` på macOS), eller test forbindelsen med OpenSSL-kommandoen ovenfor.
+      </Accordion>
+    </AccordionGroup>
+  </Accordion>
+
+  <Accordion title="Godkendelse mislykkedes">
+    **Fejleksempel:** `535 Authentication failed` eller `SMTP Error: Could not authenticate`
+
+    **Årsag:** Serveren afviste loginoplysningerne.
+
+    **Løsning:**
+
+    1. Dobbelttjek dit brugernavn og din adgangskode. Brug dit mySMTP SMTP-brugernavn, som kan være forskelligt fra den email-adresse du tilmeldte dig med.
+    2. Bekræft at din konto er aktiv og ikke låst. Tjek dit [dedikerede server-dashboard](https://dashboard.mysmtp.com) eller [delt konto-dashboard](https://mysmtp.com).
+    3. Sørg for at godkendelsesmetoden er **Normal password** eller **Basic authentication** afhængigt af din klient.
+    4. Hvis du for nylig ændrede din adgangskode, skal du opdatere den i applikationen og prøve igen.
+  </Accordion>
+
+  <Accordion title="TLS-fejl">
+    **Fejleksempel:** `SSL: CERTIFICATE_VERIFY_FAILED` eller `Handshake failed`
+
+    **Årsag:** Klienten og serveren kan ikke etablere en sikker forbindelse.
+
+    **Løsning:**
+
+    1. Opdater din klient og dit system til at understøtte moderne TLS-versioner. mySMTP kræver mindst **TLS 1.2**.
+    2. Verificer at dit systems CA trust store er opdateret.
+    3. Hvis du bruger et brugerdefineret TLS-bibliotek (for eksempel i PHP eller Python), sørg for at det er opdateret.
+    4. Undgå at deaktivere certifikatvalidering i produktion. Deaktiver kun midlertidigt for en kontrolleret test i et isoleret miljø.
+  </Accordion>
+
+  <Accordion title="Blokeret af firewall eller ISP">
+    **Fejleksempel:** Ingen specifik fejl, men forbindelsen udløber lydløst eller fejler.
+
+    **Årsag:** Mange internetudbydere og hostingudbydere blokerer udgående trafik på port 25 for at reducere spam. Nogle virksomhedsfirewalls blokerer også port 587.
+
+    **Løsning:**
+
+    1. Brug **port 587** med STARTTLS, som er den standardiserede submissionsport.
+    2. Hvis port 587 er blokeret, prøv **port 2525** eller **port 25** som alternativer.
+    3. Kontakt din netværksadministrator eller internetudbyder for at åbne submissionsporte.
+  </Accordion>
+
+  <Accordion title="For mange forbindelser / throttling">
+    **Fejleksempel:** `421 Too many concurrent SMTP connections` eller `421 Service not available`
+
+    **Årsag:** Serveren begrænser antallet af samtidige forbindelser fra din klient.
+
+    **Løsning:**
+
+    1. Genbrug dine SMTP-forbindelser i stedet for at åbne en ny for hver besked. Brug connection pooling hvor din applikation understøtter det.
+    2. Sænk din afsendelseshastighed, hvis du sender store mængder.
+    3. Hvis du er på en delt IP-plan (kun DK) og konsekvent rammer grænsen, overvej at opgradere til en [dedikeret IP](/da/getting-started/shared-ips-or-dedicated) for højere forbindelsesgrænser.
+    4. Gennemgå [SMTP-grænser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates) for plan-specifik vejledning.
+  </Accordion>
+
+  <Accordion title="DNS-opløsningsproblemer">
+    **Fejleksempel:** `Temporary failure in name resolution` eller `Host not found`
+
+    **Årsag:** SMTP-hostname'et kan ikke opløses til en IP-adresse.
+
+    **Løsning:**
+
+    1. Tjek at hostname'et er korrekt. Brugere med dedikeret IP skal bruge `relayxx.mysmtp.com` (fra deres opsætningsmail). Brugere med delt IP (kun DK) skal bruge `mail.mysmtp.com`.
+    2. Sørg for at din server har fungerende DNS-indstillinger. Bekræft at du kan opløse andre hostnames.
+    3. Som et midlertidigt fejlfindingstrin kan du prøve at bruge SMTP-serverens IP-adresse direkte. Erstat IP'en med hostname'et i produktion, når DNS er genoprettet.
+  </Accordion>
+</AccordionGroup>
+
+## Generelle fejlfindingstrin
+
+<Steps>
+  <Step title="Test grundlæggende forbindelse">
+    Kør `ping` eller `traceroute` til server-hostname'et for at verificere at stien er tilgængelig.
+  </Step>
+  <Step title="Test SMTP-håndtrykket">
+    Brug `telnet` eller `openssl s_client` til at teste at porten er åben og serveren svarer.
+  </Step>
+  <Step title="Tjek dine applikationslogs">
+    Læs den fulde fejlmeddelelse og stack trace fra din email-klient eller afsendelsesapplikation.
+  </Step>
+  <Step title="Tjek mySMTP servicestatus">
+    Besøg [status.mysmtp.com](https://status.mysmtp.com) for vedligeholdelsesvinduer eller kendte hændelser.
+  </Step>
+  <Step title="Isoler netværksforstyrrelser">
+    Deaktiver midlertidigt antivirus eller lokal firewall for at se om den opsnapper SMTP-trafik.
+  </Step>
+  <Step title="Test fra et andet netværk">
+    Prøv at sende fra et andet sted eller mobilt hotspot for at udelukke lokale netværksbegrænsninger.
+  </Step>
+</Steps>
+
+<Tip>
+  Brug [Bounce Code Decoder](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox til at omsætte kryptiske SMTP-svar til klare årsager og løsninger.
+</Tip>
+
+## Tips til pålidelige SMTP-forbindelser
+
+- Brug altid moderne kryptering. Forbind på **587 med STARTTLS** eller en alternativ sikker port.
+- Brug hostnames frem for hardcoded IP-adresser, så din konfiguration forbliver gyldig hvis IP'en ændres.
+- Overvåg din forbindelseshastighed, timeout-rate og retry-count i din applikation.
+- Hold dine email-biblioteker og operativsystem opdateret.

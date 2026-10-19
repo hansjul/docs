@@ -1,0 +1,110 @@
+---
+title: "Send WooCommerce-ordremails via mySMTP"
+sidebarTitle: "WooCommerce"
+description: "Sorg for, at WooCommerce-transaktionsmails naar kunderne ved at route dem via mySMTP med WP Mail SMTP-pluginet."
+---
+
+WooCommerce er afhaengig af WordPress' `wp_mail()` til at sende ordrebekraeftelser, forsendelsesnotifikationer og nulstilling af adgangskoder. For at sikre, at disse emails naar kunderne, skal du route dem via mySMTP ved at bruge WP Mail SMTP-pluginet.
+
+## Forudsaetninger
+
+- WooCommerce installeret og aktivt paa WordPress
+- Admin-adgang til WordPress
+- Dine mySMTP-loginoplysninger (se [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials))
+- Et verificeret afsenderdomaene
+
+## SMTP-indstillinger
+
+| Indstilling | Vaerdi |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (fra din opsaetningsmail) |
+| Host (shared IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Kryptering | TLS |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Shared IP-planer er kun tilgaengelige for kunder i Danmark.
+</Note>
+
+## Forbind mySMTP til WordPress
+
+WooCommerce har ikke egne SMTP-indstillinger. Konfigurer `wp_mail()` paa WordPress-niveau, saa alle WooCommerce-emails bruger mySMTP.
+
+<Steps>
+  <Step title="Installer og aktiver WP Mail SMTP">
+    I WordPress gaar du til **Plugins → Tilfoej nyt plugin**. Sog efter **WP Mail SMTP by WPForms**, og installer og aktiver det.
+  </Step>
+  <Step title="Konfigurer Other SMTP">
+    Ga til **WP Mail SMTP → Settings**. Under **Mailer** vaelger du **Other SMTP**. Udfyld:
+
+    - **SMTP Host:** dit reelle mySMTP-hostname (fra din opsaetningsmail)
+    - **Encryption:** TLS
+    - **SMTP Port:** `587`
+    - **Authentication:** On
+    - **SMTP Username:** dit mySMTP-brugernavn
+    - **SMTP Password:** dit mySMTP-adgangskode
+  </Step>
+  <Step title="Saet From-email og -navn">
+    Saet **From Email** til en adresse paa dit autentificerede domaene (for eksempel `ordrer@ditdomaene.dk`). Saet **From Name** til dit butiksnavn. Aktiver **Force From Email** og **Force From Name**.
+  </Step>
+  <Step title="Gem og test">
+    Klik pa **Save Settings**, ga derefter til **Email Test** og send en testmail til dig selv.
+  </Step>
+</Steps>
+
+## Match WooCommerce-afsenderindstillinger med mySMTP
+
+WooCommerce lader dig definere et afsendernavn og en adresse under **WooCommerce → Settings → Emails**. Disse vaerdier skal matche det autentificerede domaene, du bruger med mySMTP.
+
+<Steps>
+  <Step title="Aaben WooCommerce email-indstillinger">
+    I WordPress-admin gaar du til **WooCommerce → Settings → Emails**.
+  </Step>
+  <Step title="Saet From-adressen">
+    Scroll til bunden af siden. Saet **From address** til den samme domaeneverificerede adresse, du konfigurerede i WP Mail SMTP (for eksempel `ordrer@ditdomaene.dk`).
+  </Step>
+  <Step title="Saet From-navnet">
+    Saet **From name** til dit butiks- eller brandnavn. Dette vises i modtagerens indbakke.
+  </Step>
+  <Step title="Gem aendringer">
+    Klik pa **Save changes** i bunden af siden.
+  </Step>
+</Steps>
+
+<Warning>
+  Hvis WooCommerce's **From address** bruger et andet domaene end det, der er autentificeret i mySMTP, kan mailbox-providere afvise eller filtrere mailen. Brug altid det samme verificerede domaene.
+</Warning>
+
+## Test ordremails
+
+Opret et testprodukt og afgiv en testordre, eller brug en sandbox-betalingsgateway. Tjek, at ordrebekraeftelsen ankommer til kundeadressen, og viser det korrekte afsendernavn og -adresse.
+
+Du kan ogsaa se seneste afsendelser og tjekke for fejl i WP Mail SMTP-loggene, hvis logning er aktiveret.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Ordremails ankommer ikke">
+    Bekraeft foerst, at WP Mail SMTP-testmailen lykkes. Verificer derefter, at WooCommerce-emailtyperne er aktiveret under **WooCommerce → Settings → Emails**. Sorg for, at ordrestatus aendres (for eksempel fra Afventer til Behandles), fordi nogle emails kun udløses ved statusovergange.
+  </Accordion>
+
+  <Accordion title="Emails havner i spam">
+    Bekraeft, at SPF, DKIM og DMARC er konfigureret for dit domaene. Se [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Koer [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Testmailen virker, men WooCommerce-emails goer ikke">
+    Nogle WooCommerce-email-customizer-plugins eller SMTP-plugins konflikter med WP Mail SMTP. Deaktiver andre email-relaterede plugins midlertidigt for at finde konflikten.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [WordPress SMTP-konfiguration](/da/email-configuration/platforms/wordpress)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)
+- [SMTP-graenser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)

@@ -1,0 +1,112 @@
+---
+title: "DNS Opsætning til Autentificering"
+sidebarTitle: "DNS Opsætning"
+description: "Lær hvorfor DNS betyder noget for email autentificering, og hvordan SPF, DKIM, DMARC og BIMI afhænger af DNS TXT-records for at beskytte afsenderreputation."
+---
+
+<Tip>
+  Brug <a href="https://toolbox.smtp.ai/">One-Click SPF / DKIM / DMARC Checker</a> i mySMTP Deliverability Toolbox til at verificere dine records, efter du har publiceret dem. Værktøjet kører i din browser og viser pass, advar eller fejl for hver protokol.
+</Tip>
+
+## Hvordan DNS driver email autentificering
+
+DNS fungerer som en offentlig telefonbog for dit domæne. Autentificeringsprotokoller gemmer verifikationsdata i TXT-records, som modtagende servere slår op, før de accepterer din mail.
+
+| Protokol | DNS-record type | Hvad den beviser |
+| --- | --- | --- |
+| SPF | TXT | Hvilke servere der har tilladelse til at sende email for dit domæne |
+| DKIM | TXT | At beskedsignaturen matcher din offentlige nøgle |
+| DMARC | TXT | Din politik for håndtering af beskeder, der fejler SPF eller DKIM |
+| BIMI | TXT | Hvor din brand-logo findes til visning i indbakker |
+
+Uden disse records har modtagere ingen mulighed for at bekræfte, at dine beskeder er legitime. Manglende eller forkert DNS-opsætning er en af de mest almindelige årsager til, at mails lander i spammapper.
+
+## Kerne-records for mySMTP
+
+Dette er de minimums-records, du bør publicere, når du sender gennem mySMTP.
+
+### SPF
+
+Autoriserer mySMTP-servere til at sende på dine vegne.
+
+```text
+v=spf1 include:spf1.mysmtp.com ~all
+```
+
+Hvis du allerede har en SPF-record, tilføj `include:spf1.mysmtp.com` før den endelige mekanisme.
+
+### DKIM
+
+mySMTP leverer en unik DKIM-nøgle for dit domæne. Tilføj den som en TXT-record på hosten `mysmtp._domainkey`.
+
+```text
+Type:  TXT
+Name:  mysmtp._domainkey
+Value: Den 2048-bit nøgle fra din mySMTP opsætningsmail
+```
+
+### DMARC
+
+Start med en overvågningspolitik, og skærpk den gradvist.
+
+```text
+v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
+```
+
+<Steps>
+  <Step title="Overvåg">
+    Start med `p=none` for at samle rapporter uden at påvirke levering.
+  </Step>
+  <Step title="Karantæne">
+    Efter 2 til 4 uger med rene rapporter, skift til `p=quarantine` for at sende fejlende beskeder til spam.
+  </Step>
+  <Step title="Afvis">
+    Når du er sikker på, at al legitim mail består autentificering, brug `p=reject` for at blokere forfalskede beskeder helt.
+  </Step>
+</Steps>
+
+<Warning>
+  Spring ikke direkte til `p=reject`. Forkert konfigureret autentificering kan blokere din egen legitime mail.
+</Warning>
+
+## Generel DNS-vejledning
+
+### Hvor du tilføjer records
+
+Tilføj TXT-records hos den DNS-udbyder, hvor dit domænes nameservers peger. Det er normalt din domæneregistrar (GoDaddy, Namecheap, One.com) eller en dedikeret DNS-host (Cloudflare, Route 53).
+
+### Almindelige fejl at undgå
+
+| Fejl | Hvorfor det betyder noget | Sådan retter du det |
+| --- | --- | --- |
+| Flere SPF-records | Modtagere ignorerer alle undtagen én, hvilket forårsager tilfældige fejl | Kombiner alle `include:` i én enkelt record |
+| SPF over 10 DNS-opslag | Overskrider RFC-grænsen og forårsager SPF permerror | Brug <a href="https://toolbox.smtp.ai/">SPF Validator</a> til at tælle opslag og fladgøre includes |
+| DKIM-nøgle for kort | 512-bit eller 768-bit nøgler er ikke længere tillidvækkende | Brug den 2048-bit nøgle fra mySMTP |
+| DMARC uden rapportering | Du kan ikke spotte autentificeringshuller | Inkluder altid en `rua`-adresse |
+| CNAME på apex | De fleste udbydere understøtter ikke CNAME på root-domæner | Brug en ALIAS- eller ANAME-record, eller peg A-recorden i stedet |
+
+### Udbredelse og caching
+
+DNS-ændringer er ikke øjeblikkelige. TTL-værdier (time-to-live) på gamle records bestemmer, hvor længe resolvers cacher de tidligere data.
+
+| TTL-værdi | Typisk ventetid |
+| --- | --- |
+| 300 sekunder (5 minutter) | 5 til 15 minutter |
+| 3600 sekunder (1 time) | 1 til 4 timer |
+| 86400 sekunder (24 timer) | Op til 24 timer |
+
+Sænk din TTL til 300, før du foretager ændringer, og hæv den derefter tilbage til 3600 eller 86400, når records er verificeret.
+
+## Test af dine DNS-records
+
+Efter du har publiceret dine records, verificer dem, før du sender kampagner:
+
+1. Vent op til 24 timer på DNS-udbredelse. I de fleste tilfælde er records live inden for minutter.
+2. Send en test-email til <a href="https://test.smtp.ai/">test.smtp.ai</a> og tjek at SPF, DKIM og DMARC alle består.
+3. Brug <a href="https://toolbox.smtp.ai/">DMARC Wizard</a> til at gennemgå din politik og alignment-indstillinger.
+4. Gennemse DMARC aggregate-rapporter sendt til din `rua`-adresse for at bekræfte autentificeringsalignment.
+
+## Næste skridt
+
+- For en trin-for-trin gennemgang af at tilføje records hos din domæneregistrar, se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+- For en dybere forklaring af hver protokol, se [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).

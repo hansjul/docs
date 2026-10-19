@@ -1,0 +1,86 @@
+---
+title: "Google Workspace SMTP Relay with mySMTP"
+sidebarTitle: "Google Workspace"
+description: "Route Google Workspace outbound mail through mySMTP using Gmail routing hosts and outbound gateway settings. Configure TLS and IP-based authorization."
+---
+
+Google Workspace host routes do not support username and password authentication. Contact mySMTP support to arrange IP-based authorization.
+
+## Before you start
+
+Have these details ready:
+
+| Setting | Value |
+| --- | --- |
+| Host | Your relay hostname, e.g. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Encryption | **TLS (STARTTLS)** |
+| Authentication | IP-based (contact mySMTP support) |
+
+<Note>
+  Use the exact relay hostname from your setup email. `relayxx.mysmtp.com` is only an example.
+</Note>
+
+## Add mySMTP as a host route
+
+<Steps>
+  <Step title="Open the Admin console">
+    Go to the [Google Admin console](https://admin.google.com) and sign in with a Super Admin account.
+  </Step>
+  <Step title="Go to Gmail hosts">
+    Navigate to **Apps** > **Google Workspace** > **Gmail** > **Hosts**.
+  </Step>
+  <Step title="Add a new host">
+    1. Click **Add route** or **Configure**.
+    2. Enter a name such as `mySMTP`.
+    3. Under **Specify email server**, enter your relay hostname (e.g. `relayxx.mysmtp.com`).
+    4. Set **Port** to **587**.
+    5. Select **Require TLS connection**.
+    6. Click **Save**.
+  </Step>
+</Steps>
+
+## Apply the route to outbound mail
+
+<Steps>
+  <Step title="Open Gmail routing">
+    In the Admin console, go to **Apps** > **Google Workspace** > **Gmail** > **Routing**.
+  </Step>
+  <Step title="Create an outbound gateway rule">
+    1. Scroll to **Outbound** and click **Configure** or **Add another rule**.
+    2. Give the rule a name such as `Route via mySMTP`.
+    3. Under **For the above types of messages, do the following**, select **Change route**.
+    4. Choose the `mySMTP` host route you created.
+    5. Click **Save**.
+  </Step>
+</Steps>
+
+<Warning>
+  Google Workspace host routes do not support username and password authentication to an external SMTP host. Authentication is handled by the sending IP address. Contact [mySMTP support](/support/contact-support) to authorize Google Workspace's outbound IP ranges for your account.
+</Warning>
+
+## SPF record
+
+Add both Google Workspace and mySMTP to your domain's SPF record. A typical record looks like:
+
+```text
+v=spf1 include:_spf.google.com include:spf1.mysmtp.com ~all
+```
+
+<Warning>
+  If you already have an SPF record, add the includes without removing existing entries. Too many DNS lookups can cause SPF failures. Use the [Deliverability Toolbox](https://toolbox.smtp.ai/) to check your SPF record.
+</Warning>
+
+## Test the connection
+
+1. Send a test email from a Google Workspace mailbox to an external address, such as a Gmail account or your own.
+2. Confirm the message arrives. In the received message headers you should see it passed through your mySMTP relay.
+3. If the message does not arrive, check the **Email log search** in the Admin console under **Reports** > **Email log search**.
+
+## Troubleshooting
+
+- **Messages still go through Google directly:** Make sure the routing rule is enabled and applies to outbound mail. Check that no other routing rule with a higher priority overrides it.
+- **TLS connection fails:** Confirm the host route requires TLS and that your network allows outbound connections on port **587**.
+- **Relay access denied:** Verify that mySMTP support has authorized Google Workspace's outbound IP ranges for your account.
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

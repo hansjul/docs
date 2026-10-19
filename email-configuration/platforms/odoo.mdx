@@ -1,0 +1,97 @@
+---
+title: "Configure mySMTP as an outgoing mail server in Odoo"
+sidebarTitle: "Odoo"
+description: "Set up mySMTP in Odoo by adding an outgoing mail server with your SMTP credentials, then test the connection and set from-address filters."
+---
+
+Odoo can send invoices, quotes, and notifications through mySMTP by adding a custom outgoing mail server.
+
+## Prerequisites
+
+- Administrator access to your Odoo instance
+- Your mySMTP credentials (see [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials))
+- A verified sending domain
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (from your setup email) |
+| Host (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Connection Security | TLS (STARTTLS) |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Add an outgoing mail server
+
+<Steps>
+  <Step title="Enable developer mode">
+    In Odoo, go to **Settings → General Settings**. Scroll to the bottom and activate **Developer Mode** (the tools icon). Menu names can vary slightly by version.
+  </Step>
+  <Step title="Open outgoing mail servers">
+    Go to **Settings → Technical → Email → Outgoing Mail Servers**.
+  </Step>
+  <Step title="Create a new server">
+    Click **New**. Fill in the form:
+
+    - **Description:** mySMTP
+    - **SMTP Server:** your real mySMTP hostname (from your setup email)
+    - **SMTP Port:** `587`
+    - **Connection Security:** TLS (STARTTLS)
+    - **Username:** your mySMTP username
+    - **Password:** your mySMTP password
+  </Step>
+  <Step title="Test the connection">
+    Click **Test Connection**. Odoo will attempt to connect and authenticate. A success message confirms the server is ready.
+  </Step>
+  <Step title="Save">
+    Click **Save**.
+  </Step>
+</Steps>
+
+## From address filtering
+
+In the same outgoing mail server record, set **From Filter** to a domain or email address if you want this server to be used only for specific senders. This is useful when you have multiple mail servers and want Odoo to route email intelligently. Leave it empty to use this server as the default for all outgoing mail.
+
+<Warning>
+  The From address Odoo uses must match an authenticated domain in mySMTP. Mismatched domains can cause delivery failures or spam folder placement.
+</Warning>
+
+## Odoo 17 and later
+
+Odoo 17 introduced a simplified **Use a custom email server** option in **Settings → General Settings → Discuss**. When enabled, you can configure an outgoing mail server without entering developer mode. The fields are the same as above: SMTP server, port, username, and password.
+
+<Note>
+  Odoo Online (the hosted SaaS version) may have restrictions on custom email servers and may require using Odoo's built-in email gateway instead. If the custom server option is unavailable or testing fails, contact your Odoo provider or [support@mysmtp.com](mailto:support@mysmtp.com) for guidance.
+</Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Test Connection fails">
+    Confirm you are using your real mySMTP hostname, port 587, and TLS. Re-enter your username and password carefully. If Odoo is hosted behind a firewall, make sure outbound port 587 is open.
+  </Accordion>
+
+  <Accordion title="Emails go to spam">
+    Verify SPF, DKIM, and DMARC are configured for your sending domain. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Outgoing Mail Servers menu is missing">
+    Developer mode must be active to see the Technical menu. Toggle it in **Settings → General Settings**. In Odoo 17+, use the simplified Discuss email server settings instead.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+- [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials)

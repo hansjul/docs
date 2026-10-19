@@ -1,0 +1,56 @@
+---
+title: "Mac Mail 2025 SMTP Setup Guide"
+sidebarTitle: "Mac Mail 2025"
+description: "Set up mySMTP in Mac Mail 2025. Add your SMTP server, enter login credentials, and configure ports and TLS for outgoing mail."
+---
+
+Incoming mail settings stay unchanged.Incoming mail settings stay unchanged.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Use TLS/SSL (enables TLS) | On |
+| Authentication | Password |
+| User name / password | Your mySMTP SMTP username and password |
+
+## Configure Mac Mail
+
+<Steps>
+  <Step title="Open account settings">
+    Open Mail and choose **Mail** > **Settings** (called **Preferences** on older macOS versions), then click **Accounts** and select the account you want to use with mySMTP.
+  </Step>
+  <Step title="Open the SMTP server list">
+    Click the **Server Settings** tab. Under **Outgoing Mail Server (SMTP)**, open the **Account** menu and choose **Edit SMTP Server List...**
+  </Step>
+  <Step title="Add the mySMTP server">
+    Click **\+** to add a server and enter a description, such as `mySMTP`, and the **Server Name** from the table above.
+  </Step>
+  <Step title="Enter port and login">
+    1. Turn off **Automatically manage connection settings**.
+    2. Set **Port** to **587** and check **Use TLS/SSL**.
+    3. Set **Authentication** to **Password**.
+    4. Enter your mySMTP **User Name** and **Password**.
+    5. Click **OK**.
+  </Step>
+  <Step title="Save and test">
+    Make sure the new mySMTP server is selected as the outgoing account, click **Save**, and send a test email.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+- **Mail says the server is offline:** confirm the port is 587 and that **Automatically manage connection settings** is off.
+- **Connection times out:** your network may block port 587. Try port **2525**.
+- **Relay denied:** make sure the sender address uses a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).
+
+## Related articles
+
+- [Email clients overview](/email-configuration/email-clients)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)

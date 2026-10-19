@@ -1,0 +1,117 @@
+---
+title: "Connect Microsoft Exchange Server with mySMTP"
+sidebarTitle: "Microsoft Exchange"
+description: "Connect Microsoft Exchange Server 2019 to mySMTP using a smart host send connector. Configure TLS, authentication, and route outbound mail through mySMTP."
+---
+
+Exchange Server 2019 routes outbound mail through a send connector. The steps below configure mySMTP as the smart host with TLS on port 587.
+
+## Before you start
+
+Have these details from your mySMTP setup email ready:
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Encryption | **TLS (STARTTLS)** |
+| Username | Your mySMTP username |
+| Password | Your mySMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Set up the send connector
+
+<Tabs>
+  <Tab title="Exchange Admin Center">
+    <Steps>
+      <Step title="Open the Exchange Admin Center">
+        Open your browser, go to `https://<YourExchangeServer>/ecp` and log in with admin credentials.
+      </Step>
+      <Step title="Create a new send connector">
+        1. Go to **Mail Flow** > **Send Connectors**.
+        2. Click the **\+ (plus)** icon.
+        3. Name it `mySMTP` (or similar) and set **Type** to **Internet**.
+        4. Click **Next**.
+      </Step>
+      <Step title="Configure the smart host">
+        1. On the **Network settings** screen, select **Route mail through smart hosts**.
+        2. Click **\+ Add** and enter your relay hostname (e.g. `relayxx.mysmtp.com`).
+        3. Click **Next**.
+      </Step>
+      <Step title="Set up authentication">
+        1. On the **Smart host authentication** screen, select **Basic Authentication**.
+        2. Check **Offer basic authentication only after starting TLS**.
+        3. Enter your mySMTP **username** and **password**.
+        4. Click **Next**.
+      </Step>
+      <Step title="Add the address space">
+        1. Click **\+ Add**.
+        2. Enter `*` as the **Full Qualified Domain Name (FQDN)** and keep **Cost** at `1`.
+        3. Click **Save**, then **Next**.
+
+        The `*` address space sends mail for all external domains through mySMTP.
+      </Step>
+      <Step title="Select the source server">
+        Click **\+ Add**, select your Exchange server (e.g. `EXCH01`), and click **Finish**.
+      </Step>
+      <Step title="Set the port to 587">
+        The EAC always creates connectors on port 25 and has no field to change it. Open the **Exchange Management Shell** and run:
+
+        ```powershell
+        Set-SendConnector -Identity "mySMTP" -Port 587 -RequireTLS $true
+        ```
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Exchange Management Shell">
+    Run this in the **Exchange Management Shell**. Replace the relay hostname and server name with your own. You are prompted for your mySMTP username and password.
+
+    ```powershell
+    New-SendConnector -Name "mySMTP" `
+      -Usage Internet `
+      -AddressSpaces "*" `
+      -DNSRoutingEnabled $false `
+      -SmartHosts "relayxx.mysmtp.com" `
+      -Port 587 `
+      -RequireTLS $true `
+      -SmartHostAuthMechanism BasicAuthRequireTLS `
+      -AuthenticationCredential (Get-Credential) `
+      -SourceTransportServers "EXCH01"
+    ```
+  </Tab>
+</Tabs>
+
+<Warning>
+  If you already have another send connector with the `*` address space, Exchange may keep using it. Disable the old connector, or give the mySMTP connector a lower cost.
+</Warning>
+
+## Test the connection
+
+1. Send a test email from a user mailbox (e.g. using Outlook or OWA) to an external address, such as a Gmail account or your own.
+2. Confirm the message arrives. In the received message headers you should see it passed through your mySMTP relay.
+3. If the message does not arrive, check the queue in the Exchange Management Shell:
+   ```powershell
+   Get-Queue | Where-Object { $_.NextHopDomain -like "*mysmtp*" } | Format-List NextHopDomain,Status,LastError
+   ```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Messages stay in the queue with a connection error">
+    Check that outbound traffic on port **587** is allowed by your firewall, and that the connector port is set to 587 (`Get-SendConnector "mySMTP" | Format-List Port`).
+  </Accordion>
+
+  <Accordion title="Authentication failed (535)">
+    Re-enter your mySMTP username and password on the connector, and confirm **Offer basic authentication only after starting TLS** is enabled.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Make sure the sender address uses a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

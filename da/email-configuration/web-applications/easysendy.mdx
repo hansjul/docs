@@ -1,0 +1,64 @@
+---
+title: "EasySendy Pro"
+sidebarTitle: "EasySendy"
+description: "Integrer EasySendy Pro med mySMTP ved at konfigurere SMTP-serverindstillinger på port 587 med TLS-kryptering til sikker kampagnelevering."
+---
+
+## Tilføj en delivery server
+
+<Steps>
+  <Step title="Åbn Delivery Servers">
+    Besøg dit EasySendy Pro-dashboard. Naviger til **Delivery Servers** fra hovedmenuen. Klik på **\+ Add Delivery Server**.
+  </Step>
+  <Step title="Vælg SMTP">
+    På listen over delivery server-typer skal du vælge **SMTP** (typisk mærket **SMTP - Generic**). Klik på **Create Server** eller **Next**.
+  </Step>
+  <Step title="Indtast mySMTP-detaljer">
+    Brug følgende indstillinger:
+
+    | Indstilling | Værdi |
+    | --- | --- |
+    | Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+    | Server (delt IP, kun DK) | `mail.mysmtp.com` |
+    | Port | `587` |
+    | Brugernavn | Dit mySMTP-brugernavn |
+    | Adgangskode | Dit mySMTP-adgangskode |
+    | Protokol | TLS (STARTTLS hvis tilgængelig) |
+    | From Email | f.eks. `you@yourdomain.com` |
+    | From Name | Dit firma- eller afsendernavn |
+    | Reply-To Email | Valgfri, typisk samme som From Email |
+    | Bounce Email | Valgfri (anbefales at opsættes separat) |
+
+    <Note>
+      Delte IP-planer er kun tilgængelige for kunder i Danmark.
+    </Note>
+  </Step>
+  <Step title="Test og gem">
+    Klik på **Validate Server** eller **Test Connection**. Hvis den er succesfuld, bekræfter EasySendy SMTP-forbindelsen. Gem serveren. Den er nu aktiv til at sende kampagner.
+  </Step>
+</Steps>
+
+<Tip>
+  Før du importerer en ny liste, skal du køre den gennem [Email List Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+</Tip>
+
+## Send en testkampagne
+
+Opret en lille testkampagne til din personlige e-mailadresse. Bekræft, at beskeden ankommer, og at headerne viser, at den blev sendt gennem mySMTP.
+
+## Fejlfinding
+
+- **Forbindelsestest mislykkedes:** bekræft, at værtsnavnet matcher din opsætningsmail, at porten er 587, og at TLS er valgt. Hvis dit netværk blokerer 587, kan du prøve port 2525.
+- **Godkendelsesfejl:** genindtast dit mySMTP-brugernavn og din adgangskode. Sørg for, at der ikke er ekstra mellemrum.
+- **E-mails ender i spam:** verificer, at SPF, DKIM og DMARC er konfigureret for dit domæne. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+  <Tip>
+    Tjek din opsætning med [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+  </Tip>
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).
+
+## Relaterede artikler
+
+- [Webapplikationer, oversigt](/da/email-configuration/web-applications)
+- [SMTP-begrænsninger og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)

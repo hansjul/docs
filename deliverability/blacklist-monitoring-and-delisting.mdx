@@ -1,0 +1,72 @@
+---
+title: "Blacklist Monitoring & Delisting"
+sidebarTitle: "Blacklists"
+description: "Find out how to monitor your sending IPs and domains on email blacklists, and what steps to take to get delisted if your mySMTP IP is blocked."
+---
+
+<Tip>
+  Start with the <a href="https://toolbox.smtp.ai/">Blacklist Checker</a> in the mySMTP Deliverability Toolbox. It checks your sending IP and domain against major blocklists and includes direct delisting links. No account is required and the check runs entirely in your browser.
+</Tip>
+
+## Check your IP and domain reputation
+
+Use these trusted tools to see if your sending IP or domain appears on major blacklists.
+
+| Tool | What it checks | URL |
+| --- | --- | --- |
+| mySMTP Blacklist Checker | Major blocklists with delisting links | <a href="https://toolbox.smtp.ai/">toolbox.smtp.ai</a> |
+| MultiRBL | Multiple RBLs at once | [multirbl.valli.org](https://multirbl.valli.org/) |
+| MXToolbox | Blacklists, reputation, and alerts | [mxtoolbox.com/blacklists.aspx](https://mxtoolbox.com/blacklists.aspx) |
+| Spamhaus | SBL, XBL, and PBL listings | [check.spamhaus.org](https://check.spamhaus.org/) |
+| Talos Intelligence | Global IP reputation scores | [talosintelligence.com](https://talosintelligence.com/) |
+| Barracuda | Barracuda reputation lookup | [barracudacentral.org/lookups](https://www.barracudacentral.org/lookups) |
+| Google Postmaster Tools | Gmail domain reputation and spam rate | [postmaster.google.com](https://postmaster.google.com/) |
+| Microsoft SNDS | Outlook.com IP reputation and spam traps | [postmaster.live.com](https://postmaster.live.com/) |
+
+<Tip>
+  Bookmark one or two tools and check your IP weekly, or daily during a dedicated IP warmup.
+</Tip>
+
+## If you are blacklisted
+
+<Steps>
+  <Step title="Identify the cause">
+    Review recent sending activity in your mySMTP dashboard. Look for:
+
+    - Sudden volume spikes
+    - High bounce rates
+    - Spam complaints
+    - Compromised credentials or unauthorized sending
+  </Step>
+  <Step title="Fix the root problem">
+    Remove bad addresses from your list, secure any compromised accounts, and pause campaigns until the issue is resolved. Continuing to send from a blacklisted IP deepens the reputation damage.
+  </Step>
+  <Step title="Request removal">
+    Visit the blacklist operator's website and follow their delisting process. Most require a self-service form. Some remove listings automatically after a period of good behavior. Be honest in your request and explain the steps you took to fix the cause.
+  </Step>
+  <Step title="Verify delivery">
+    After delisting, send test messages to addresses at Gmail, Outlook, Yahoo, and Apple iCloud. Confirm that messages arrive in the inbox and not in spam.
+  </Step>
+</Steps>
+
+## Prevent future listings
+
+- Keep bounce rates under 2% and spam complaint rates under 0.1%.
+- Use confirmed opt-in and remove non-engagers.
+- Authenticate with SPF, DKIM, and DMARC. See [DNS setup for authentication](/deliverability/dns-setup-for-authentication).
+- Warm up new dedicated IPs gradually. See [Warm up plans](/deliverability/warm-up-plans).
+- Send consistent volumes rather than sudden spikes.
+
+## Need help?
+
+If your IP remains listed after you have fixed the cause and requested removal, [contact mySMTP support](/support/contact-support) with your account email, the blacklist name, and any error messages you received.
+
+<Tip>
+  Want mySMTP to monitor 100+ blacklists for you and handle delisting? See [RepHero](/deliverability/rephero).
+</Tip>
+
+## Related articles
+
+- [IP reputation: dedicated vs. shared IPs](/deliverability/ip-reputation-dedicated-vs-shared-ips)
+- [Handling bounces and complaints](/deliverability/handling-bounces-and-complaints)
+- [Improve email deliverability](/deliverability/improve-email-deliverability)

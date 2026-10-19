@@ -1,0 +1,142 @@
+---
+title: "Python-kodeeksempel til mySMTP med smtplib"
+sidebarTitle: "Python"
+description: "Send e-mail fra Python ved hjælp af smtplib med STARTTLS eller implicit TLS. Inkluderer almindelig tekst, HTML og vedhæftede filer for mySMTP."
+---
+
+Pythons indbyggede `smtplib`-modul lader dig sende e-mails gennem mySMTP uden at installere tredjepartspakker. Du kan bruge STARTTLS på port 587 eller implicit TLS på port 465 (Pythons `SMTP_SSL`-klasse, som forhandler TLS på trods af navnet).
+
+## Forudsætninger
+
+- Python 3.8 eller nyere
+- Dit mySMTP-brugernavn og -adgangskode fra opsætningsmailen
+- Dit mySMTP-værtsnavn fra opsætningsmailen (vist som `relayxx.mysmtp.com` i disse eksempler)
+
+## STARTTLS på port 587 (anbefalet)
+
+```python
+import os
+import smtplib
+from email.message import EmailMessage
+
+SMTP_HOST = os.getenv('MYSMTP_HOST', 'relayxx.mysmtp.com')
+SMTP_USER = os.getenv('MYSMTP_USER')
+SMTP_PASS = os.getenv('MYSMTP_PASS')
+
+msg = EmailMessage()
+msg['From'] = 'you@yourdomain.com'
+msg['To'] = 'recipient@example.com'
+msg['Subject'] = 'Test email from Python'
+msg.set_content('This is a plain text test message sent through mySMTP.')
+
+with smtplib.SMTP(SMTP_HOST, 587) as server:
+    server.starttls()
+    server.login(SMTP_USER, SMTP_PASS)
+    server.send_message(msg)
+
+print('Message sent successfully')
+```
+
+<Note>
+  Erstat `relayxx.mysmtp.com` med dit rigtige værtsnavn fra mySMTP-opsætningsmailen. Indlæs legitimationsoplysninger fra miljøvariabler, og hårdkod dem aldrig i kildefiler.
+</Note>
+
+<Tabs>
+  <Tab title="Implicit TLS på port 465">
+    Hvis dit netværk blokerer port 587, skal du bruge implicit TLS på port 465:
+
+    ```python
+    import os
+    import smtplib
+    from email.message import EmailMessage
+    
+    SMTP_HOST = os.getenv('MYSMTP_HOST', 'relayxx.mysmtp.com')
+    SMTP_USER = os.getenv('MYSMTP_USER')
+    SMTP_PASS = os.getenv('MYSMTP_PASS')
+    
+    msg = EmailMessage()
+    msg['From'] = 'you@yourdomain.com'
+    msg['To'] = 'recipient@example.com'
+    msg['Subject'] = 'Test email from Python'
+    msg.set_content('This is a plain text test message sent through mySMTP.')
+    
+    with smtplib.SMTP_SSL(SMTP_HOST, 465) as server:
+        server.login(SMTP_USER, SMTP_PASS)
+        server.send_message(msg)
+    
+    print('Message sent successfully')
+    ```
+  </Tab>
+</Tabs>
+
+## HTML-body med vedhæftet fil
+
+```python
+import os
+import smtplib
+from email.message import EmailMessage
+from email.utils import make_msgid
+import mimetypes
+
+SMTP_HOST = os.getenv('MYSMTP_HOST', 'relayxx.mysmtp.com')
+SMTP_USER = os.getenv('MYSMTP_USER')
+SMTP_PASS = os.getenv('MYSMTP_PASS')
+
+msg = EmailMessage()
+msg['From'] = 'you@yourdomain.com'
+msg['To'] = 'recipient@example.com'
+msg['Subject'] = 'HTML email with attachment'
+
+msg.set_content('This is the plain text fallback.')
+msg.add_alternative(
+    '<h1>Hello</h1><p>This is an HTML message.</p>',
+    subtype='html'
+)
+
+filepath = '/path/to/invoice.pdf'
+ctype, encoding = mimetypes.guess_type(filepath)
+if ctype is None or encoding is not None:
+    ctype = 'application/octet-stream'
+maintype, subtype = ctype.split('/', 1)
+
+with open(filepath, 'rb') as fp:
+    msg.add_attachment(
+        fp.read(),
+        maintype=maintype,
+        subtype=subtype,
+        filename='invoice.pdf'
+    )
+
+with smtplib.SMTP(SMTP_HOST, 587) as server:
+    server.starttls()
+    server.login(SMTP_USER, SMTP_PASS)
+    server.send_message(msg)
+
+print('Message sent successfully')
+```
+
+## Almindelige fejl
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Dit brugernavn eller din adgangskode er forkert, eller din konto er endnu ikke aktiveret. Genindtast legitimationsoplysningerne nøjagtigt som vist i opsætningsmailen. Se [Opsætning af SMTP-legitimationsoplysninger](/da/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Dit netværk eller din vært kan blokere port 587. Prøv port 2525 med STARTTLS, eller port 465 med `SMTP_SSL` (implicit TLS). Se [Understøttede SMTP-porte og -kryptering](/da/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    Krypteringsmetoden matcher ikke porten. Brug `starttls()` for porte 587 og 2525. Brug `SMTP_SSL` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test din SPF-, DKIM- og DMARC-opsætning med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/), før du sender store volumener.
+</Tip>
+
+## Relaterede artikler
+
+- [Kodeeksempler, oversigt](/da/email-configuration/code-examples)
+- [SMTP-begrænsninger og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

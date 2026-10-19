@@ -1,0 +1,56 @@
+---
+title: "Opsæt mySMTP i eM Client"
+sidebarTitle: "eM Client"
+description: "Konfigurer mySMTP i eM Client ved hjælp af SMTP-fanen i kontoinstillingerne. Angiv relay-hosten, port 587, STARTTLS-sikkerhed og godkendelse."
+---
+
+eM Client giver dig mulighed for at redigere SMTP-indstillinger uden at fjerne kontoen. Sørg for at have dine mySMTP SMTP-legitimationsoplysninger klar.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server (dedikeret IP) | f.eks. `relayxx.mysmtp.com` (dit hostnavn står i opsætningsmailen) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** |
+| Sikkerhedspolitik | **Brug hvis tilgængelig** eller **Påkrævet** (STARTTLS) |
+| Godkendelse | Til, med dit SMTP-brugernavn og -adgangskode |
+
+<Note>
+  Delt IP-abonnementer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Konfigurer eM Client
+
+<Steps>
+  <Step title="Åbn kontoinstillinger">
+    I eM Client skal du gå til **Menu** > **Konti**.
+  </Step>
+  <Step title="Vælg din konto">
+    Klik på den emailkonto, du vil konfigurere, i panelet til venstre.
+  </Step>
+  <Step title="Åbn SMTP-fanen">
+    Klik på fanen **SMTP** for at redigere indstillingerne for den udgående server.
+  </Step>
+  <Step title="Indtast serveroplysningerne">
+    Udfyld felterne:
+
+    - **Host**: dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`)
+    - **Port**: **587**
+    - **Sikkerhedspolitik**: vælg **Brug hvis tilgængelig** eller **Påkrævet** for STARTTLS
+    - **Brug godkendelse**: marker afkrydsningsfeltet
+    - **Brugernavn**: dit mySMTP SMTP-brugernavn
+    - **Adgangskode**: dit mySMTP SMTP-adgangskode
+  </Step>
+  <Step title="Gem og test">
+    Klik på **OK** eller **Gem** for at anvende ændringerne. Send en testmail for at bekræfte levering.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+- **Kan ikke sende mail:** Bekræft, at hosten matcher den i din opsætningsmail.
+- **Forbindelsen fejler:** Kontroller, at porten er **587**, og at sikkerhedspolitikken aktiverer STARTTLS. Hvis dit netværk blokerer 587, prøv **2525**.
+- **Godkendelsesfejl:** Genindtast dit mySMTP-brugernavn og -adgangskode, og bekræft at **Brug godkendelse** er markeret.
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

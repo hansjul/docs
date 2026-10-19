@@ -1,0 +1,132 @@
+---
+title: "Postfix Smart Host Setup for mySMTP"
+sidebarTitle: "Postfix"
+description: "Configure Linux Postfix to relay mail through mySMTP using a smart host. Set up SMTP authentication, TLS, and credentials for secure delivery."
+---
+
+You need your SMTP username, password, and relay hostname from your mySMTP setup email.
+
+## Before you start
+
+Have these details ready:
+
+| Setting | Value |
+| --- | --- |
+| Relay host | Your relay hostname, e.g. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Encryption | **STARTTLS** |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Use the exact relay hostname from your setup email. `relayxx.mysmtp.com` is only an example.
+</Note>
+
+## Install required packages
+
+<Tabs>
+  <Tab title="Debian / Ubuntu">
+    ```bash
+    sudo apt update
+    sudo apt install libsasl2-modules
+    ```
+  </Tab>
+  <Tab title="RHEL / CentOS / Rocky">
+    ```bash
+    sudo yum install cyrus-sasl-plain
+    ```
+  </Tab>
+</Tabs>
+
+## Configure the smart host
+
+<Steps>
+  <Step title="Edit main.cf">
+    Open `/etc/postfix/main.cf` in your editor and add or update these lines:
+
+    ```ini
+    relayhost = [relayxx.mysmtp.com]:587
+    smtp_sasl_auth_enable = yes
+    smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+    smtp_sasl_security_options = noanonymous
+    smtp_tls_security_level = encrypt
+    ```
+
+    Replace `relayxx.mysmtp.com` with your actual relay hostname.
+  </Step>
+  <Step title="Create the SASL password file">
+    Create `/etc/postfix/sasl_passwd` with this content:
+
+    ```ini
+    [relayxx.mysmtp.com]:587    username:password
+    ```
+
+    Replace `relayxx.mysmtp.com`, `username`, and `password` with your actual values.
+  </Step>
+  <Step title="Hash the password file">
+    Run:
+
+    ```bash
+    sudo postmap /etc/postfix/sasl_passwd
+    ```
+
+    This creates `sasl_passwd.db`. For security, restrict permissions on both files:
+
+    ```bash
+    sudo chmod 600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+    ```
+  </Step>
+  <Step title="Restart Postfix">
+    ```bash
+    sudo systemctl restart postfix
+    ```
+  </Step>
+</Steps>
+
+## Test the connection
+
+Send a test email using the `mail` or `sendmail` command:
+
+```bash
+echo "Test message body" | mail -s "Test subject" -a "From: you@yourdomain.com" recipient@example.com
+```
+
+<Note>
+  If your system does not have the `mail` command, install `mailutils` (Debian/Ubuntu) or `mailx` (RHEL).
+</Note>
+
+Check the mail log for delivery status:
+
+```bash
+sudo tail -f /var/log/mail.log
+```
+
+Look for a successful connection to your relay hostname and a `status=sent` entry.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Authentication failed (SASL authentication failed)">
+    Double-check the username and password in `/etc/postfix/sasl_passwd`. Run `sudo postmap /etc/postfix/sasl_passwd` again after any change, then restart Postfix.
+  </Accordion>
+
+  <Accordion title="Connection timed out">
+    Check that outbound traffic on port **587** is allowed by your firewall. Try port **2525** if port 587 is blocked:
+
+    ```ini
+    relayhost = [relayxx.mysmtp.com]:2525
+    ```
+
+    Update the port in `/etc/postfix/sasl_passwd` as well, then run `sudo postmap /etc/postfix/sasl_passwd` and restart Postfix.
+  </Accordion>
+
+  <Accordion title="TLS handshake failed">
+    Confirm `smtp_tls_security_level = encrypt` is set in `main.cf`. Some older systems may need `smtp_tls_wrappermode = yes` for port 465, but mySMTP uses STARTTLS on port 587.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Make sure the sender address uses a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

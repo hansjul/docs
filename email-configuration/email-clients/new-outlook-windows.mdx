@@ -1,0 +1,66 @@
+---
+title: "Set up mySMTP in New Outlook for Windows"
+sidebarTitle: "New Outlook"
+description: "Configure mySMTP in New Outlook for Windows using Advanced settings during account setup. Set the custom SMTP server, port 587, and authentication."
+---
+
+New Outlook for Windows lets you set a custom outgoing SMTP server during account setup in Advanced settings.New Outlook for Windows lets you set a custom outgoing SMTP server during account setup in Advanced settings.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated IP) | e.g. `relayxx.mysmtp.com` (your hostname is in the setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Encryption | **STARTTLS** |
+| Authentication | On, with your SMTP username and password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Add an account with mySMTP
+
+<Steps>
+  <Step title="Open account settings">
+    In New Outlook, click **Settings** > **Accounts** > **Email accounts**.
+  </Step>
+  <Step title="Start adding an account">
+    Click **Manage**, then click **Add account**.
+  </Step>
+  <Step title="Enter your email address">
+    Type your email address, then click **Continue** or **Advanced setup**.
+  </Step>
+  <Step title="Choose the account type">
+    Select **IMAP** or **POP**.
+  </Step>
+  <Step title="Enter the incoming server details">
+    Fill in your incoming mail server settings as provided by your email provider.
+  </Step>
+  <Step title="Enter the outgoing SMTP details">
+    In the outgoing server section, enter:
+
+    - **SMTP server**: your relay hostname (e.g. `relayxx.mysmtp.com`)
+    - **Port**: **587**
+    - **Encryption method**: **STARTTLS**
+    - **Authentication**: on
+    - **User Name**: your mySMTP SMTP username
+    - **Password**: your mySMTP SMTP password
+  </Step>
+  <Step title="Complete setup">
+    Click **Next** or **Done** to finish. Send a test email to verify delivery.
+  </Step>
+</Steps>
+
+<Warning>
+  New Outlook does not let you edit the SMTP server on an existing account. To change the outgoing server later, remove the account and add it again with the steps above.
+</Warning>
+
+## Troubleshooting
+
+- **Cannot add the account:** confirm you selected **Advanced setup** and chose **IMAP** or **POP**. Microsoft 365 and Exchange accounts do not allow custom SMTP.
+- **Connection fails:** check that the port is **587** and encryption is **STARTTLS**. If your network blocks 587, try **2525**.
+- **Authentication error:** re-enter your mySMTP username and password.
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

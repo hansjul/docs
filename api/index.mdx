@@ -1,0 +1,83 @@
+---
+title: "mySMTP Email API: Send Over HTTPS (Coming Late Q4 2026)"
+sidebarTitle: "Email API"
+description: "The mySMTP REST API for sending email over HTTPS is coming in late Q4 2026. Learn what to expect and how to send with SMTP relay in the meantime."
+tag: "Coming soon"
+---
+
+The mySMTP Email API will let you send email from your application over HTTPS instead of SMTP. It is planned for release in **late Q4 2026**. Until then, every mySMTP account sends through the SMTP relay, which works with any application, library, or device.
+
+<Info>
+  The API is not available yet. This page will be updated with endpoints, authentication, and code examples when it launches.
+</Info>
+
+## API components
+
+The API platform has four primary functional components across synchronous and asynchronous communication paradigms:
+
+<CardGroup cols={2}>
+  <Card title="1. Management API" icon="sliders">
+    Control-plane management, configuration, relay discovery.
+
+    - **API type:** Synchronous REST (with Async task execution)
+    - **Protocol:** HTTPS (JSON)
+    - **Pattern:** Request-Response (`202 Accepted` for background tasks)
+  </Card>
+
+  <Card title="2. Event API" icon="tower-broadcast">
+    Realtime server-side signaling, async task completion notifications.
+
+    - **API type:** Asynchronous / Event-Driven
+    - **Protocol:** HTTPS (SSE / `text/event-stream`)
+    - **Pattern:** Unidirectional Server Push Stream
+  </Card>
+
+  <Card title="3. WebSocket feed API" icon="arrows-left-right">
+    Continuous dashboard feeds, live logs, datatable state, metrics.
+
+    - **API type:** Asynchronous / Event-Driven
+    - **Protocol:** WSS (WebSockets)
+    - **Pattern:** Full-Duplex / Bidirectional Stream
+  </Card>
+
+  <Card title="4. Mail submission APIs" icon="paper-plane">
+    Direct relay and global fleet-send mail submission and queue acceptance.
+
+    - **API type:** Synchronous Request-Response
+    - **Protocol:** HTTPS (REST / MIME)
+    - **Pattern:** Synchronous Request-Response
+  </Card>
+</CardGroup>
+
+## Send with SMTP today
+
+You do not need to wait for the API. Any language or framework with an SMTP library can send through mySMTP now.
+
+| Setting | Value |
+| --- | --- |
+| Server | e.g. `relayxx.mysmtp.com` (your hostname is in the setup email) |
+| Port | **587** (primary), 2525 or 25 |
+| Encryption | STARTTLS |
+| Authentication | Your SMTP username and SMTP password |
+
+<CardGroup cols={2}>
+  <Card title="Web applications" icon="globe" href="/email-configuration/web-applications/index">
+    Connect email marketing and sending platforms to mySMTP.
+  </Card>
+
+  <Card title="SMTP credentials" icon="key" href="/getting-started/setting-up-smtp-credentials">
+    Find and manage your SMTP username and password.
+  </Card>
+
+  <Card title="Ports and encryption" icon="lock" href="/getting-started/supported-smtp-ports-and-encryption">
+    Choose the right port and TLS mode.
+  </Card>
+
+  <Card title="Webhooks" icon="bolt" href="/api/webhooks">
+    Real-time delivery events, also coming in late Q4 2026.
+  </Card>
+</CardGroup>
+
+## Get notified
+
+Want to know when the API launches, or have a use case you want supported? Contact [support@mysmtp.com](mailto:support@mysmtp.com) or follow the [mySMTP blog](https://mysmtp.com/blog).

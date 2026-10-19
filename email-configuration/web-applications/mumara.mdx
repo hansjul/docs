@@ -1,0 +1,73 @@
+---
+title: "Connect Mumara to mySMTP for secure campaign delivery"
+sidebarTitle: "Mumara"
+description: "Configure Mumara to send email campaigns through mySMTP using port 587 and TLS encryption. Add your SMTP credentials and test the connection."
+---
+
+You need your mySMTP SMTP credentials and access to the Mumara admin panel.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Server Type | SMTP |
+| Port | `587` |
+| Security | `STARTTLS` (TLS) |
+| Username | Your full mySMTP username |
+| Password | Your mySMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure the SMTP server
+
+<Steps>
+  <Step title="Open SMTP Management">
+    Log in to your Mumara admin panel. Go to **Settings → SMTP Management → SMTP Servers**.
+  </Step>
+  <Step title="Add or edit the server">
+    To add a new server, click **Add New Server**. To update an existing entry, click **Edit** next to it.
+  </Step>
+  <Step title="Enter mySMTP credentials">
+    Fill in the form with the values from the table above:
+
+    - Sender Name: your sender name (for example, Marketing)
+    - Sender Email: `you@yourdomain.com`
+    - Server Host: `relayxx.mysmtp.com` (from your setup email)
+    - Server Port: `587`
+    - Server Secure: `TLS`
+    - Username and Password: your mySMTP credentials
+  </Step>
+  <Step title="Test and save">
+    Click **Test SMTP Connection**. When the response is successful, click **Save** or **Update SMTP**.
+  </Step>
+</Steps>
+
+## Send a test campaign
+
+After saving, create a small test campaign to a personal email address. Confirm that the message arrives and that the headers show it passed through mySMTP.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection test fails">
+    Double-check the username and password. Confirm TLS is selected and the port is 587. If your server blocks 587, switch to 2525.
+  </Accordion>
+
+  <Accordion title="Authentication error">
+    Make sure you are using your full mySMTP username and that the password has no leading or trailing spaces.
+  </Accordion>
+
+  <Accordion title="Emails going to spam">
+    Verify that your sending domain has SPF, DKIM, and DMARC configured. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox to spot issues fast.
+    </Tip>
+  </Accordion>
+</AccordionGroup>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

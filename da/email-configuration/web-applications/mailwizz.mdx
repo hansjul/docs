@@ -1,0 +1,74 @@
+---
+title: "Forbind MailWizz til mySMTP til masse-e-mail-levering"
+sidebarTitle: "MailWizz"
+description: "Følg denne guide for at forbinde MailWizz til mySMTP ved at konfigurere SMTP-serverindstillinger med port 587 og TLS-kryptering til sikker levering."
+---
+
+Du skal bruge dine mySMTP-legitimationsoplysninger og adminadgang til MailWizz.
+
+<Tip>
+  Din mySMTP dedikerede IP virker med din egen selvhostede MailWizz. Vil du hellere ikke køre MailWizz selv? mySMTP tilbyder [Hosted MailWizz](/da/email-configuration/web-applications/hosted-mailwizz) på egen infrastruktur, der kun sender via mySMTP-IP'er og er klar inden for en time.
+</Tip>
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Protokol/Kryptering | TLS (eller STARTTLS) |
+| Brugernavn | Dit mySMTP-brugernavn |
+| Adgangskode | Dit mySMTP-adgangskode |
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Tilføj en SMTP delivery server
+
+<Steps>
+  <Step title="Åbn Delivery Servers">
+    Log ind på dit MailWizz-adminpanel. Gå til **Servers → Delivery Servers**.
+  </Step>
+  <Step title="Opret en SMTP-server">
+    Klik på **Create New Server**. Vælg **SMTP** fra listen over delivery server-typer.
+  </Step>
+  <Step title="Indtast mySMTP-indstillinger">
+    Udfyld SMTP-konfigurationsformularen med oplysningerne fra tabellen ovenfor og disse yderligere felter:
+
+    - From Email: f.eks. `you@yourdomain.com` (skal være gyldig)
+    - From Name: Dit brand eller firmanavn
+    - Reply-To Email: Valgfri, normalt samme som From Email
+    - Force From/Reply-To: Ja (anbefales for at sikre deliverability)
+    - Timeout: 5-10 sekunder
+  </Step>
+  <Step title="Test og aktiver">
+    Rul til bunden af formularen, og klik på **Test Connection**. Hvis den er succesfuld, skal du klikke på **Save and Activate**. Serveren vises på din delivery server-liste og er klar til at sende.
+  </Step>
+</Steps>
+
+<Tip>
+  Optimer batchstørrelser og leveringsskemaer med [MailWizz Quota Optimizer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+</Tip>
+
+## Send en testkampagne
+
+Opret en lille testkampagne til din personlige e-mailadresse. Bekræft, at beskeden ankommer, og at headerne viser, at den blev sendt gennem mySMTP.
+
+## Fejlfinding
+
+- **Forbindelsestest mislykkedes:** dobbelttjek værtsnavnet, port 587 og TLS-valget. Hvis dit netværk blokerer 587, kan du prøve port 2525.
+- **Godkendelsesfejl:** genindtast dit mySMTP-brugernavn og din adgangskode. Sørg for, at der ikke er ekstra mellemrum.
+- **E-mails ender i spam:** verificer, at SPF, DKIM og DMARC er konfigureret for dit domæne. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+  <Tip>
+    Kør [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+  </Tip>
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).
+
+## Relaterede artikler
+
+- [Webapplikationer, oversigt](/da/email-configuration/web-applications)
+- [SMTP-begrænsninger og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)

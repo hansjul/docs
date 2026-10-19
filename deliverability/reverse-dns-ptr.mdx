@@ -1,0 +1,75 @@
+---
+title: "Set Up Reverse DNS (PTR) for Dedicated IP Reputation"
+sidebarTitle: "Reverse DNS PTR"
+description: "Learn how rDNS works, why it matters for dedicated IPs, and how to request a custom PTR record from mySMTP. Check rDNS with dig, nslookup, or the Toolbox."
+---
+
+Reverse DNS (rDNS) helps receiving servers verify that your sending IP matches your domain name. Forward-confirmed rDNS reduces the chance that your mail is rejected or filtered as suspicious.
+
+## What is PTR/rDNS
+
+A PTR record maps an IP address back to a hostname. It is the reverse of a regular DNS A record, which maps a hostname to an IP. Receiving mail servers often check that the IP sending them mail has a valid PTR record, and that the hostname it resolves to points back to the same IP (forward-confirmed rDNS).
+
+## Why receivers check rDNS
+
+Mailbox providers and spam filters use rDNS as a basic trust signal:
+
+- IPs without PTR records may be treated as less reputable.
+- Mismatched forward and reverse DNS looks like spoofing or misconfiguration.
+- Some receivers reject mail outright from IPs that fail this check.
+
+## Who sets the PTR record
+
+The owner of the IP address controls PTR records. Because mySMTP owns the IP addresses allocated to your account, **mySMTP sets and manages PTR records for all dedicated IPs**. You cannot add a PTR record at your own DNS provider.
+
+If you want your dedicated IP to resolve to a hostname on your own domain (for example, `mail.yourdomain.com`), see [Branded rDNS](/deliverability/branded-rdns).
+
+<Note>
+  Shared IP plans are only available to customers in Denmark. PTR for shared IPs is managed by mySMTP and cannot be customized.
+</Note>
+
+## How to check your current PTR
+
+You can verify the current PTR record for your IP using any of these methods.
+
+<Tabs>
+  <Tab title="dig">
+    Run this command, replacing `YOUR_IP` with your sending IP:
+
+    ```bash
+    dig -x YOUR_IP +short
+    ```
+
+    Example output:
+
+    ```text
+    relayxx.mysmtp.com.
+    ```
+  </Tab>
+  <Tab title="nslookup">
+    Run this command, replacing `YOUR_IP` with your sending IP:
+
+    ```bash
+    nslookup YOUR_IP
+    ```
+
+    Look for the "name" line in the response.
+  </Tab>
+  <Tab title="Toolbox">
+    Use the rDNS checker in the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) to look up PTR records without installing tools.
+  </Tab>
+</Tabs>
+
+<Warning>
+  Always use the hostname from your setup email. `relayxx.mysmtp.com` is an example. Shared IP (DK only) customers use `mail.mysmtp.com`.
+</Warning>
+
+## Shared IP (DK only) behavior
+
+On shared IP plans, the PTR record is set by mySMTP to a shared hostname. Individual customers cannot request custom PTR names on shared IPs. If you require a custom PTR, consider upgrading to a dedicated IP plan.
+
+## Related articles
+
+- [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained)
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)
+- [IP reputation: dedicated vs shared IPs](/deliverability/ip-reputation-dedicated-vs-shared-ips)

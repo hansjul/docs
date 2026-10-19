@@ -1,0 +1,60 @@
+---
+title: "Konica Minolta bizhub SMTP-opsætning via PageScope"
+sidebarTitle: "Konica Minolta"
+description: "Konfigurer mySMTP på Konica Minolta bizhub-enheder via PageScope Web Connection. Sæt SMTP-serveren, port 587, STARTTLS og SMTP-autentificering."
+---
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, DK kun) | `mail.mysmtp.com` |
+| Port | **587** |
+| Kryptering (mærket "SSL/TLS") | **STARTTLS** |
+| SMTP-autentificering | Aktiveret |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Kodeord | Dit mySMTP-kodeord |
+
+<Note>
+  Brug det præcise relay-hostnavn fra din mySMTP opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Note>
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark. Alle andre kunder bruger et dedikeret hostnavn.
+</Note>
+
+## Konfigurer enheden
+
+<Steps>
+  <Step title="Åbn PageScope Web Connection">
+    Åbn en webbrowser, indtast enhedens IP-adresse, og log ind som **Administrator**.
+  </Step>
+  <Step title="Naviger til E-mail Settings">
+    Gå til **Administrator** > **Network** > **E-mail Setting** > **E-mail TX (SMTP)**.
+  </Step>
+  <Step title="Indtast SMTP-server">
+    I **SMTP Server** skal du indtaste dit mySMTP relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+  </Step>
+  <Step title="Sæt port og kryptering">
+    Sæt **SMTP Port** til **587** og sæt **SSL/TLS** eller **Encryption** til **STARTTLS**.
+  </Step>
+  <Step title="Aktivér SMTP-autentificering">
+    Slå **SMTP Authentication** til, og indtast dit mySMTP **User Name** og **Password**.
+  </Step>
+  <Step title="Sæt afsenderadressen">
+    Indtast **Sender E-mail Address** (for eksempel `scanner@yourdomain.com`). Dette domæne skal være autentificeret for din mySMTP-konto.
+  </Step>
+  <Step title="Gem og test">
+    Klik på **OK** eller **Apply** for at gemme. Send en test scan-to-email for at bekræfte levering.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+- **Cannot connect to server:** bekræft at din firewall tillader udgående trafik på port 587. Hvis blokeret, prøv port **2525** eller **25**.
+- **Invalid user name or password:** indtast igen dit mySMTP brugernavn og kodeord omhyggeligt. De er case-sensitive.
+- **Relay denied:** afsenderadressens domæne skal være på din mySMTP-konto. Se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+- **STARTTLS ikke vist:** på nogle modeller skal du vælge **TLS** eller aktivere kryptering efter at have bekræftet at porten er 587.
+
+For mere vejledning, se [Scan to Email](/da/email-configuration/email-clients/scan-to-email) og [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

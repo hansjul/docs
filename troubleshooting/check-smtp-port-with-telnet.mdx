@@ -1,0 +1,83 @@
+---
+title: "Check if an SMTP Port Is Open with Telnet or PowerShell"
+sidebarTitle: "Check Port with Telnet"
+description: "Test whether ports 587, 2525, 465, or 25 are reachable from your network to the mySMTP relay using telnet on Windows, macOS, and Linux, or PowerShell."
+---
+
+Use your relay hostname from the mySMTP setup email. The examples below use the sample host `relayxx.mysmtp.com`.
+
+## Enable telnet
+
+<Tabs>
+  <Tab title="Windows">
+    1. Open **Control Panel** > **Programs** > **Turn Windows features on or off**.
+    2. Check **Telnet Client** and click **OK**.
+
+    Or run this in an administrator Command Prompt:
+
+    ```bash
+    dism /online /Enable-Feature /FeatureName:TelnetClient
+    ```
+  </Tab>
+  <Tab title="macOS">
+    Install telnet with [Homebrew](https://brew.sh):
+
+    ```bash
+    brew install telnet
+    ```
+  </Tab>
+  <Tab title="Linux">
+    ```bash
+    sudo apt install telnet    # Debian, Ubuntu
+    sudo dnf install telnet    # Fedora, RHEL
+    ```
+  </Tab>
+</Tabs>
+
+## Test the port
+
+<Steps>
+  <Step title="Run telnet">
+    Open a terminal or Command Prompt and connect to the port you want to test:
+
+    ```bash
+    telnet relayxx.mysmtp.com 587
+    ```
+
+    Replace `587` with `2525`, `465`, or `25` to test another port.
+  </Step>
+  <Step title="Read the result">
+    | Result | Meaning |
+    | --- | --- |
+    | A line starting with `220` | The port is open and the server answered |
+    | Blank screen with connection established (port 465) | The port is open. Port 465 expects TLS immediately, so no `220` greeting is shown in telnet |
+    | `Connection timed out` | The port is blocked by a firewall, router, or your ISP |
+    | `Connection refused` | Something on the path rejected the connection; check the hostname and port |
+    | `Could not resolve host` / `Unknown host` | The hostname is wrong or DNS is not working |
+  </Step>
+  <Step title="Close the session">
+    Type `QUIT` and press **Enter**. If the session does not respond, press **Ctrl + ]**, then type `quit`.
+  </Step>
+</Steps>
+
+## Alternative: PowerShell on Windows
+
+No telnet needed. Run:
+
+```powershell
+Test-NetConnection -ComputerName relayxx.mysmtp.com -Port 587
+```
+
+`TcpTestSucceeded : True` means the port is open. `False` means it is blocked.
+
+## If the port is blocked
+
+- Try port **2525**, which is rarely blocked.
+- Ask your network administrator or hosting provider to allow outbound traffic to the port.
+- Most ISPs and cloud providers block outbound port **25**. Use 587 or 2525 instead.
+
+<Tip>
+  Use [test.smtp.ai](https://test.smtp.ai) to check connectivity, TLS 1.2/1.3 negotiation, and authentication in one test.
+</Tip>
+
+For port and encryption details, see [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption). For full SMTP session tests, see [Command-line test](/email-configuration/code-examples/command-line-test).

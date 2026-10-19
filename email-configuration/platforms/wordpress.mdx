@@ -1,0 +1,117 @@
+---
+title: "Configure mySMTP with WordPress and WP Mail SMTP"
+sidebarTitle: "WordPress"
+description: "Send WordPress emails reliably through mySMTP by configuring the WP Mail SMTP plugin with your SMTP credentials and authenticated domain."
+---
+
+Send WordPress emails reliably through mySMTP by configuring the WP Mail SMTP plugin with your SMTP credentials and authenticated domain.
+
+## Prerequisites
+
+- Admin access to your WordPress site
+- Your mySMTP username and password (see [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials))
+- A verified sending domain
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (from your setup email) |
+| Host (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Encryption | TLS |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure WP Mail SMTP
+
+WP Mail SMTP is the most widely used plugin for routing WordPress emails through a custom SMTP server.
+
+<Steps>
+  <Step title="Install WP Mail SMTP">
+    In your WordPress admin, go to **Plugins → Add New Plugin**. Search for **WP Mail SMTP by WPForms**, then install and activate it.
+  </Step>
+  <Step title="Start the setup wizard">
+    After activation, click **Launch Setup Wizard**. Choose **Skip** to bypass the wizard and go straight to the settings page, or continue with **Other SMTP** when prompted for a mailer.
+  </Step>
+  <Step title="Select Other SMTP">
+    From the WP Mail SMTP settings, under **Mailer**, select **Other SMTP**. This lets you enter any custom SMTP server.
+  </Step>
+  <Step title="Enter mySMTP settings">
+    Fill in the following fields:
+
+    - **SMTP Host:** `relayxx.mysmtp.com` (replace with your real hostname from the mySMTP setup email)
+    - **Encryption:** TLS
+    - **SMTP Port:** `587`
+    - **Authentication:** On
+    - **SMTP Username:** Your mySMTP username
+    - **SMTP Password:** Your mySMTP password
+  </Step>
+  <Step title="Set the From email and name">
+    In the same settings page, set **From Email** to an address on your authenticated domain (for example, `noreply@yourdomain.com`). Set **From Name** to your brand or site name. Check **Force From Email** and **Force From Name** so plugins and themes cannot override them.
+  </Step>
+  <Step title="Save settings and send a test email">
+    Click **Save Settings**. Then go to the **Email Test** tab, enter a personal email address, and click **Send Email**. Confirm the message arrives and shows the correct sender.
+  </Step>
+</Steps>
+
+<Tabs>
+  <Tab title="WP Mail SMTP">
+    The steps above use WP Mail SMTP. This is the plugin we recommend for most WordPress sites because of its large user base, setup wizard, and built-in email test tool.
+  </Tab>
+  <Tab title="FluentSMTP">
+    FluentSMTP is a popular alternative. After installing it, go to **Settings → FluentSMTP**, add **SMTP** as a connection, and fill in the same host, port, username, and password. FluentSMTP also supports multiple connections and fallback providers.
+  </Tab>
+</Tabs>
+
+## Secure your password with wp-config.php constants
+
+Storing your SMTP password in the WordPress database is acceptable for many sites, but you can also define it as a PHP constant in `wp-config.php` so it is not visible in the admin interface.
+
+Add these lines above `/* That's all, stop editing! */` in `wp-config.php`:
+
+```php
+// WP Mail SMTP: use constants instead of database settings
+define( 'WPMS_ON', true );
+define( 'WPMS_SMTP_PASS', 'your-mysmtp-password' );
+```
+
+When `WPMS_ON` is `true`, WP Mail SMTP reads settings from constants instead of the database. See the WP Mail SMTP documentation for the full list of constants (for example, `WPMS_MAIL_FROM`, `WPMS_MAIL_FROM_NAME`, `WPMS_SMTP_HOST`, and so on).
+
+<Warning>
+  Never commit `wp-config.php` with a hardcoded password to version control. Load the password from environment variables when possible, or keep the file outside your repository.
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Test email fails with connection error">
+    Confirm you are using your real mySMTP hostname (not `relayxx.mysmtp.com`). Check that port 587 is open on your hosting firewall. If your host blocks 587, try port 2525.
+  </Accordion>
+
+  <Accordion title="Authentication failed">
+    Re-enter your mySMTP username and password, making sure there are no leading or trailing spaces. Copy the values from a password manager if possible.
+  </Accordion>
+
+  <Accordion title="Emails go to spam">
+    Verify that your sending domain has SPF, DKIM, and DMARC configured. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="WordPress still uses the default mail function">
+    Make sure WP Mail SMTP is active and the **Mailer** setting is set to **Other SMTP**, not **Default (none)**. Other plugins can also override `wp_mail`; disable them one by one to find conflicts.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+- [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials)

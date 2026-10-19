@@ -1,0 +1,74 @@
+---
+title: "Migrer fra Brevo til mySMTP"
+sidebarTitle: "Brevo"
+description: "Skift fra Brevo SMTP til mySMTP. Opdater hostname, loginoplysninger, port, SPF og DKIM. Eksportér din suppression-liste og warm op din nye IP for et rent cutover."
+---
+
+At flytte fra Brevo til mySMTP betyder, at du skal opdatere dit SMTP-hostname, autentificeringsmetode og domaene-DNS-poster. Denne vejledning viser praecis, hvad du skal aendre, saa intet bryder under overgangen.
+
+## Hvad aendres
+
+| Indstilling | Brevo (gammel) | mySMTP (ny) |
+| --- | --- | --- |
+| SMTP-server | `smtp-relay.brevo.com` | `relayxx.mysmtp.com` (fra din opsaetningsmail) |
+| Shared IP (kun DK) | `smtp-relay.brevo.com` | `mail.mysmtp.com` |
+| Port | `587` (anbefalet) eller `465` | `587` (STARTTLS, anbefalet) eller `465` |
+| Brugernavn | Dit Brevo SMTP-login / API-nøglenavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Din Brevo SMTP-nøgle / API-nøgle | Dit mySMTP SMTP-adgangskode |
+| SPF-post | `v=spf1 include:spf.brevo.com ~all` (legacy: `include:spf.sendinblue.com`) | `v=spf1 include:spf1.mysmtp.com ~all` |
+| SPF under transition |  | `v=spf1 include:spf.brevo.com include:spf1.mysmtp.com ~all` |
+
+<Note>
+  Dit reelle mySMTP-hostname staar i din opsaetningsmail. Brug ikke `smtp.mysmtp.com`.
+</Note>
+
+## Før du cutover
+
+1. **Eksportér din suppression-liste** fra Brevo (bounces, spam-klager, afmeldinger). Send ikke til disse adresser fra mySMTP. mySMTP importerer ikke suppression-lister automatisk.
+2. **Verificer DNS** for mySMTP. Tilfoej `include:spf1.mysmtp.com` til din eksisterende SPF-post (for eksempel `v=spf1 include:spf.brevo.com include:spf1.mysmtp.com ~all`) og tilfoej mySMTP DKIM TXT/CNAME-poster. Behold Brevos poster indtil overgangen er stabil.
+3. **Test forbindelse** med [test.smtp.ai](https://test.smtp.ai) ved at bruge dine mySMTP-loginoplysninger.
+
+## Cutover-trin
+
+<Steps>
+  <Step title="Opdater applikationens SMTP-indstillinger">
+    Erstat Brevos `smtp-relay.brevo.com` med dit mySMTP-hostname, indtast dit mySMTP-brugernavn og -adgangskode, og brug port `587` med STARTTLS.
+  </Step>
+  <Step title="Send testbeskeder">
+    Send nogle fa testmails til adresser, du kontrollerer. Verificer headers, at autentificeringen gaar igennem, og at beskederne lander i indbakken.
+  </Step>
+  <Step title="Overvåg leveringsmetrics">
+    Hold oje med bounces, klager og indbakkeplacering i 24 til 72 timer. Brug [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+  </Step>
+  <Step title="Warm op din dedikerede IP">
+    Hvis du er paa en dedikeret IP-plan (standard), saa oeg volumen gradvist. Se [Warm-up-planer](/da/deliverability/warm-up-plans) og brug [warm-up-generatoren](https://toolbox.smtp.ai/#warmup-generator).
+  </Step>
+  <Step title="Fjern Brevo DNS-poster">
+    Naar afsendelsen er stabil og dine reputation-metrics ser gode ud, fjerner du `include:spf.brevo.com` (og legacy `include:spf.sendinblue.com`), saa din SPF-post lyder `v=spf1 include:spf1.mysmtp.com ~all`, og sletter Brevo DKIM CNAME/TXT-poster.
+  </Step>
+</Steps>
+
+<AccordionGroup>
+  <Accordion title="Jeg brugte Brevos HTTP API, ikke SMTP. Hvad goer jeg?">
+    mySMTP's HTTP API kommer i Q4 2026. Indtil da skifter du til SMTP ved at opdatere din integration til at bruge indstillingerne i tabellen ovenfor. Se [Kodeeksempler](/da/email-configuration/code-examples) for biblioteker i PHP, Python, Node.js, .NET og Java.
+  </Accordion>
+
+  <Accordion title="Kan jeg beholde Brevo som backup under overgangen?">
+    Ja. Behold Brevo DNS-poster og loginoplysninger aktive, mens du warmer mySMTP op. Fjern dem først, naar du har bekræftet stabil levering.
+  </Accordion>
+
+  <Accordion title="Skal jeg aendre min from-adresse?">
+    Nej. Du kan beholde de samme from-adresser og domaener. Sorg bare for, at domaenets SPF og DKIM inkluderer mySMTP.
+  </Accordion>
+
+  <Accordion title="Hvad hvis jeg ser en stigning i bounces efter skiftet?">
+    Hvis du ikke eksporterede og ekskluderede din Brevo-suppression-liste, kan du sende til kendte daarlige adresser. Pause afsendelsen, rens din liste, og genoptag med en mindre volumen.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [Migrer til mySMTP-oversigt](/da/email-configuration/migration)
+- [Warm-up-planer](/da/deliverability/warm-up-plans)
+- [Kodeeksempler](/da/email-configuration/code-examples)
+- [DNS-opsaetning til autentificering](/da/deliverability/dns-setup-for-authentication)

@@ -1,0 +1,138 @@
+---
+title: "PHP-kodeeksempel til mySMTP med PHPMailer"
+sidebarTitle: "PHP"
+description: "Send e-mail fra PHP ved hjælp af PHPMailer eller Symfony Mailer med mySMTP. Inkluderer TLS på port 587, HTML, vedhæftede filer og fejlhåndtering."
+---
+
+Brug PHPMailer eller Symfony Mailer til at sende transaktions- og marketing-e-mails fra PHP gennem mySMTP. Begge biblioteker understøtter TLS-kryptering og SMTP-godkendelse.
+
+## Forudsætninger
+
+- PHP 8.1 eller nyere
+- Composer
+- Dit mySMTP-brugernavn og -adgangskode fra opsætningsmailen
+- Dit mySMTP-værtsnavn fra opsætningsmailen (vist som `relayxx.mysmtp.com` i disse eksempler)
+
+## PHPMailer via Composer
+
+### Installation
+
+```bash
+composer require phpmailer/phpmailer
+```
+
+### Grundlæggende afsendelseseksempel
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host       = getenv('MYSMTP_HOST') ?: 'relayxx.mysmtp.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = getenv('MYSMTP_USER');
+    $mail->Password   = getenv('MYSMTP_PASS');
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
+
+    $mail->setFrom('you@yourdomain.com', 'Your Name');
+    $mail->addAddress('recipient@example.com', 'Recipient Name');
+    $mail->isHTML(false);
+    $mail->Subject = 'Test email from PHPMailer';
+    $mail->Body    = 'This is a plain text test message sent through mySMTP.';
+
+    $mail->send();
+    echo 'Message sent successfully';
+} catch (Exception $e) {
+    echo 'Message could not be sent. Error: ', $mail->ErrorInfo;
+}
+```
+
+<Note>
+  Erstat `relayxx.mysmtp.com` med dit rigtige værtsnavn fra mySMTP-opsætningsmailen. Indlæs legitimationsoplysninger fra miljøvariabler, og hårdkod dem aldrig i kildefiler.
+</Note>
+
+### HTML-body med vedhæftet fil
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host       = getenv('MYSMTP_HOST') ?: 'relayxx.mysmtp.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = getenv('MYSMTP_USER');
+    $mail->Password   = getenv('MYSMTP_PASS');
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
+
+    $mail->setFrom('you@yourdomain.com', 'Your Name');
+    $mail->addAddress('recipient@example.com');
+    $mail->addReplyTo('you@yourdomain.com');
+    $mail->isHTML(true);
+    $mail->Subject = 'HTML email with attachment';
+    $mail->Body    = '<h1>Hello</h1><p>This is an HTML message.</p>';
+    $mail->AltBody = 'Hello. This is a plain text fallback.';
+
+    $mail->addAttachment('/path/to/invoice.pdf', 'invoice.pdf');
+
+    $mail->send();
+    echo 'Message sent successfully';
+} catch (Exception $e) {
+    echo 'Error: ', $mail->ErrorInfo;
+}
+```
+
+<Tabs>
+  <Tab title="Symfony Mailer DSN">
+    Hvis du bruger Symfony, skal du konfigurere mailer DSN i `.env` eller `config/packages/mailer.yaml`:
+
+    ```text
+    MAILER_DSN=smtp://USERNAME:PASSWORD@relayxx.mysmtp.com:587
+    ```
+
+    Erstat `USERNAME`, `PASSWORD` og `relayxx.mysmtp.com` med dine faktiske legitimationsoplysninger og værtsnavn fra opsætningsmailen. Symfony Mailer bruger automatisk STARTTLS på port 587.
+  </Tab>
+</Tabs>
+
+## Fejlhåndtering
+
+Omslut altid PHPMailer-kald i en try/catch-blok. `Exception` kastes ved SMTP-forbindelsesfejl, godkendelsesfejl og afviste modtagere. Inspicer `$mail->ErrorInfo` for det nøjagtige server-svar.
+
+## Almindelige fejl
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Dit brugernavn eller din adgangskode er forkert, eller din konto er endnu ikke aktiveret. Genindtast legitimationsoplysningerne nøjagtigt som vist i opsætningsmailen. Se [Opsætning af SMTP-legitimationsoplysninger](/da/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Dit netværk eller din vært kan blokere port 587. Prøv port 2525 med STARTTLS, eller port 465 med `PHPMailer::ENCRYPTION_SMTPS`. Se [Understøttede SMTP-porte og -kryptering](/da/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    Krypteringsindstillingen matcher ikke porten. Brug `ENCRYPTION_STARTTLS` for porte 587 og 2525. Brug `ENCRYPTION_SMTPS` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test din SPF-, DKIM- og DMARC-opsætning med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/), før du sender store volumener.
+</Tip>
+
+## Relaterede artikler
+
+- [Kodeeksempler, oversigt](/da/email-configuration/code-examples)
+- [SMTP-begrænsninger og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

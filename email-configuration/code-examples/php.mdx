@@ -1,0 +1,271 @@
+---
+title: "PHP Code Example for mySMTP with PHPMailer"
+sidebarTitle: "PHP"
+description: "Send email from PHP using PHPMailer or Symfony Mailer with mySMTP. Includes TLS on port 587, HTML, attachments, and error handling."
+---
+
+Use PHPMailer or Symfony Mailer to send transactional and marketing email from PHP through mySMTP. Both libraries support TLS encryption and SMTP authentication.
+
+## Prerequisites
+
+- PHP 8.1 or later
+- Composer
+- Your mySMTP username and password from the setup email
+- Your mySMTP hostname from the setup email (shown as `relayxx.mysmtp.com` in these examples)
+
+## PHPMailer via Composer
+
+### Install
+
+```bash
+composer require phpmailer/phpmailer
+```
+
+### Basic send example
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host       = getenv('MYSMTP_HOST') ?: 'relayxx.mysmtp.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = getenv('MYSMTP_USER');
+    $mail->Password   = getenv('MYSMTP_PASS');
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
+
+    $mail->setFrom('you@yourdomain.com', 'Your Name');
+    $mail->addAddress('recipient@example.com', 'Recipient Name');
+    $mail->isHTML(false);
+    $mail->Subject = 'Test email from PHPMailer';
+    $mail->Body    = 'This is a plain text test message sent through mySMTP.';
+
+    $mail->send();
+    echo 'Message sent successfully';
+} catch (Exception $e) {
+    echo 'Message could not be sent. Error: ', $mail->ErrorInfo;
+}
+```
+
+<Note>
+  Replace `relayxx.mysmtp.com` with your real hostname from the mySMTP setup email. Load credentials from environment variables, never hardcode them in source files.
+</Note>
+
+### HTML body with attachment
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host       = getenv('MYSMTP_HOST') ?: 'relayxx.mysmtp.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = getenv('MYSMTP_USER');
+    $mail->Password   = getenv('MYSMTP_PASS');
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
+
+    $mail->setFrom('you@yourdomain.com', 'Your Name');
+    $mail->addAddress('recipient@example.com');
+    $mail->addReplyTo('you@yourdomain.com');
+    $mail->isHTML(true);
+    $mail->Subject = 'HTML email with attachment';
+    $mail->Body    = '<h1>Hello</h1><p>This is an HTML message.</p>';
+    $mail->AltBody = 'Hello. This is a plain text fallback.';
+
+    $mail->addAttachment('/path/to/invoice.pdf', 'invoice.pdf');
+
+    $mail->send();
+    echo 'Message sent successfully';
+} catch (Exception $e) {
+    echo 'Error: ', $mail->ErrorInfo;
+}
+```
+
+<Tabs>
+  <Tab title="Symfony Mailer DSN">
+    If you use Symfony, configure the mailer DSN in `.env` or `config/packages/mailer.yaml`:
+
+    ```text
+    MAILER_DSN=smtp://USERNAME:PASSWORD@relayxx.mysmtp.com:587
+    ```
+
+    Replace `USERNAME`, `PASSWORD`, and `relayxx.mysmtp.com` with your actual credentials and hostname from the setup email. Symfony Mailer uses STARTTLS automatically on port 587.
+  </Tab>
+</Tabs>
+
+## Error handling
+
+Always wrap PHPMailer calls in a try/catch block. `Exception` is thrown for SMTP connection failures, authentication errors, and rejected recipients. Inspect `$mail->ErrorInfo` for the exact server response.
+
+## Common errors
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Your username or password is incorrect, or your account is not yet activated. Re-enter credentials exactly as shown in the setup email. See [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Your network or host may block port 587. Try port 2525 with STARTTLS, or port 465 with `PHPMailer::ENCRYPTION_SMTPS`. See [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    The encryption setting does not match the port. Use `ENCRYPTION_STARTTLS` for ports 587 and 2525. Use `ENCRYPTION_SMTPS` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test your SPF, DKIM, and DMARC setup with the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) before sending large volumes.
+</Tip>
+
+## Related articles
+
+- [Code Examples overview](/email-configuration/code-examples)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+
+Use PHPMailer or Symfony Mailer to send transactional and marketing email from PHP through mySMTP. Both libraries support TLS encryption and SMTP authentication.
+
+## Prerequisites
+
+- PHP 8.1 or later
+- Composer
+- Your mySMTP username and password from the setup email
+- Your mySMTP hostname from the setup email (shown as `relayxx.mysmtp.com` in these examples)
+
+## PHPMailer via Composer
+
+### Install
+
+```bash
+composer require phpmailer/phpmailer
+```
+
+### Basic send example
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host       = getenv('MYSMTP_HOST') ?: 'relayxx.mysmtp.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = getenv('MYSMTP_USER');
+    $mail->Password   = getenv('MYSMTP_PASS');
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
+
+    $mail->setFrom('you@yourdomain.com', 'Your Name');
+    $mail->addAddress('recipient@example.com', 'Recipient Name');
+    $mail->isHTML(false);
+    $mail->Subject = 'Test email from PHPMailer';
+    $mail->Body    = 'This is a plain text test message sent through mySMTP.';
+
+    $mail->send();
+    echo 'Message sent successfully';
+} catch (Exception $e) {
+    echo 'Message could not be sent. Error: ', $mail->ErrorInfo;
+}
+```
+
+<Note>
+  Replace `relayxx.mysmtp.com` with your real hostname from the mySMTP setup email. Load credentials from environment variables, never hardcode them in source files.
+</Note>
+
+### HTML body with attachment
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host       = getenv('MYSMTP_HOST') ?: 'relayxx.mysmtp.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = getenv('MYSMTP_USER');
+    $mail->Password   = getenv('MYSMTP_PASS');
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
+
+    $mail->setFrom('you@yourdomain.com', 'Your Name');
+    $mail->addAddress('recipient@example.com');
+    $mail->addReplyTo('you@yourdomain.com');
+    $mail->isHTML(true);
+    $mail->Subject = 'HTML email with attachment';
+    $mail->Body    = '<h1>Hello</h1><p>This is an HTML message.</p>';
+    $mail->AltBody = 'Hello. This is a plain text fallback.';
+
+    $mail->addAttachment('/path/to/invoice.pdf', 'invoice.pdf');
+
+    $mail->send();
+    echo 'Message sent successfully';
+} catch (Exception $e) {
+    echo 'Error: ', $mail->ErrorInfo;
+}
+```
+
+<Tabs>
+  <Tab title="Symfony Mailer DSN">
+    If you use Symfony, configure the mailer DSN in `.env` or `config/packages/mailer.yaml`:
+
+    ```text
+    MAILER_DSN=smtp://USERNAME:PASSWORD@relayxx.mysmtp.com:587
+    ```
+
+    Replace `USERNAME`, `PASSWORD`, and `relayxx.mysmtp.com` with your actual credentials and hostname from the setup email. Symfony Mailer uses STARTTLS automatically on port 587.
+  </Tab>
+</Tabs>
+
+## Error handling
+
+Always wrap PHPMailer calls in a try/catch block. `Exception` is thrown for SMTP connection failures, authentication errors, and rejected recipients. Inspect `$mail->ErrorInfo` for the exact server response.
+
+## Common errors
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Your username or password is incorrect, or your account is not yet activated. Re-enter credentials exactly as shown in the setup email. See [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Your network or host may block port 587. Try port 2525 with STARTTLS, or port 465 with `PHPMailer::ENCRYPTION_SMTPS`. See [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    The encryption setting does not match the port. Use `ENCRYPTION_STARTTLS` for ports 587 and 2525. Use `ENCRYPTION_SMTPS` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test your SPF, DKIM, and DMARC setup with the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) before sending large volumes.
+</Tip>
+
+## Related articles
+
+- [Code Examples overview](/email-configuration/code-examples)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

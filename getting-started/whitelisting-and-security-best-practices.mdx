@@ -1,0 +1,75 @@
+---
+title: "Whitelisting and Security Best Practices"
+sidebarTitle: "Whitelisting"
+description: "Restrict SMTP access with IP whitelisting, use strong credentials, and monitor login activity to protect your mySMTP account from unauthorized use."
+---
+
+These settings help prevent abuse, protect your sender reputation, and keep your email delivery reliable.
+
+## What is IP whitelisting?
+
+IP whitelisting limits SMTP connections to approved public IP addresses. Any connection from an IP that is not on the list is rejected.
+
+This is useful when:
+
+- You use a dedicated IP server and know the exact source IP of your sending application.
+- You want to prevent stolen credentials from being used outside your office or data center.
+
+## How to whitelist an IP address
+
+<Steps>
+  <Step title="Log in to the dashboard">
+    Go to [app.mysmtp.com](https://app.mysmtp.com) and sign in as the account owner.
+  </Step>
+  <Step title="Open IP Whitelisting">
+    Navigate to **IP Whitelisting** in the left-hand menu.
+  </Step>
+  <Step title="Add a trusted IP">
+    Enter the public IP address of the system that connects to mySMTP, such as your application server, office network, or VPS. Do not enter a private LAN address.
+  </Step>
+  <Step title="Save and wait">
+    Save the change. The rule takes effect quickly, but propagation can take a few minutes.
+  </Step>
+</Steps>
+
+<Tip>
+  If your internet connection has a dynamic public IP, whitelisting by static IP may not be practical. In that case, rely on strong SMTP credentials and monitoring instead.
+</Tip>
+
+## Credential security
+
+### Use strong, unique passwords
+
+Choose long passwords for each SMTP user. Do not reuse passwords across services. If you suspect a credential has been exposed, change the password in the dashboard under **SMTP Users**.
+
+### Use one SMTP user per integration
+
+Create a separate SMTP user for each email client, application, or team member. This makes it easier to identify which integration sent a given message and limits the impact of retiring one credential.
+
+### Monitor login attempts
+
+Review sending logs in **Log Reports** for unexpected traffic. If you see failed logins from unknown IPs and use IP whitelisting, the firewall is working. If you do not use whitelisting, treat repeated failures as a sign to rotate passwords.
+
+### Enable the Bcc archive feature
+
+If your account supports it, use the Bcc copy option in **SMTP Users** to keep a hidden archive of all sent mail. This helps during audits and troubleshooting.
+
+## Best practices summary
+
+| Practice | How to apply it |
+| --- | --- |
+| Whitelist only trusted IPs | Add the public IP of each sending system, not a wide range |
+| Rotate passwords after setup changes or suspected exposure | Edit the SMTP user in the dashboard and update the application |
+| Separate users per integration | Create one SMTP user per application or team member |
+| Monitor logs regularly | Check Log Reports for volume spikes or bounce increases |
+| Keep a Bcc archive | Enable under SMTP Users if available |
+
+## Related articles
+
+- [Dedicated IP server dashboard](/getting-started/dedicated-ip-server-dashboard)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+
+<Tip>
+  Not sure what your current public IP is? Use the free [What Is My IP](https://toolbox.smtp.ai/#what-is-my-ip) tool in the mySMTP Deliverability Toolbox. It shows your IPv4/IPv6 address, PTR record, and ASN instantly in your browser.
+</Tip>

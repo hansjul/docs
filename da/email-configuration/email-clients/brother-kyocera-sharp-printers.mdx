@@ -1,0 +1,114 @@
+---
+title: "Brother, Kyocera og Sharp Printer SMTP-opsætning"
+sidebarTitle: "Brother / Kyocera / Sharp"
+description: "Konfigurer mySMTP på Brother, Kyocera og Sharp printere. Brug hvert mærkes webpanel til at sætte SMTP-serveren, porten og autentificeringen."
+---
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, DK kun) | `mail.mysmtp.com` |
+| Port | **587** |
+| Forbindelseskryptering | **STARTTLS** |
+| Autentificering | Aktiveret |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Kodeord | Dit mySMTP-kodeord |
+
+<Note>
+  Brug det præcise relay-hostnavn fra din mySMTP opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Note>
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark. Alle andre kunder bruger et dedikeret hostnavn.
+</Note>
+
+## Opsætning efter mærke
+
+<Tabs>
+  <Tab title="Brother">
+    <Steps>
+      <Step title="Åbn Web Based Management">
+        Åbn en webbrowser, indtast printerens IP-adresse, og log ind som administrator.
+      </Step>
+      <Step title="Naviger til SMTP-indstillinger">
+        Gå til **Network** > **Protocol** > **SMTP Advanced Settings**.
+      </Step>
+      <Step title="Indtast SMTP-server">
+        I **SMTP Server** skal du indtaste dit mySMTP relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+      </Step>
+      <Step title="Sæt port og kryptering">
+        Sæt **SMTP Port** til **587** og sæt **SSL/TLS** eller **Security** til **STARTTLS**.
+      </Step>
+      <Step title="Aktivér autentificering">
+        Slå **SMTP Authentication** til, og indtast dit mySMTP **User Name** og **Password**.
+      </Step>
+      <Step title="Sæt afsenderadressen">
+        Indtast **Sender E-mail Address** (for eksempel `printer@yourdomain.com`). Dette domæne skal være på din mySMTP-konto.
+      </Step>
+      <Step title="Gem og test">
+        Klik på **Submit** eller **Apply**. Send en test scan-to-email for at bekræfte levering.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Kyocera">
+    <Steps>
+      <Step title="Åbn Command Center RX">
+        Åbn en webbrowser, indtast enhedens IP-adresse, og log ind med admin-credentials.
+      </Step>
+      <Step title="Naviger til E-mail-indstillinger">
+        Gå til **Function Settings** (eller **Network Settings**) > **E-mail** > **SMTP**.
+      </Step>
+      <Step title="Indtast SMTP-server">
+        I **SMTP Server** skal du indtaste dit mySMTP relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+      </Step>
+      <Step title="Sæt port og kryptering">
+        Sæt **SMTP Port** til **587** og sæt **SSL/TLS** eller **Encryption** til **STARTTLS**.
+      </Step>
+      <Step title="Aktivér autentificering">
+        Slå **SMTP Authentication** til, og indtast dit mySMTP **User Name** og **Password**.
+      </Step>
+      <Step title="Sæt afsenderadressen">
+        Indtast **Sender E-mail Address** (for eksempel `mfp@yourdomain.com`). Dette domæne skal være autentificeret på din mySMTP-konto.
+      </Step>
+      <Step title="Gem og test">
+        Klik på **Submit** eller **Apply**. Send en test scan-to-email for at verificere.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Sharp">
+    <Steps>
+      <Step title="Åbn Sharp webpanelet">
+        Åbn en webbrowser, indtast enhedens IP-adresse, og log ind som administrator.
+      </Step>
+      <Step title="Naviger til SMTP-indstillinger">
+        Gå til **System Settings** > **Network Settings** > **Services Settings** > **SMTP**.
+      </Step>
+      <Step title="Indtast SMTP-server">
+        I **SMTP Server** skal du indtaste dit mySMTP relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+      </Step>
+      <Step title="Sæt port og kryptering">
+        Sæt **SMTP Port** til **587** og sæt **SSL/TLS** eller **Encryption** til **STARTTLS**.
+      </Step>
+      <Step title="Aktivér autentificering">
+        Slå **SMTP Authentication** til, og indtast dit mySMTP **User Name** og **Password**.
+      </Step>
+      <Step title="Sæt enhedens email">
+        Indtast **Device E-mail Address** (for eksempel `scanner@yourdomain.com`). Dette domæne skal være på din mySMTP-konto.
+      </Step>
+      <Step title="Gem og test">
+        Klik på **Submit** eller **Apply**. Send en test scan-to-email for at bekræfte levering.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Fejlfinding
+
+- **Cannot connect:** tjek at din firewall tillader udgående trafik på port 587. Hvis blokeret, prøv port **2525** eller **25**.
+- **Authentication failed:** indtast igen dit mySMTP brugernavn og kodeord. De er case-sensitive.
+- **Relay denied:** afsenderadressen skal bruge et domæne autentificeret for din mySMTP-konto. Se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+- **No STARTTLS option:** på ældre modeller skal du vælge **TLS** eller aktivere den højest tilgængelige krypteringsindstilling og bekræfte at porten er 587.
+
+For generel scan-to-email vejledning, se [Scan to Email](/da/email-configuration/email-clients/scan-to-email). For fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

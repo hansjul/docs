@@ -1,0 +1,60 @@
+---
+title: "Manuel kontooprettelse: Bestil mySMTP via bankoverførsel"
+sidebarTitle: "Manuel opsætningsformular"
+description: "Intet firmakreditkort? Download mySMTP kontooprettelsesformularen på engelsk eller dansk for at bestille et abonnement manuelt og betale via bankoverførsel i stedet."
+---
+
+Brug den manuelle opsætningsformular, når din virksomhed ikke kan betale online med kreditkort, for eksempel når fakturaer skal betales via bankoverførsel eller gennem et EAN nummer (Danmark).
+
+## Download formularen
+
+<CardGroup cols={2}>
+  <Card title="Kontooprettelsesformular (engelsk)" icon="file-pdf" href="https://mysmtp.com/images/documents/account-setup-form_EN.pdf">
+    For kunder uden for Danmark. Inkluderer moms nummer for EU virksomheder.
+  </Card>
+
+  <Card title="Kontooprettelse (Dansk)" icon="file-pdf" href="https://mysmtp.com/images/documents/kontooprettelse_DA.pdf">
+    Til danske kunder. Inkluderer EAN nummer og valg af månedlig eller årlig betaling.
+  </Card>
+</CardGroup>
+
+## Bestil manuelt
+
+<Steps>
+  <Step title="Download og udfyld formularen">
+    Vælg den engelske eller danske version og udfyld alle felter.
+  </Step>
+  <Step title="Vælg Bank som betalingsmetode">
+    Sæt flueben ved **Bank** under **Payment method** (dansk formular: **Betalingsmetode**).
+  </Step>
+  <Step title="Underskriv og send formularen">
+    Dater og underskriv formularen, send den derefter til [support@mysmtp.com](mailto:support@mysmtp.com).
+  </Step>
+  <Step title="Modtag din opsætningsmail">
+    Når din ordre er behandlet, modtager du en opsætningsmail med dit SMTP hostnavn, logindetaljer og DNS instruktioner.
+  </Step>
+</Steps>
+
+## Formularfelter
+
+| Felt | Engelsk formular | Dansk formular |
+| --- | --- | --- |
+| Virksomhed | Company | Virksomhed |
+| Skatte- eller fakturerings-ID | VAT no. (if inside EU) | EAN nummer |
+| Kontaktperson og telefon | Contact person, Phone | Navn kontaktperson, Tlf. |
+| Adresse | Address, Postal code, City | Adresse, Postnummer, By |
+| E-mail og hjemmeside | Email, Website | Email, Website |
+| Pakke | What package | Hvilken pakke |
+| Afsendelsesdomæner | Sending domain(s) | Sende domæne(r) |
+| Klageadresse | Email for feedback loops / complaints | Not included |
+| Faktureringsperiode | Not included | SMTP ordre type: Månedlig or 1 år (-25%) |
+| Betalingsmetode | Credit card, PayPal, Bank, Crypto | Credit card, PayPal, Bank, Crypto |
+| Dato og underskrift | Date, Signature | Dato, Underskrift |
+
+<Tip>
+  List alle domæner, du planlægger at sende fra, under **Sending domain(s)**. Tjek deres SPF, DKIM og DMARC records først med den gratis [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/).
+</Tip>
+
+<Note>
+  Har du et firmakreditkort? Bestil online i stedet for hurtigere aktivering. Se [Tilmeld og aktiver](/da/getting-started/sign-up-and-activate-your-account).
+</Note>

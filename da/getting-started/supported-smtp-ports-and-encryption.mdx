@@ -1,0 +1,63 @@
+---
+title: "Understøttede SMTP-porte og kryptering"
+sidebarTitle: "Porte og kryptering"
+description: "Vælg den rigtige SMTP-port og kryptering for mySMTP. Forstå STARTTLS og implicit TLS, så du kan sende sikkert fra enhver e-mailklient eller applikation."
+---
+
+mySMTP understøtter flere porte og krypteringsmetoder, så du kan forbinde fra næsten ethvert netværk. For den bedste balance mellem kompatibilitet og sikkerhed, brug port **587 med STARTTLS**.
+
+## Understøttede porte
+
+| Port | Kryptering | Hvornår du bruger den |
+| --- | --- | --- |
+| 587 | STARTTLS (anbefalet) | Standard for e-mailklienter, applikationer og SMTP relay |
+| 465 | Implicit TLS | Alternativ når 587 er blokeret, eller din applikation kræver TLS fra starten |
+| 25 | Ingen / STARTTLS | Kun server-til-server relay; de fleste internetudbydere og cloududbydere blokerer udgående port 25 |
+| 2525 | STARTTLS | Fallback når 587 er blokeret af en firewall eller internetudbyder |
+
+<Note>
+  mySMTP anbefaler port **587 med STARTTLS** for al udgående mail fra e-mailklienter og applikationer.
+</Note>
+
+## Krypteringsmetoder
+
+mySMTP accepterer kun **TLS 1.2** og **TLS 1.3**. SSL (SSLv2, SSLv3) og de ældre TLS 1.0 og TLS 1.1-protokoller understøttes ikke. Hvis din applikation eller enhed ikke kan forhandle TLS 1.2 eller nyere, skal du opdatere dens software eller firmware.
+
+<Note>
+  Nogle applikationer og enheder stadig mærker deres krypteringsindstilling som "SSL", "SSL/TLS" eller "Use SSL". Disse mærker er historiske. Aktivering af dem bruger TLS 1.2 eller 1.3, når softwaren understøtter det.
+</Note>
+
+### STARTTLS (port 587)
+
+STARTTLS begynder som en almindelig tekstforbindelse, og opgraderer derefter til TLS-kryptering efter SMTP-hilsenen. Dette er den moderne standard for godkendt e-mailafsendelse (RFC 6409, opdateret af RFC 8314). Det tilbyder den bredeste kompatibilitet, fordi det fungerer på den samme port som ikke-godkendt afsendelse, og de fleste mailklienter understøtter det som standard.
+
+### Implicit TLS (port 465)
+
+Implicit TLS (SMTPS) indpakker hele SMTP-sessionen i TLS fra det første byte. Det er nyttigt til ældre applikationer eller netværk, der blokerer port 587, men det er mindre almindeligt end STARTTLS for klientafsendelse.
+
+### Port 25
+
+Port 25 er beregnet til MTA-til-MTA relay, ikke til afsendelse fra en e-mailklient eller applikation. Internetudbydere blokerer almindeligvis udgående port 25 for at reducere spam. Hvis din applikation kræver port 25, skal du verificere at din hostingudbyder tillader udgående trafik på den port.
+
+## Sådan vælger du
+
+- **E-mailklienter og webapps:** brug port **587 med STARTTLS**.
+- **Hvis 587 er blokeret:** prøv port **2525 med STARTTLS**.
+- **Hvis din applikation kræver TLS fra starten (implicit TLS):** brug port **465**.
+- **Kun server-til-server relay:** brug port **25**, hvis dit netværk tillader det.
+
+## Sådan verificerer du din forbindelse
+
+1. Send en test-e-mail fra din klient eller applikation til en adresse du kontrollerer.
+2. Tjek de modtagne meddelelseshoveder for TLS-versionsinformation.
+3. Brug [test.smtp.ai](https://test.smtp.ai) til at bekræfte portforbindelse, krypteringsforhandling og godkendelse.
+
+## Fejlfinding
+
+| Symptom | Sandsynlig årsag | Løsning |
+| --- | --- | --- |
+| Forbindelse afvist eller timeout | Port blokeret af internetudbyder eller firewall | Skift til 587, 465 eller 2525 |
+| TLS-handshake mislykkedes | Forkert krypteringsmetode valgt, eller klienten understøtter kun SSL eller TLS 1.0/1.1 | Match krypteringen til porten (STARTTLS for 587/2525, implicit TLS for 465), og sørg for at klienten understøtter TLS 1.2 eller 1.3 |
+| Mail afvist efter forbindelse | Ingen godkendelse sendt | Aktiver SMTP-godkendelse og angiv dit mySMTP-brugernavn og din adgangskode |
+
+For at tjekke om en port er tilgængelig fra dit netværk, se [Check if an SMTP port is open](/da/troubleshooting/check-smtp-port-with-telnet). For flere detaljer om legitimationsoplysninger, se [Opsætning af SMTP-legitimationsoplysninger](/da/getting-started/setting-up-smtp-credentials). For fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

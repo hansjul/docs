@@ -1,0 +1,84 @@
+---
+title: "Forbind PrestaShop til mySMTP til transaktionsmail"
+sidebarTitle: "PrestaShop"
+description: "Konfigurer PrestaShop til at sende emails via mySMTP ved at indtaste dine brugerdefinerede SMTP-parametre og teste forbindelsen, foer du gemmer."
+---
+
+PrestaShop understotter brugerdefinerede SMTP-servere indbygget. Forbind den til mySMTP, saa ordrebekraeftelser, kontoemails og marketingbeskeder leveres paalideligt.
+
+## Forudsaetninger
+
+- Admin-adgang til PrestaShop back office
+- Dine mySMTP-loginoplysninger (se [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials))
+- Et verificeret afsenderdomaene
+
+## SMTP-indstillinger
+
+| Indstilling | Vaerdi |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (fra din opsaetningsmail) |
+| Host (shared IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Kryptering | TLS |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Shared IP-planer er kun tilgaengelige for kunder i Danmark.
+</Note>
+
+## Konfigurer SMTP i PrestaShop
+
+<Steps>
+  <Step title="Aaben E-mail-indstillinger">
+    Log ind paa din PrestaShop back office. Ga til **Advanced Parameters → E-mail**.
+  </Step>
+  <Step title="Vaelg brugerdefineret SMTP">
+    Under **Send emails to** vaelger du **Set my own SMTP parameters**. SMTP-konfigurationsfelterne vises.
+  </Step>
+  <Step title="Indtast mySMTP-indstillinger">
+    Udfyld formularen:
+
+    - **SMTP server:** dit reelle mySMTP-hostname (fra din opsaetningsmail)
+    - **SMTP username:** dit mySMTP-brugernavn
+    - **SMTP password:** dit mySMTP-adgangskode
+    - **Encryption:** TLS
+    - **Port:** `587`
+  </Step>
+  <Step title="Send en testmail">
+    Indtast en email-adresse, du kontrollerer, under **Test your email configuration**, og klik pa **Send a test email**. Tjek din indbakke for beskeden.
+  </Step>
+  <Step title="Gem indstillinger">
+    Klik pa **Save** i bunden af siden.
+  </Step>
+</Steps>
+
+<Warning>
+  Sorg for, at From-adressen, som PrestaShop bruger, tilhører dit autentificerede domaene. Du kan saette dette under **Shop Parameters → Contact → Stores** for kontakt-emails, eller i det relevante moduls indstillinger for marketingemails.
+</Warning>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Testmailen fejler">
+    Bekraeft, at du har indtastet dit reelle mySMTP-hostname (ikke `relayxx.mysmtp.com`), port 587 og TLS. Genindtast dit brugernavn og adgangskode uden ekstra mellemrum. Hvis din hostingudbyder blokerer 587, saa prov port 2525.
+  </Accordion>
+
+  <Accordion title="Emails havner i spam">
+    Bekraeft, at SPF, DKIM og DMARC er konfigureret for dit domaene. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Koer [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Ingen 'Set my own SMTP parameters'-mulighed">
+    Denne mulighed er standard i PrestaShop 1.7 og 8.x. Hvis du ikke ser den, saa tjek, at din butik ikke bruger PHP mail()-funktionsindstillingen, som PrestaShop betegner anderledes i nogle aeldre versioner.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [SMTP-graenser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)
+- [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials)

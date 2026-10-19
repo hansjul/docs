@@ -1,0 +1,60 @@
+---
+title: "Xerox AltaLink and VersaLink SMTP Setup via EWS"
+sidebarTitle: "Xerox"
+description: "Configure mySMTP on Xerox AltaLink and VersaLink devices using the Embedded Web Server. Set SMTP server, port 587, STARTTLS, and login credentials."
+---
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Connection encryption | **STARTTLS** |
+| Login credentials | Enabled |
+| User Name | Your mySMTP SMTP username |
+| Password | Your mySMTP password |
+
+<Note>
+  Use the exact relay hostname from your mySMTP setup email. `relayxx.mysmtp.com` is only an example.
+</Note>
+
+<Note>
+  Shared IP plans are only available to customers in Denmark. All other customers use a dedicated hostname.
+</Note>
+
+## Configure the device
+
+<Steps>
+  <Step title="Open the Embedded Web Server">
+    Open a web browser, enter the device's IP address, and log in with admin credentials.
+  </Step>
+  <Step title="Navigate to SMTP settings">
+    Go to **Properties** or **Connectivity** > **Setup** > **SMTP (Email)**.
+  </Step>
+  <Step title="Enter the server address">
+    In **SMTP Server**, enter your mySMTP relay hostname (e.g. `relayxx.mysmtp.com`).
+  </Step>
+  <Step title="Set the port and encryption">
+    Set **SMTP Port** to **587** and set **Connection Encryption** or **Security** to **STARTTLS**.
+  </Step>
+  <Step title="Enable login credentials">
+    Turn on **Login Credentials** or **SMTP Authentication** and enter your mySMTP **User Name** and **Password**.
+  </Step>
+  <Step title="Set the device email address">
+    Enter the **Device E-mail Address** (for example, `printer@yourdomain.com`). This domain must be authenticated for your mySMTP account.
+  </Step>
+  <Step title="Save and test">
+    Click **Save** or **Apply** to confirm. Send a test scan-to-email or a test alert to verify delivery.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+- **Cannot reach server:** check that your network allows outbound connections on port 587. If it is blocked, try port **2525** or **25**.
+- **Login rejected:** verify your mySMTP username and password. They are case-sensitive.
+- **Relay not allowed:** the device email address must use a domain authenticated on your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+- **No STARTTLS option:** on some VersaLink models, select **TLS** or the highest available encryption setting and set the port to 587.
+
+For more help, see [Scan to email](/email-configuration/email-clients/scan-to-email) and [Common SMTP errors](/troubleshooting/common-smtp-errors).

@@ -1,0 +1,130 @@
+---
+title: "Common SMTP Errors & Solutions"
+sidebarTitle: "SMTP Errors"
+description: "Fix frequent mySMTP connection problems including timeouts, authentication failures, TLS errors, and throttling. Step-by-step solutions for each issue."
+---
+
+<AccordionGroup>
+  <Accordion title="Connection timed out">
+    **Error example:** `Connection timed out` or `Could not connect to SMTP host`
+
+    **Cause:** Your client cannot reach the SMTP server. This is usually caused by network issues, firewall rules blocking the port, or the server being unreachable.
+
+    **Fix:**
+
+    1. Check your internet connection.
+    2. Confirm the SMTP server address is correct. Use `relayxx.mysmtp.com` for dedicated IPs (from your setup email), or `mail.mysmtp.com` for shared IP (DK only).
+    3. Confirm the relevant port is open on your network. mySMTP supports port **587** (STARTTLS) and port **2525** as an alternative.
+    4. Test connectivity with telnet or openssl:
+       ```text
+       telnet relayxx.mysmtp.com 587
+       ```
+       Or for a TLS test:
+       ```text
+       openssl s_client -starttls smtp -connect relayxx.mysmtp.com:587
+       ```
+
+    <AccordionGroup>
+      <Accordion title="What if telnet is not installed?">
+        Install it from your package manager (for example `sudo apt install telnet` on Ubuntu, `brew install telnet` on macOS), or test connectivity with the OpenSSL command above.
+      </Accordion>
+    </AccordionGroup>
+  </Accordion>
+
+  <Accordion title="Authentication failed">
+    **Error example:** `535 Authentication failed` or `SMTP Error: Could not authenticate`
+
+    **Cause:** The server rejected the login credentials.
+
+    **Fix:**
+
+    1. Double-check your username and password. Use your mySMTP SMTP username, which may differ from the email address you signed up with.
+    2. Confirm your account is active and not locked. Check your [dedicated server dashboard](https://dashboard.mysmtp.com) or [shared account dashboard](https://mysmtp.com).
+    3. Make sure the authentication method is **Normal password** or **Basic authentication** depending on your client.
+    4. If you recently changed your password, update it in the application and retry.
+  </Accordion>
+
+  <Accordion title="TLS errors">
+    **Error example:** `SSL: CERTIFICATE_VERIFY_FAILED` or `Handshake failed`
+
+    **Cause:** The client and server cannot establish a secure connection.
+
+    **Fix:**
+
+    1. Update your client and system to support modern TLS versions. mySMTP requires at least **TLS 1.2**.
+    2. Verify that your system CA trust store is up to date.
+    3. If you are using a custom TLS library (for example in PHP or Python), ensure it is current.
+    4. Avoid disabling certificate validation in production. Only disable it temporarily for a controlled test in an isolated environment.
+  </Accordion>
+
+  <Accordion title="Blocked by firewall or ISP">
+    **Error example:** No specific error, but the connection silently times out or fails.
+
+    **Cause:** Many ISPs and hosting providers block outbound traffic on port 25 to reduce spam. Some corporate firewalls also block port 587.
+
+    **Fix:**
+
+    1. Use **port 587** with STARTTLS, which is the standard submission port.
+    2. If port 587 is blocked, try **port 2525** or **port 25** as alternatives.
+    3. Contact your network administrator or ISP to open submission ports.
+  </Accordion>
+
+  <Accordion title="Too many connections / throttling">
+    **Error example:** `421 Too many concurrent SMTP connections` or `421 Service not available`
+
+    **Cause:** The server is limiting the number of simultaneous connections from your client.
+
+    **Fix:**
+
+    1. Reuse your SMTP connections instead of opening a new one for every message. Use connection pooling where your application supports it.
+    2. Lower your sending rate if you are sending large volumes.
+    3. If you are on a shared IP plan (DK only) and consistently hit the limit, consider upgrading to a [dedicated IP](/getting-started/shared-ips-or-dedicated) for higher connection limits.
+    4. Review [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates) for plan-specific guidance.
+  </Accordion>
+
+  <Accordion title="DNS resolution issues">
+    **Error example:** `Temporary failure in name resolution` or `Host not found`
+
+    **Cause:** The SMTP hostname cannot be resolved to an IP address.
+
+    **Fix:**
+
+    1. Check that the hostname is correct. Dedicated IP users should use `relayxx.mysmtp.com` (from their setup email). Shared IP users (DK only) should use `mail.mysmtp.com`.
+    2. Ensure your server has working DNS settings. Confirm you can resolve other hostnames.
+    3. As a temporary troubleshooting step only, try using the SMTP server's IP address directly. Replace the IP with the hostname in production once DNS is restored.
+  </Accordion>
+</AccordionGroup>
+
+## General troubleshooting steps
+
+<Steps>
+  <Step title="Test basic connectivity">
+    Run `ping` or `traceroute` to the server hostname to verify the path is reachable.
+  </Step>
+  <Step title="Test the SMTP handshake">
+    Use `telnet` or `openssl s_client` to test that the port is open and the server responds.
+  </Step>
+  <Step title="Check your application logs">
+    Read the full error message and stack trace from your email client or sending application.
+  </Step>
+  <Step title="Check mySMTP service status">
+    Visit [status.mysmtp.com](https://status.mysmtp.com) for maintenance windows or known incidents.
+  </Step>
+  <Step title="Isolate network interference">
+    Temporarily disable antivirus or local firewall to see if it is intercepting SMTP traffic.
+  </Step>
+  <Step title="Test from a different network">
+    Try sending from another location or mobile hotspot to rule out local network restrictions.
+  </Step>
+</Steps>
+
+<Tip>
+  Use the [Bounce Code Decoder](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox to turn cryptic SMTP responses into plain-English causes and fixes.
+</Tip>
+
+## Tips for reliable SMTP connections
+
+- Always use modern encryption. Connect on **587 with STARTTLS** or an alternate secure port.
+- Use hostnames rather than hardcoded IP addresses so your configuration stays valid if the IP changes.
+- Monitor your connection rate, timeout rate, and retry count in your application.
+- Keep your email libraries and operating system up to date.

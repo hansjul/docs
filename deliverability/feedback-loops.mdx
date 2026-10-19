@@ -1,0 +1,61 @@
+---
+title: "Understand Email Feedback Loops and Complaint Rates"
+sidebarTitle: "Feedback Loops"
+description: "Learn how major ISPs report spam complaints via feedback loops, what complaint rate thresholds to stay under, and how to handle complaints with mySMTP."
+---
+
+Feedback loops (FBLs) are programs that let mailbox providers report spam complaints back to senders. Keeping your complaint rate low is essential for inbox placement.
+
+## What is a feedback loop
+
+When a recipient clicks "Report spam" or "Junk" in their mail client, the mailbox provider can forward a copy of that message back to the sender through a feedback loop. The report is usually sent in Abuse Reporting Format (ARF). This lets you identify which campaigns, lists, or content generated complaints so you can fix the root cause.
+
+<Warning>
+  Complaint data is only useful if you act on it immediately. Remove complainers from your lists right away.
+</Warning>
+
+## Major feedback loop programs
+
+Not all providers offer traditional feedback loops, and the enrollment rules differ.
+
+### Microsoft JMRP and SNDS
+
+Microsoft offers the Junk Mail Reporting Program (JMRP). Complaint reports come through the same portal as [Smart Network Data Services](https://sendersupport.olc.protection.outlook.com/snds) (SNDS). You must sign up for SNDS and register your IPs to receive JMRP data.
+
+### Yahoo Complaint Feedback Loop
+
+Yahoo provides a [Complaint Feedback Loop](https://senders.yahooinc.com/) that is DKIM-based. You must sign up with Yahoo, prove domain ownership, and have valid DKIM signing in place. Complaints are returned in ARF format.
+
+### Gmail
+
+Gmail does not offer a traditional feedback loop. Instead, senders should:
+
+- Add a `Feedback-ID` header to campaigns for troubleshooting.
+- Use [Google Postmaster Tools](https://postmaster.google.com) to monitor domain reputation and spam rate.
+- Keep the spam rate below 0.1% and never reach 0.3%.
+
+## Complaint rate thresholds
+
+Complaint rates vary by industry, but the safe targets are the same across major receivers:
+
+| Provider | Target | Maximum |
+| --- | --- | --- |
+| Gmail | Below 0.1% | Never reach 0.3% |
+| Yahoo | Below 0.1% | Never reach 0.3% |
+| Microsoft | Below 0.1% | Never reach 0.3% |
+
+Sustained rates above these limits often lead to temporary throttling, spam folder placement, or blocks.
+
+## How mySMTP handles complaints
+
+Complaints must be removed from your mailing lists immediately. This protects both your reputation and the shared infrastructure. If you are unsure how complaint data is shared for your account, contact [support@mysmtp.com](mailto:support@mysmtp.com).
+
+<Tip>
+  Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox to audit your list hygiene and sending practices before you scale volume.
+</Tip>
+
+## Related articles
+
+- [Handling bounces and complaints](/deliverability/handling-bounces-and-complaints)
+- [Google Postmaster and Microsoft SNDS](/deliverability/google-postmaster-and-microsoft-snds)
+- [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained)

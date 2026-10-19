@@ -1,0 +1,82 @@
+---
+title: "Forbind SendBlaster til mySMTP til masse-e-mail-kampagner"
+sidebarTitle: "SendBlaster"
+description: "Konfigurer SendBlaster til at sende masse-e-mails gennem mySMTP ved at opsætte SMTP-relay på port 587 med STARTTLS-kryptering og godkendelse."
+---
+
+Send nyhedsbreve eller massekampagner direkte fra din computer.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Connection Security | STARTTLS eller TLS |
+| Authentication | Ja |
+| Brugernavn | Dit fulde mySMTP-brugernavn |
+| Adgangskode | Dit mySMTP-adgangskode |
+| Sender Email | f.eks. `you@yourdomain.com` |
+| Sender Name | Dit firma- eller brandnavn |
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Konfigurer SendBlaster
+
+<Steps>
+  <Step title="Åbn Send-fanens indstillinger">
+    Åbn **SendBlaster**. Klik på fanen **Send**, og klik derefter på **Settings** (tandhjulsikon eller i menuen til venstre).
+  </Step>
+  <Step title="Tilføj SMTP-serveren">
+    Gå til fanen **SMTP Servers**. Klik på **Add new SMTP configuration** eller **Edit current server**.
+  </Step>
+  <Step title="Indtast mySMTP-detaljer">
+    Udfyld felterne med værdierne fra tabellen ovenfor, og klik derefter på **Save**.
+  </Step>
+  <Step title="Send en testmail">
+    Fra fanen **Send** skal du prøve at sende en testmail. Hvis den leveres, er din SMTP-opsætning korrekt.
+  </Step>
+</Steps>
+
+## Bedste praksis
+
+<Tip>
+  Brug et brugerdefineret domæne med SPF, DKIM og DMARC korrekt opsat.
+</Tip>
+
+<Warning>
+  Brug ikke gratis eller offentlige domæner som Gmail eller Yahoo til afsenderadressen.
+</Warning>
+
+<Note>
+  Brug throttling, når du sender til store lister. For eksempel, begræns afsendelsen til cirka 1 e-mail i sekundet.
+</Note>
+
+<Tip>
+  Rens din liste med [Email List Analyzer](https://toolbox.smtp.ai/) og verificer din skabelon med [Email Template Verifier](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox, før du sender.
+</Tip>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Testmail mislykkedes">
+    Tjek, at værten matcher din opsætningsmail, at porten er 587, og at STARTTLS er valgt. Hvis dit netværk blokerer 587, kan du prøve port 2525.
+  </Accordion>
+
+  <Accordion title="Godkendelse mislykkedes">
+    Genindtast dit mySMTP-brugernavn og din adgangskode. Sørg for, at der ikke er ekstra mellemrum.
+  </Accordion>
+
+  <Accordion title="E-mails ender i spam">
+    Verificer, at SPF, DKIM og DMARC er konfigureret for dit domæne. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Diagnosticer leveringsproblemer med [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+</AccordionGroup>
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

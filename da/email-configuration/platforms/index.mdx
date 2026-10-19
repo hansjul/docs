@@ -1,0 +1,68 @@
+---
+title: "CMS og frameworks: mySMTP email-konfigurationsvejledninger"
+sidebarTitle: "CMS og frameworks"
+description: "Find trin-for-trin mySMTP-opsaetningsvejledninger til WordPress, WooCommerce, Magento, PrestaShop, Shopify, Odoo, Laravel og Django."
+---
+
+Dette afsnit beskriver, hvordan du forbinder mySMTP til populare CMS-platforme og web-frameworks. Hver vejledning indeholder de korrekte SMTP-indstillinger, trinvis konfiguration og fejlfindingstips.
+
+## Faelles SMTP-indstillinger
+
+| Indstilling | Vaerdi |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (fra din opsaetningsmail) |
+| Host (shared IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Kryptering | TLS / STARTTLS |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Shared IP-planer er kun tilgaengelige for kunder i Danmark. Se planer og IPs under [Shared IPs eller dedikerede IPs](/da/getting-started/shared-ips-or-dedicated).
+</Note>
+
+## Platformvejledninger
+
+<CardGroup cols={2}>
+  <Card title="WordPress" icon="wordpress" href="/da/email-configuration/platforms/wordpress">
+    Konfigurer WP Mail SMTP med mySMTP-loginoplysninger og send en testmail fra dit WordPress-admin.
+  </Card>
+
+  <Card title="WooCommerce" icon="shopping-bag" href="/da/email-configuration/platforms/woocommerce">
+    Send WooCommerce-ordremails via mySMTP ved foerst at opsaette WordPress SMTP, og match derefter afsenderindstillingerne.
+  </Card>
+
+  <Card title="Magento" icon="shopping-cart" href="/da/email-configuration/platforms/magento">
+    Brug Magento 2's indbyggede SMTP-indstillinger eller et tredjeparts-modul til tidligere versioner.
+  </Card>
+
+  <Card title="PrestaShop" icon="store" href="/da/email-configuration/platforms/prestashop">
+    Indtast brugerdefinerede SMTP-parametre i PrestaShop og send en indbygget testmail.
+  </Card>
+
+  <Card title="Shopify" icon="shopify" href="/da/email-configuration/platforms/shopify">
+    Forstaa Shopifys SMTP-begraensninger, og hvor mySMTP stadig passer ind i din stack.
+  </Card>
+
+  <Card title="Odoo" icon="gear" href="/da/email-configuration/platforms/odoo">
+    Tilfoej en udgående mailserver i Odoo, test forbindelsen og saet from-adresse-filtre.
+  </Card>
+
+  <Card title="Laravel" icon="code" href="/da/email-configuration/platforms/laravel">
+    Opdater .env med mySMTP-indstillinger, ryd config-cache og test med Tinker.
+  </Card>
+
+  <Card title="Django" icon="python" href="/da/email-configuration/platforms/django">
+    Konfigurer SMTP-backend i settings.py og test med send_mail.
+  </Card>
+</CardGroup>
+
+## Brug for hjaelp?
+
+Hvis din platform ikke er listet, kan du som regel forbinde ethvert system, der understotter SMTP, ved at indtaste ovenstående indstillinger. Kontakt [support@mysmtp.com](mailto:support@mysmtp.com) for providerspecifikke trin.
+
+## Relaterede artikler
+
+- [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials)
+- [Understottede SMTP-porte og kryptering](/da/getting-started/supported-smtp-ports-and-encryption)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

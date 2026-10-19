@@ -1,0 +1,129 @@
+---
+title: "Dedikeret IP-server-dashboard"
+sidebarTitle: "Server-dashboard"
+description: "Brug mySMTP-dashboardet til at overvåge dedikeret IP-afsendelsesaktivitet, administrere SMTP-brugere, verificere DNS-poster og fejlsøge leveringsproblemer."
+---
+
+mySMTP-dashboardet på [app.mysmtp.com](https://app.mysmtp.com) giver dig ét sted til at overvåge afsendelse, administrere brugere og fejlsøge levering for din dedikerede IP-server.
+
+<Frame>
+  ![Dashboard overview](https://mysmtp.com/images/DB-KB/2026-09-29_11-16-23.png)
+</Frame>
+
+## Log ind og vælg den rigtige konto
+
+Kontoejeren logger ind med den samme kontologin, der bruges på [clients.mysmtp.com](https://clients.mysmtp.com). Denne konto kan se hele dashboardet, inklusive konto- og købsinformation og alle servere i flåden.
+
+En SMTP-bruger logger ind med en brugerlogin oprettet under **SMTP Users** i dashboardet. Brugerens visning er begrænset: den viser ikke e-mailkøbshistorik og forbrugsstatus, andre servere i en multi-server-flåde, eller kontoprofilen og opgraderingsmuligheder. Giv hver person eller applikation sin egen SMTP-bruger, hvor det er praktisk, så aktivitet kan identificeres separat.
+
+Hvis du ikke kan logge ind, brug **Lost password?** på loginskærmen eller kontakt [support@mysmtp.com](mailto:support@mysmtp.com). SMTP-godkendelsesdetaljer for en e-mailapplikation kan afvige fra kontoejerens klientområde-login.
+
+## Dashboard-fanen
+
+Dashboard-fanen er udgangspunktet for overvågning af afsendelse. Afsendelsesøjebliksbilledet er som standard for de seneste syv dage. Skift datoområdet med kalenderfeltet for at fokusere på en bestemt periode. Skift mellem linje-, søjle- og donut-diagram for at se den samme aktivitet på forskellige måder.
+
+Diagrammet grupperer beskeder efter **Sent**, **Accepted**, **Bounced** og **Expired**. Brug det til at spotte ændringer i volumen eller en usædvanlig stigning i fejl, og åbn derefter Log Reports for at undersøge individuelle beskeder. Dashboardet mærker sin timevisning som GMT+1 servertid; tjek det viste område, når du sammenligner et diagram med dine egne applikationslogfiler.
+
+<Note>
+  **Accepted** betyder at den modtagende mailserver accepterede beskeden. Det bekræfter ikke at beskeden nåede indbakken eller blev åbnet.
+</Note>
+
+## Log Reports
+
+Åbn **Log Reports**, når du har brug for at spore en bestemt afsendelse eller forstå en bounce. Gennemgå tidsstempel, modtager, leveringsstatus og enhver tilgængelig SMTP-respons. En midlertidig fejl kan blive forsøgt igen, mens en permanent afvisning kræver et nærmere kig på adressen, domænegodkendelse eller modtagerens respons.
+
+Detaljerede afsendelseslogfiler er tilgængelige i **30 dage**. Hvor rapporten tilbyder en CSV-eksport, skal du downloade den, hvis du har brug for at arbejde gennem et større sæt beskeder eller dele en sag med support. Hvis du kontakter support, inkluder det omtrentlige afsendelsestidspunkt, afsender, modtager og SMTP-responsen; undgå at sende adgangskoder.
+
+## SMTP-brugere
+
+Brug **SMTP Users** til at administrere de logins, der bruges af personer, applikationer og e-mailklienter, der sender gennem mySMTP. Opret en separat bruger for hver integration eller team, hvor det er nyttigt, og indtast den brugers SMTP-legitimationsoplysninger i den afsendende applikation. Dette gør det nemmere at identificere, hvilken integration der genererede trafikken, og at begrænse effekten af en legitimationsændring.
+
+Kontoejeren kan også oprette et dashboard-login for en subbruger her. En subbruger kan inspicere den afsendelsesinformation, der er tilgængelig for det login, med de kontobegrænsninger beskrevet ovenfor. Behold ejerloginnet til kontoadministration.
+
+## Bcc-arkiv: behold en kopi af hver e-mail
+
+Gå aldrig glip af, hvad du har sendt. Med **Bcc**-muligheden under **SMTP Users** sender mySMTP en kopi af hver udgående e-mail til en adresse du vælger, såsom dit e-mailarkiv, en compliance-postkasse eller en delt teamindbakke. Hver besked fanges automatisk.
+
+<CardGroup cols={2}>
+  <Card title="Komplet arkiv" icon="box-archive">
+    Behold en fuld registrering af hver e-mail sendt gennem din server, klar til at søge i, når du har brug for det.
+  </Card>
+
+  <Card title="Compliance og dokumentation" icon="scale-balanced">
+    Dokumenter hvad der blev sendt og hvornår, til audits, journalisering og tvister med kunder.
+  </Card>
+
+  <Card title="Hurtigere fejlfinding" icon="magnifying-glass">
+    Se præcis, hvad din applikation eller kampagneværktøj sendte, inklusive indhold, hoveder og vedhæftninger.
+  </Card>
+
+  <Card title="Ingen kodeændringer" icon="wand-magic-sparkles">
+    Det er indstillet på serveren, så du behøver ikke ændre dine applikationer, e-mailklienter eller printere.
+  </Card>
+</CardGroup>
+
+<Steps>
+  <Step title="Åbn SMTP Users">
+    Log ind på [app.mysmtp.com](https://app.mysmtp.com) og åbn **SMTP Users**.
+  </Step>
+  <Step title="Aktiver Bcc">
+    Find Bcc-muligheden, og indtast den adresse, der skal modtage en kopi af hver e-mail.
+  </Step>
+  <Step title="Send en test">
+    Send en test-e-mail og bekræft at kopien ankommer til din arkivpostkasse.
+  </Step>
+</Steps>
+
+<Tip>
+  Brug en dedikeret arkivpostkasse med tilstrækkelig lagerkapacitet, og sørg for at den accepterer høje volumener. En fuld eller blokeret arkivpostkasse kan få kopierne til at bounce.
+</Tip>
+
+## DNS verifications
+
+Brug **DNS verifications** til at tjekke godkendelsesposterne for dit afsenderdomæne. SPF autoriserer afsendelsesinfrastrukturen, DKIM underskriver udgående beskeder, og DMARC fastsætter en politik for beskeder der fejler i godkendelses- og justeringskontroller.
+
+Tilføj de eksakte poster, der er leveret til din konto hos din domænes DNS-udbyder, og vend derefter tilbage til dashboardet for at tjekke deres status, efter DNS er opdateret. Hvis dit domæne allerede har en SPF-post, opdater denne post fremfor at udgive en anden SPF-post. En post der er til stede, men endnu ikke verificeret, kan simpelthen have brug for mere tid til at propagere; tjek også for tastefejl og det korrekte DNS-hostnavn.
+
+## IP Whitelisting
+
+Brug **IP Whitelisting** til at administrere godkendte offentlige kilde-IP-adresser til SMTP-adgang, når din opsætning bruger denne funktion. Indtast den offentlige IP for det system, der forbinder til mySMTP, såsom en applikationsserver eller kontornetværk, fremfor en privat LAN-adresse. Hold listen begrænset til betroede afsendere, og fjern poster der ikke længere bruges.
+
+Hvis din internetforbindelse har en skiftende offentlig IP, tjek hvordan din afsendelsesapplikation godkender, før du stoler på en fast whitelist-post. Kontakt support, hvis du er usikker på hvordan whitelisting gælder for din server.
+
+## Værktøjer
+
+Udvid **Tools** for at se de værktøjer, der er tilgængelige for din konto. Brug det relevante værktøj, når du tjekker opsætning eller fejlfinder afsendelse. De eksakte muligheder kan afhænge af din server og kontokonfiguration. For generelle domæne- og deliverability-kontroller uden for dashboardet, kan du også bruge [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/).
+
+## Server Fleet
+
+**Server Fleet** viser de dedikerede SMTP-servere tildelt kontoen. Hvis din konto har mere end én server, kan kontoejeren vælge en server for at gennemgå dens egen aktivitet og indstillinger. Tjek den valgte server, før du fortolker et diagram eller en lograpport. En subbruger ser ikke den fulde multi-server-flåde.
+
+## Konto- og supportkontroller
+
+**Profilikonet** øverst til højre fører til kontomuligheder. Kontoejeren har adgang til kontoprofilen og opgraderingsmuligheder; disse er skjult for subbrugere. Brug [clients.mysmtp.com](https://clients.mysmtp.com) til det autoritative klientkonto- og faktureringslogin.
+
+**Supportchat-ikonet** forbinder dig med support. Sidefoden linker også til **Service Status**-siden, hvor du kan tjekke for en rapporteret hændelse, før du fejlfinder et bredere afsendelsesproblem.
+
+## Fejlsøg en manglende e-mail
+
+<Steps>
+  <Step title="Vælg den rigtige server">
+    Vælg den rigtige server i **Server Fleet**, hvis din konto har flere.
+  </Step>
+  <Step title="Åbn Log Reports">
+    Åbn **Log Reports** og find beskeden efter tid og modtager.
+  </Step>
+  <Step title="Læs status og SMTP-respons">
+    Læs dens status og modtagerens SMTP-respons. En accepteret besked kan stadig blive filtreret af modtagerens postkasseudbyder; en bounced eller udløbet besked har brug for at den rapporterede årsag bliver adresseret.
+  </Step>
+  <Step title="Tjek DNS verifications">
+    Tjek **DNS verifications**, hvis responsen nævner godkendelse eller domænepolitik.
+  </Step>
+  <Step title="Kontakt support, hvis nødvendigt">
+    Hvis resultatet er uklart, kontakt support med beskeddetaljerne og SMTP-responsen.
+  </Step>
+</Steps>
+
+<Tip>
+  Brug den gratis [PTR / rDNS Checker](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox til at bekræfte at din dedikerede IP har et matchende reverse og forward DNS-post (FCrDNS). Dette er en nøglefaktor for indbakkeplacering hos større udbydere.
+</Tip>

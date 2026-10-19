@@ -1,0 +1,82 @@
+---
+title: "Connect SendBlaster to mySMTP for bulk email campaigns"
+sidebarTitle: "SendBlaster"
+description: "Configure SendBlaster to send bulk emails through mySMTP by setting up SMTP relay on port 587 with STARTTLS encryption and authentication."
+---
+
+Send newsletters or bulk campaigns directly from your desktop.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Connection Security | STARTTLS or TLS |
+| Authentication | Yes |
+| Username | Your full mySMTP username |
+| Password | Your mySMTP password |
+| Sender Email | e.g. `you@yourdomain.com` |
+| Sender Name | Your business or brand name |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure SendBlaster
+
+<Steps>
+  <Step title="Open the Send tab settings">
+    Open **SendBlaster**. Click the **Send** tab, then click **Settings** (gear icon or in the left-hand menu).
+  </Step>
+  <Step title="Add the SMTP server">
+    Go to the **SMTP Servers** tab. Click **Add new SMTP configuration** or **Edit current server**.
+  </Step>
+  <Step title="Enter mySMTP details">
+    Fill out the fields with the values from the table above, then click **Save**.
+  </Step>
+  <Step title="Send a test email">
+    From the **Send** tab, try sending a test email. If it is delivered, your SMTP setup is correct.
+  </Step>
+</Steps>
+
+## Best practices
+
+<Tip>
+  Use a custom domain with SPF, DKIM, and DMARC properly set up.
+</Tip>
+
+<Warning>
+  Do not use free or public domains like Gmail or Yahoo for the sender address.
+</Warning>
+
+<Note>
+  Use throttling when sending to large lists. For example, limit sending to about 1 email per second.
+</Note>
+
+<Tip>
+  Clean your list with the [Email List Analyzer](https://toolbox.smtp.ai/) and verify your template with the [Email Template Verifier](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox before sending.
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Test email fails">
+    Check that the host matches your setup email, the port is 587, and STARTTLS is selected. If your network blocks 587, try port 2525.
+  </Accordion>
+
+  <Accordion title="Authentication failed">
+    Re-enter your mySMTP username and password. Make sure there are no extra spaces.
+  </Accordion>
+
+  <Accordion title="Emails going to spam">
+    Verify SPF, DKIM, and DMARC are configured for your domain. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Diagnose delivery issues with the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+</AccordionGroup>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

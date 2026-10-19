@@ -1,0 +1,56 @@
+---
+title: "Mac Mail 2025 SMTP-opsætningsguide"
+sidebarTitle: "Mac Mail 2025"
+description: "Opsæt mySMTP i Mac Mail 2025. Tilføj din SMTP-server, indtast login-legitimationsoplysninger, og konfigurér porte og TLS til udgående e-mail."
+---
+
+Indstillinger for indgående e-mail forbliver uændrede.Indstillinger for indgående e- for indgående e-mail forbliver uændrede.Indstillinger for indgående e-mail forbliver uændrede.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætnings-e--e-mail) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** |
+| Brug TLS/SSL (aktiverer TLS) | Til |
+| AutentificeringAutentificering | Adgangskode |
+| Brugernavn / adgangskode | Dit mySMTP SMTP-brugernavn og -adgangskode |
+
+## Konfiguréér Mac Mail
+
+<Steps>
+  <Step title="Åbn kontoinddstillinger">
+    Åbn Mail og vælg **Mail** > **Indstillinger** (kaldet **Indstillinger** på ældre macOS-versioner), klik derefter på **Konti** og vælg den konto, du vil bruge**Indstillinger** på ældre macOS-versioner), klik derefter på **Konti** og vælg den konto, du vil bruge med mySMTP.
+  </Step>
+  <Step title="Åbn SMTP-serverlisten">
+    Klik på fanen **Serverindstillinger**. Under **Udgående mailserver (SMTP)**, åbn menuen **Konto** og vælg, åbn menuen **Konto** og vælg **Rediger SMTP-serverliste...**
+  </Step>
+  <Step title="Tilføj mySMTP-serveren">
+    Klik på **\+** for at tilføje en server,, og indtast en beskrivelse, f.eks. `mySMTP`, og **Servernavnet** fra tabellen ovenfor.
+  </Step>
+  <Step title="Indtast port og login">
+    1. Slå **Administrer forbindelsesindstillinger automatisk** fra.
+    2. Angiv **Port** til **587** og markéAngiv **Port** til **587** og markér **Brug TLS/SSL**.
+    3. Angiv **Autentificering**Angiv **Autentificering** til **Adgangskode**.
+    4. Indtast dit mySMTP **Brugernavn** og **Adgangskode**.
+    5. Klik på **OK**.
+  </Step>
+  <Step title="Gem og test">
+    Sørg for at den nye mySMTP-server er valgt som den udgående konto, klik på **Gem**, og send en test-e- at den nye mySMTP-server er valgt som den udgående konto, klik på **Gem**, og send en test-e-mail.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+- **Mail siger at serveren er offline:** bekræft at porten er 587 at serveren er offline: bekræft at porten er 587 og at **Administrer forbindelsesindstillinger automatisk** er slået fra.
+- **Forbindelsen udløber:** dit netværk blokerer muligvisdit netværk blokerer muligvis port 587. Prøv port **2525**.
+- **Relay nægtet:** sørg for at afsenderadressen bruger et domæne, der er autentificeret for din mySMTP-konto. Se [DNS-indstillingersørg for at afsenderadressen bruger et domæne, der er autentificeret for din mySMTP-konto. Se DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).
+
+## Relaterede artikler
+
+- [Oversigt over e-mail--mail-klienter](/da/email-configuration/email-clients)
+- [SMTP-grænser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)

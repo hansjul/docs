@@ -1,0 +1,279 @@
+---
+title: "Integrer mySMTP med webapps og e-handelsplatforme"
+sidebarTitle: "Oversigt"
+description: "Forbind mySMTP til WordPress, Magento, Laravel og andre webapps. Brug port 587 med STARTTLS og dit SMTP-brugernavn og -adgangskode til godkendt levering."
+---
+
+Du skal bruge dine mySMTP SMTP-legitimationsoplysninger og adgang til din platforms adminpanel eller serverfiler.
+
+## SMTP-indstillinger
+
+Brug disse værdier, medmindre din platform kræver noget specifikt. Brugere med dedikeret IP skal bruge værtsnavnet fra deres opsætningsmail.
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Kryptering | `STARTTLS` (TLS) |
+| Godkendelse | Normal adgangskode / Login |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP-adgangskode |
+
+<Note>
+  Nogle platforme angiver port 465 som "SSL". mySMTP understøtter kun TLS 1.2 og 1.3 og anbefaler port 587 med STARTTLS. Hvis din vært blokkerer 587, kan du prøve port 2525.
+</Note>
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+<Tip>
+  Valider dine DNS-poster, før du sender, med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/).
+</Tip>
+
+## Platformvejledninger
+
+<Tabs>
+  <Tab title="WordPress">
+    Brug WP Mail SMTP-pluginet for den mest pålidelige opsætning.
+
+    <Steps>
+      <Step title="Installer pluginet">
+        Gå til **Plugins → Tilføj nyt**, søg efter **WP Mail SMTP**, og installer det.
+      </Step>
+      <Step title="Vælg mailafsender">
+        Gå til **WP Mail SMTP → Indstillinger**. Under **Mailafsender** skal du vælge **Anden SMTP**.
+      </Step>
+      <Step title="Indtast mySMTP-legitimationsoplysninger">
+        - SMTP-vært: `relayxx.mysmtp.com` (fra din opsætningsmail)
+        - Kryptering: TLS
+        - Port: `587`
+        - Brugernavn og adgangskode: dine mySMTP-legitimationsoplysninger
+      </Step>
+      <Step title="Gem og test">
+        Gem ændringerne, og klik på **Send test** for at bekræfte levering.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Magento">
+    <Steps>
+      <Step title="Åbn mailindstillinger">
+        I Magento Admin skal du gå til **Stores → Configuration → Advanced → System**.
+      </Step>
+      <Step title="Angiv SMTP-værten">
+        Udvid **Mail Sending Settings**, og indtast:
+
+        - Host: `relayxx.mysmtp.com` (fra din opsætningsmail)
+        - Port: `587`
+        - Godkendelse: **Login**
+        - Brugernavn og adgangskode: dine mySMTP-legitimationsoplysninger
+      </Step>
+      <Step title="Gem og test">
+        Gem indstillingerne, og send en testmail fra butikken.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="WooCommerce">
+    WooCommerce bruger WordPress-mailafsenderen. Følg fanen **WordPress** ovenfor med WP Mail SMTP, og verificer derefter, at WooCommerce-mails bruger den korrekte afsenderadresse i **WooCommerce → Indstillinger → E-mails**.
+  </Tab>
+  <Tab title="PrestaShop">
+    <Steps>
+      <Step title="Åbn e-mailindstillinger">
+        Gå til **Avancerede parametre → E-mail**.
+      </Step>
+      <Step title="Brug din egen SMTP">
+        Vælg **Angiv mine egne SMTP-parametre**.
+      </Step>
+      <Step title="Indtast legitimationsoplysninger">
+        Udfyld værten (`relayxx.mysmtp.com` fra din opsætningsmail), port 587, brugernavn, adgangskode og TLS-kryptering, og gem derefter.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Drupal">
+    <Steps>
+      <Step title="Installer modulet">
+        Installer modulet **SMTP Authentication Support**.
+      </Step>
+      <Step title="Konfigurer SMTP">
+        Gå til **Configuration → SMTP Authentication**, og indtast din mySMTP-vært (`relayxx.mysmtp.com` fra din opsætningsmail), port 587, brugernavn, adgangskode og TLS.
+      </Step>
+      <Step title="Gem og send en test">
+        Gem, og brug modulets testfunktion til at verificere levering.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Joomla">
+    <Steps>
+      <Step title="Åbn Global Configuration">
+        Gå til **System → Global Configuration → Server**.
+      </Step>
+      <Step title="Sæt mailafsender til SMTP">
+        Sæt **Mailafsender** til **SMTP**, og udfyld:
+
+        - Host: `relayxx.mysmtp.com` (fra din opsætningsmail)
+        - Port: `587`
+        - Sikkerhed: STARTTLS
+        - Godkendelse: Ja
+        - Brugernavn og adgangskode: dine mySMTP-legitimationsoplysninger
+      </Step>
+      <Step title="Gem">
+        Gem konfigurationen, og send en testbesked.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="OpenCart">
+    <Steps>
+      <Step title="Åbn mailindstillinger">
+        Gå til **Indstillinger → Mail**.
+      </Step>
+      <Step title="Vælg SMTP">
+        Sæt **Mail Engine** til **SMTP**, og indtast din mySMTP-vært (`relayxx.mysmtp.com` fra din opsætningsmail), port 587, brugernavn, adgangskode og TLS.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Laravel">
+    Opdater din `.env`-fil:
+
+    ```bash
+    MAIL_MAILER=smtp
+    MAIL_HOST=relayxx.mysmtp.com
+    MAIL_PORT=587
+    MAIL_USERNAME=your_username
+    MAIL_PASSWORD=your_password
+    MAIL_ENCRYPTION=tls
+    MAIL_FROM_ADDRESS=you@yourdomain.com
+    MAIL_FROM_NAME="Your App"
+    ```
+
+    Ryd derefter config-cachen:
+
+    ```bash
+    php artisan config:clear
+    ```
+  </Tab>
+  <Tab title="Symfony">
+    Opdater din `.env`-fil:
+
+    ```bash
+    MAILER_DSN="smtp://your_username:your_password@relayxx.mysmtp.com:587"
+    ```
+
+    Test forbindelsen:
+
+    ```bash
+    php bin/console mailer:test you@yourdomain.com
+    ```
+  </Tab>
+  <Tab title="Django">
+    Opdater `settings.py`:
+
+    ```python
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "relayxx.mysmtp.com"
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = "your_username"
+    EMAIL_HOST_PASSWORD = "your_password"
+    DEFAULT_FROM_EMAIL = "you@yourdomain.com"
+    ```
+
+    Genstart applikationen.
+  </Tab>
+  <Tab title="ASP.NET Core">
+    Tilføj indstillinger til `appsettings.json`:
+
+    ```json
+    {
+      "SmtpSettings": {
+        "Server": "relayxx.mysmtp.com",
+        "Port": 587,
+        "Username": "your_username",
+        "Password": "your_password",
+        "UseStartTls": true
+      }
+    }
+    ```
+
+    Injicer indstillingerne i din mailservice, og send via `System.Net.Mail.SmtpClient` eller `MailKit`.
+  </Tab>
+  <Tab title="Ghost">
+    Opdater `config.production.json`:
+
+    ```json
+    "mail": {
+      "transport": "SMTP",
+      "options": {
+        "host": "relayxx.mysmtp.com",
+        "port": 587,
+        "auth": {
+          "user": "your_username",
+          "pass": "your_password"
+        }
+      }
+    }
+    ```
+
+    Genstart Ghost.
+  </Tab>
+</Tabs>
+
+## Dedikerede platformguider
+
+Se de fulde vejledninger for disse platforme:
+
+<CardGroup cols={3}>
+  <Card title="Instantly" icon="bolt" href="/da/email-configuration/web-applications/instantly">
+    Forbind mySMTP til Instantly til cold email-kampagner.
+  </Card>
+
+  <Card title="Mumara" icon="envelope" href="/da/email-configuration/web-applications/mumara">
+    Konfigurer Mumara til at sende via mySMTP.
+  </Card>
+
+  <Card title="Interspire" icon="paper-plane" href="/da/email-configuration/web-applications/interspire">
+    Opsæt Interspire Email Marketer med mySMTP.
+  </Card>
+
+  <Card title="MailWizz" icon="inbox" href="/da/email-configuration/web-applications/mailwizz">
+    Tilføj mySMTP som en delivery server i MailWizz.
+  </Card>
+
+  <Card title="Hosted MailWizz" icon="server" href="/da/email-configuration/web-applications/hosted-mailwizz">
+    Lad mySMTP hoste og konfigurere MailWizz for dig.
+  </Card>
+
+  <Card title="Atomic Mail Sender" icon="rocket" href="/da/email-configuration/web-applications/atomic-mail-sender">
+    Konfigurer Atomic Mail Sender med mySMTP.
+  </Card>
+
+  <Card title="EasySendy" icon="paper-plane" href="/da/email-configuration/web-applications/easysendy">
+    Opsæt EasySendy Pro til at relay gennem mySMTP.
+  </Card>
+
+  <Card title="SendBlaster" icon="mailbox" href="/da/email-configuration/web-applications/sendblaster">
+    Konfigurer SendBlaster til masseafsendelse via mySMTP.
+  </Card>
+</CardGroup>
+
+## Hurtige løsninger
+
+<AccordionGroup>
+  <Accordion title="Port blokeret">
+    Hvis 587 er blokeret af din vært eller internetudbyder, kan du prøve port 2525.
+  </Accordion>
+
+  <Accordion title="Godkendelse mislykkedes">
+    Bekræft, at dit brugernavn og din adgangskode stemmer overens med din mySMTP-konto, og at TLS/STARTTLS er valgt.
+  </Accordion>
+
+  <Accordion title="Relay nægtet">
+    Sørg for, at afsenderdomænet er godkendt for din mySMTP-konto. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+
+  <Accordion title="E-mails ender i spam">
+    Verificer SPF, DKIM og DMARC for dit domæne. Se [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained), og test med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/).
+  </Accordion>
+</AccordionGroup>
+
+For platformspecifikke fejl, se den dedikerede guide ovenfor eller [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

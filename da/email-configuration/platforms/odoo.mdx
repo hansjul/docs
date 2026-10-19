@@ -1,0 +1,97 @@
+---
+title: "Konfigurer mySMTP som udgående mailserver i Odoo"
+sidebarTitle: "Odoo"
+description: "Saet mySMTP op i Odoo ved at tilfoeje en udgående mailserver med dine SMTP-loginoplysninger, teste forbindelsen og saette from-adresse-filtre."
+---
+
+Odoo kan sende fakturaer, tilbud og notifikationer via mySMTP ved at tilfoeje en brugerdefineret udgående mailserver.
+
+## Forudsaetninger
+
+- Administrator-adgang til din Odoo-instans
+- Dine mySMTP-loginoplysninger (se [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials))
+- Et verificeret afsenderdomaene
+
+## SMTP-indstillinger
+
+| Indstilling | Vaerdi |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (fra din opsaetningsmail) |
+| Host (shared IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Connection Security | TLS (STARTTLS) |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Shared IP-planer er kun tilgaengelige for kunder i Danmark.
+</Note>
+
+## Tilfoej en udgående mailserver
+
+<Steps>
+  <Step title="Aktiver developer mode">
+    I Odoo gaar du til **Settings → General Settings**. Scroll til bunden og aktiver **Developer Mode** (vaerktoejsikonet). Menunavne kan variere lidt efter version.
+  </Step>
+  <Step title="Aaben udgående mailservere">
+    Ga til **Settings → Technical → Email → Outgoing Mail Servers**.
+  </Step>
+  <Step title="Opret en ny server">
+    Klik pa **New**. Udfyld formularen:
+
+    - **Description:** mySMTP
+    - **SMTP Server:** dit reelle mySMTP-hostname (fra din opsaetningsmail)
+    - **SMTP Port:** `587`
+    - **Connection Security:** TLS (STARTTLS)
+    - **Username:** dit mySMTP-brugernavn
+    - **Password:** dit mySMTP-adgangskode
+  </Step>
+  <Step title="Test forbindelsen">
+    Klik pa **Test Connection**. Odoo vil forsoge at forbinde og autentificere. En succesmeddelelse bekræfter, at serveren er klar.
+  </Step>
+  <Step title="Gem">
+    Klik pa **Save**.
+  </Step>
+</Steps>
+
+## From-adresse-filtrering
+
+I den samme udgående mailserver-post kan du saette **From Filter** til et domaene eller en email-adresse, hvis du kun vil have denne server brugt til specifikke afsendere. Dette er nyttigt, naar du har flere mailservere og vil have Odoo til at route emails intelligent. Lad den vaere tom for at bruge denne server som standard for al udgående mail.
+
+<Warning>
+  Den From-adresse, som Odoo bruger, skal matche et autentificeret domaene i mySMTP. Uoverensstemmende domaener kan foraarsage leveringsfejl eller placering i spam.
+</Warning>
+
+## Odoo 17 og nyere
+
+Odoo 17 introducerede en forenklet **Use a custom email server**-mulighed i **Settings → General Settings → Discuss**. Naar den er aktiveret, kan du konfigurere en udgående mailserver uden at gaa ind i developer mode. Felterne er de samme som ovenfor: SMTP-server, port, brugernavn og adgangskode.
+
+<Note>
+  Odoo Online (den hostede SaaS-version) kan have begraensninger for brugerdefinerede emailservere og kan kraeve, at du bruger Odoo's indbyggede email-gateway i stedet. Hvis den brugerdefinerede server-mulighed ikke er tilgaengelig, eller testen fejler, saa kontakt din Odoo-udbyder eller [support@mysmtp.com](mailto:support@mysmtp.com) for vejledning.
+</Note>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Test Connection fejler">
+    Bekraeft, at du bruger dit reelle mySMTP-hostname, port 587 og TLS. Genindtast dit brugernavn og adgangskode omhyggeligt. Hvis Odoo er hosted bag en firewall, saa sorg for, at udgående port 587 er aben.
+  </Accordion>
+
+  <Accordion title="Emails havner i spam">
+    Bekraeft, at SPF, DKIM og DMARC er konfigureret for dit afsenderdomaene. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Koer [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Menuen Outgoing Mail Servers mangler">
+    Developer mode skal vaere aktiv for at se Technical-menuen. Aktiver den i **Settings → General Settings**. I Odoo 17+ skal du i stedet bruge de forenklede Discuss-emailserver-indstillinger.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [SMTP-graenser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)
+- [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials)

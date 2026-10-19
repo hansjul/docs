@@ -1,0 +1,99 @@
+---
+title: "Hvorfor ender mine e-mails i spam?"
+sidebarTitle: "E-mails i spam"
+description: "Find ud af, hvorfor dine e-mails lander i spam mapperne, og ret rodårsagerne. Lær om afsenderreputation, autentificering, liste kvalitet og content best practices for mySMTP."
+---
+
+<AccordionGroup>
+  <Accordion title="Lav afsenderreputation">
+    Dit domæne eller din IP-adresse kan have en lav afsender score på grund af tidligere spam klager eller lav engagement.
+
+    **Hvad du skal gøre:** Tjek din afsenderreputation med [Google Postmaster Tools](https://postmaster.google.com) og tredjepartsreputations-services. Hvis du er på en delt IP (kun DK), kan andre afsenderes adfærd påvirke din score. Overvej at opgradere til en [dedikeret IP](/da/getting-started/shared-ips-or-dedicated) for fuld reputationskontrol.
+  </Accordion>
+
+  <Accordion title="Manglende eller forkert autentificering (SPF, DKIM, DMARC)">
+    E-mail udbydere bruger autentificeringsrecords til at verificere, at du er autoriseret til at sende fra dit domæne.
+
+    **Hvad du skal gøre:** Opsæt [SPF, DKIM og DMARC records](/da/deliverability/spf-dkim-dmarc-and-bimi-explained) for dit afsenderdomæne. Brug [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox til at verificere, at dine beskeder består alle kontroller, før du sender i stor skala.
+  </Accordion>
+
+  <Accordion title="Høj spam klagetakst">
+    Når modtagere markerer dine e-mails som spam, vil e-mail udbydere sænke din afsender score og måske filtrere fremtidige beskeder.
+
+    **Hvad du skal gøre:** Medtag et klart, fungerende unsubscribe link i hver marketing e-mail. Respekter afmeldingsanmodninger hurtigt. Brug [dobbelt opt-in](/da/deliverability/improve-email-deliverability), så kun abonnenter, der aktivt bekræfter, modtager dine beskeder.
+  </Accordion>
+
+  <Accordion title="Lav liste kvalitet og høj bounce takst">
+    Afsendelse til ugyldige, inaktive eller købte adresser øger bounce takster og skader din reputation.
+
+    **Hvad du skal gøre:** Rens din e-mailliste regelmæssigt. Fjern hard bounces med det samme. Verificer nye adresser, før du tilføjer dem. Brug dobbelt opt-in til at bekræfte, at modtagere virkelig ønsker dine e-mails.
+  </Accordion>
+
+  <Accordion title="Spam trigger ord og content problemer">
+    Bestemte termer, overdreven punctuation, store bogstaver i emnelinjer eller vildledende content kan trigger spam filtre. E-mails med for mange billeder og for lidt tekst kan også blive markeret.
+
+    **Hvad du skal gøre:** Skriv afbalancerede, ærlige emnelinjer. Undgå STORE BOGSTAVER og overdreven brug af udråbstegn. Vedligehold et fornuftigt tekst-til-billede forhold. Test din e-mail content med en spam checker, før du sender.
+  </Accordion>
+
+  <Accordion title="Pludselige volumenspidser">
+    Afsendelse af en stor mængde fra et nyt eller lav-reputation domæne virker mistænkeligt for indbakkeudbydere.
+
+    **Hvad du skal gøre:** Opvarm din sendevolumen gradvist. Følg [IP warm-up planer](/da/deliverability/warm-up-plans) for at opbygge reputation over tid i stedet for at sende din fulde kvote på dag et.
+  </Accordion>
+
+  <Accordion title="Blacklisted IP eller domæne">
+    Din afsender IP eller dit domæne kan være på en blocklist på grund af tidligere spam aktivitet eller en kompromitteret konto.
+
+    **Hvad du skal gøre:** Tjek blocklister med [Blacklist Checker](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox. Hvis du er listet, følg udbyderens delisting procedure. Se [Blacklist overvågning](/da/deliverability/blacklist-monitoring-and-delisting) for detaljerede trin.
+  </Accordion>
+
+  <Accordion title="Forkonfigurerede e-mail headers">
+    Ufuldstændige eller forkert formaterede headers kan få beskeder til at blive markeret.
+
+    **Hvad du skal gøre:** Sørg for, at din e-mail applikation eller service inkluderer gyldige headers, inklusiv en korrekt `From` adresse, `Message-ID` og `Date`. Se [Tjek af e-mail logs og headers](/da/troubleshooting/checking-email-logs-and-headers) for mere vejledning.
+  </Accordion>
+
+  <Accordion title="Lav engagement">
+    Lave open rates og click-through rates signalerer til indbakkeudbydere, at dine e-mails ikke er ønskede.
+
+    **Hvad du skal gøre:** Segmenter dit publikum og send relevant content. Personaliser emnelinjer. Fjern abonnenter, der ikke har engageret sig i lang tid.
+  </Accordion>
+
+  <Accordion title="Delt IP reputation problemer">
+    På en delt IP (kun DK) kan andre kunders sendepraksis påvirke din leveringsevne.
+
+    **Hvad du skal gøre:** Hvis du sender i høj volumen eller har brug for fuld kontrol over din reputation, skift til en [dedikeret IP](/da/getting-started/shared-ips-or-dedicated). Delt IP planer er kun tilgængelige for kunder i Danmark.
+  </Accordion>
+
+  <Accordion title="Dårlig e-mail design">
+    E-mails, der ikke er mobilvenlige, eller som indeholder ødelagt HTML, kan blive filtreret eller vises forkert.
+
+    **Hvad du skal gøre:** Brug responsive e-mail skabeloner. Forhåndsvis dit design på tværs af forskellige enheder og klienter. Undgå at indlejre store filer eller bruge overdreven styling.
+  </Accordion>
+
+  <Accordion title="Manglende eller ødelagt unsubscribe mulighed">
+    At undlade at medtage et klart, fungerende unsubscribe link øger spam klager.
+
+    **Hvad du skal gøre:** Inkluder et one-click unsubscribe link, der overholder RFC 8058. Sørg for, at det er synligt og behandler afmeldinger hurtigt.
+  </Accordion>
+
+  <Accordion title="Overdreven brug af vedhæftninger">
+    Afsendelse af store eller uventede vedhæftninger kan trigger spam filtre og øge bounces.
+
+    **Hvad du skal gøre:** Hold vedhæftninger små. Brug cloud storage links i stedet for at vedhæfte store filer. Se [Vedhæftningsstørrelsesgrænser](/da/troubleshooting/email-attachments-size) for præcise mySMTP grænser.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Kør [Sender Readiness Checklist](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox før din næste kampagne. Den tjekker autentificering, rDNS, unsubscribe opsætning og listehygiejne på én gang.
+</Tip>
+
+## Forbedr din leveringsevne
+
+| Handling | Sådan kommer du i gang |
+| --- | --- |
+| Autentificer dit domæne | [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained) |
+| Opvarm en ny IP | [Warm-up planer](/da/deliverability/warm-up-plans) |
+| Rens din liste og fjern bounces | [Håndtering af bounces og klager](/da/deliverability/handling-bounces-and-complaints) |
+| Overvåg reputation og blocklister | [Blacklist overvågning og delisting](/da/deliverability/blacklist-monitoring-and-delisting) |
+| Tjek logs og headers for fejl | [Tjek af e-mail logs og headers](/da/troubleshooting/checking-email-logs-and-headers) |

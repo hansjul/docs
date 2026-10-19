@@ -1,0 +1,64 @@
+---
+title: "Kodeeksempler til mySMTP-integration"
+sidebarTitle: "Kodeeksempler"
+description: "Kopier og indsæt klar-til-afsendelse eksempler for PHP, Python, Node.js, .NET, Java og kommandolinje for at forbinde din applikation til mySMTP."
+---
+
+Du kan integrere mySMTP i enhver applikation ved hjælp af standard SMTP-biblioteker. Hvert eksempel nedenfor bruger sikker godkendelse og TLS-kryptering.
+
+## Forbindelsesindstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Værtsnavn | `relayxx.mysmtp.com` (dit rigtige værtsnavn står i din opsætningsmail) |
+| Delt IP-værtsnavn (kun DK) | `mail.mysmtp.com` |
+| Port (anbefalet) | `587` med STARTTLS |
+| Alternative porte | `465` (implicit TLS), `2525` (STARTTLS fallback) |
+| Godkendelse | SMTP-brugernavn og -adgangskode |
+
+<Warning>
+  Hårdkod aldrig SMTP-adgangskoder i kildekoden. Indlæs legitimationsoplysninger fra miljøvariabler, secrets managers eller krypterede konfigurationsfiler.
+</Warning>
+
+## Vælg dit sprog eller værktøj
+
+<CardGroup cols={3}>
+  <Card title="PHP" icon="code" href="/da/email-configuration/code-examples/php">
+    PHPMailer- og Symfony Mailer-eksempler med Composer.
+  </Card>
+
+  <Card title="Python" icon="code" href="/da/email-configuration/code-examples/python">
+    smtplib standardbibliotek-eksempler med STARTTLS og implicit TLS.
+  </Card>
+
+  <Card title="Node.js" icon="code" href="/da/email-configuration/code-examples/nodejs">
+    Nodemailer med async sendMail og forbindelsesverifikation.
+  </Card>
+
+  <Card title=".NET" icon="code" href="/da/email-configuration/code-examples/dotnet">
+    MailKit med STARTTLS, secure socket options og MIME-support.
+  </Card>
+
+  <Card title="Java" icon="code" href="/da/email-configuration/code-examples/java">
+    Jakarta Mail (Angus Mail) med Session og Authenticator.
+  </Card>
+
+  <Card title="Kommandolinje" icon="terminal" href="/da/email-configuration/code-examples/command-line-test">
+    Test med swaks, OpenSSL og telnet til hurtig debugging.
+  </Card>
+</CardGroup>
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark. Alle andre kunder bruger et dedikeret IP-værtsnavn fra opsætningsmailen.
+</Note>
+
+<Tip>
+  Før du sender fra produktion, skal du verificere din domænegodkendelse med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/). Den indeholder 19 gratis værktøjer inklusive SPF-validering og sender readiness checks.
+</Tip>
+
+## Relaterede artikler
+
+- [SMTP-begrænsninger og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Understøttede SMTP-porte og -kryptering](/da/getting-started/supported-smtp-ports-and-encryption)
+- [Opsætning af SMTP-legitimationsoplysninger](/da/getting-started/setting-up-smtp-credentials)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

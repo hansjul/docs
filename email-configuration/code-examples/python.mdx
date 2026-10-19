@@ -1,0 +1,142 @@
+---
+title: "Python Code Example for mySMTP with smtplib"
+sidebarTitle: "Python"
+description: "Send email from Python using smtplib with STARTTLS or implicit TLS. Includes plain text, HTML, and attachment examples for mySMTP."
+---
+
+Python's built-in `smtplib` module lets you send email through mySMTP without installing third-party packages. You can use STARTTLS on port 587 or implicit TLS on port 465 (Python's `SMTP_SSL` class, which negotiates TLS despite its name).
+
+## Prerequisites
+
+- Python 3.8 or later
+- Your mySMTP username and password from the setup email
+- Your mySMTP hostname from the setup email (shown as `relayxx.mysmtp.com` in these examples)
+
+## STARTTLS on port 587 (recommended)
+
+```python
+import os
+import smtplib
+from email.message import EmailMessage
+
+SMTP_HOST = os.getenv('MYSMTP_HOST', 'relayxx.mysmtp.com')
+SMTP_USER = os.getenv('MYSMTP_USER')
+SMTP_PASS = os.getenv('MYSMTP_PASS')
+
+msg = EmailMessage()
+msg['From'] = 'you@yourdomain.com'
+msg['To'] = 'recipient@example.com'
+msg['Subject'] = 'Test email from Python'
+msg.set_content('This is a plain text test message sent through mySMTP.')
+
+with smtplib.SMTP(SMTP_HOST, 587) as server:
+    server.starttls()
+    server.login(SMTP_USER, SMTP_PASS)
+    server.send_message(msg)
+
+print('Message sent successfully')
+```
+
+<Note>
+  Replace `relayxx.mysmtp.com` with your real hostname from the mySMTP setup email. Load credentials from environment variables, never hardcode them in source files.
+</Note>
+
+<Tabs>
+  <Tab title="Implicit TLS on port 465">
+    If your network blocks port 587, use implicit TLS on port 465:
+
+    ```python
+    import os
+    import smtplib
+    from email.message import EmailMessage
+    
+    SMTP_HOST = os.getenv('MYSMTP_HOST', 'relayxx.mysmtp.com')
+    SMTP_USER = os.getenv('MYSMTP_USER')
+    SMTP_PASS = os.getenv('MYSMTP_PASS')
+    
+    msg = EmailMessage()
+    msg['From'] = 'you@yourdomain.com'
+    msg['To'] = 'recipient@example.com'
+    msg['Subject'] = 'Test email from Python'
+    msg.set_content('This is a plain text test message sent through mySMTP.')
+    
+    with smtplib.SMTP_SSL(SMTP_HOST, 465) as server:
+        server.login(SMTP_USER, SMTP_PASS)
+        server.send_message(msg)
+    
+    print('Message sent successfully')
+    ```
+  </Tab>
+</Tabs>
+
+## HTML body with attachment
+
+```python
+import os
+import smtplib
+from email.message import EmailMessage
+from email.utils import make_msgid
+import mimetypes
+
+SMTP_HOST = os.getenv('MYSMTP_HOST', 'relayxx.mysmtp.com')
+SMTP_USER = os.getenv('MYSMTP_USER')
+SMTP_PASS = os.getenv('MYSMTP_PASS')
+
+msg = EmailMessage()
+msg['From'] = 'you@yourdomain.com'
+msg['To'] = 'recipient@example.com'
+msg['Subject'] = 'HTML email with attachment'
+
+msg.set_content('This is the plain text fallback.')
+msg.add_alternative(
+    '<h1>Hello</h1><p>This is an HTML message.</p>',
+    subtype='html'
+)
+
+filepath = '/path/to/invoice.pdf'
+ctype, encoding = mimetypes.guess_type(filepath)
+if ctype is None or encoding is not None:
+    ctype = 'application/octet-stream'
+maintype, subtype = ctype.split('/', 1)
+
+with open(filepath, 'rb') as fp:
+    msg.add_attachment(
+        fp.read(),
+        maintype=maintype,
+        subtype=subtype,
+        filename='invoice.pdf'
+    )
+
+with smtplib.SMTP(SMTP_HOST, 587) as server:
+    server.starttls()
+    server.login(SMTP_USER, SMTP_PASS)
+    server.send_message(msg)
+
+print('Message sent successfully')
+```
+
+## Common errors
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Your username or password is incorrect, or your account is not yet activated. Re-enter credentials exactly as shown in the setup email. See [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Your network or host may block port 587. Try port 2525 with STARTTLS, or port 465 with `SMTP_SSL` (implicit TLS). See [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    The encryption method does not match the port. Use `starttls()` for ports 587 and 2525. Use `SMTP_SSL` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test your SPF, DKIM, and DMARC setup with the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) before sending large volumes.
+</Tip>
+
+## Related articles
+
+- [Code Examples overview](/email-configuration/code-examples)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

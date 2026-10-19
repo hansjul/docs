@@ -1,0 +1,122 @@
+---
+title: "IP Warmup Planer for mySMTP Dedikerede IP'er"
+sidebarTitle: "Warm Up Planer"
+description: "Hvorfor IP warmup betyder noget, og hvordan du bygger en dag-for-dag plan med mySMTP Warmup Generator. Domænekrav, inputs, hastigheder og metrics at holde øje med."
+---
+
+<Card title="Åbn Warmup Generator" icon="chart-line" href="https://toolbox.smtp.ai/#warmup-generator">
+  Byg en brugerdefineret dag-for-dag warmup-plan for din dedikerede IP på sekunder. Gratis, ingen konto påkrævet.
+</Card>
+
+<Warning>
+  Det sendedomæne, du bruger på en dedikeret IP, skal have mindst 6 måneders afsendelseshistorik. Nye eller nylig registrerede domæner har ingen reputation i sig selv og kan ikke warmuppes pålideligt på en ny IP.
+</Warning>
+
+## Hvorfor warmup betyder noget
+
+- **Reputation starter ved nul.** Mailbox-udbydere bedømmer en ny IP ud fra dens første afsendelsesmønstre. Pludseligt højt volumen ligner en spammer eller en kompromitteret server.
+- **Udbydere begrænser ukendte afsendere.** Uden warmup bliver meget af din mail deffered eller afvist (4xx/5xx svar), før den når indbakken.
+- **Tidlig skade er svær at fortryde.** En blocklisting eller dårlig reputation i uge ét kan tage uger at reparere.
+- **Gode vaner bliver hængende.** En stabil ramp med engagerede modtagere giver din IP en stærk reputation, der bærer dit fulde volumen på lang sigt.
+
+## Domænekrav
+
+Før du starter, sørg for at dit domæne:
+
+| Krav | Detaljer |
+| --- | --- |
+| Domænehistorik | 6+ måneder med reel afsendelseshistorik |
+| SPF | Publiceret og inkluderer mySMTP. Se [SPF, DKIM, DMARC & BIMI](/da/deliverability/spf-dkim-dmarc-and-bimi-explained) |
+| DKIM | Signering aktiv for dit domæne |
+| DMARC | Publiceret, startende med `p=none` |
+| Blacklists | Domænet er ikke listet. Se [Blacklist overvågning](/da/deliverability/blacklist-monitoring-and-delisting) |
+
+## Byg din plan med generatoren
+
+<Steps>
+  <Step title="Åbn generatoren">
+    Gå til [toolbox.smtp.ai/#warmup-generator](https://toolbox.smtp.ai/#warmup-generator).
+  </Step>
+  <Step title="Indtast dine detaljer">
+    | Input | Hvad du skal indtaste |
+    | --- | --- |
+    | Server / IP | `relayxx.mysmtp.com` (fra din mySMTP opsætningsmail) |
+    | Email Type | Marketing, Transactional, Mixed eller Cold Outreach |
+    | Target Daily Volume | Det daglige volumen, du vil nå |
+    | Warmup Speed | Conservative, Moderate eller Aggressive |
+    | Starting Volume | Emails på dag 1 (standard 50) |
+    | Domain Reputation | Dit domænes afsendelseshistorik og reputation |
+  </Step>
+  <Step title="Vælg en warmup-hastighed">
+    | Hastighed | Varighed | Bedst til |
+    | --- | --- | --- |
+    | Conservative | 45 dage | Cold outreach, eller når inbox placement er kritisk |
+    | Moderate | 30 dage | De fleste afsendere med rene lister |
+    | Aggressive | 21 dage | Domæner med stærk reputation og højt engagement |
+  </Step>
+  <Step title="Generer og eksporter">
+    Generatoren viser oversigtskort, et dagligt volumendiagram, en dag-for-dag tabel (target volumen, stigning og fremskridt) og anbefalinger for din email-type. Eksportér planen som CSV for at spore den i et regneark eller din afsendelsesplatform.
+  </Step>
+  <Step title="Send hver dag">
+    Følg planen dagligt, startende med dine mest engagerede modtagere. Spring ikke dage over eller haste frem.
+  </Step>
+</Steps>
+
+<Note>
+  Planen vokser eksponentielt i cirka de første 70% af dagene, derefter lineært op til dit target. Dette afspejler, hvordan et reelt email-program vokser, hvilket udbydere genkender som legitim adfærd.
+</Note>
+
+## Metrics at holde øje med
+
+Tjek disse dagligt. Hvis en metric rammer advarselsniveauet, sæt på pause eller sænk farten.
+
+| Metric | Sund | Advarsel | Handling |
+| --- | --- | --- | --- |
+| Bounce rate | Under 2% | Over 5% | Sæt på pause og rens din liste |
+| Spam klagerafer | Under 0,1% | Over 0,3% | Sæt på pause med det samme |
+| Inbox placement | Over 95% | Under 70% | Sænk rampen |
+| Open rate | Over 20% | Under 10% | Gennemgå indhold og liste kvalitet |
+
+<Tip>
+  Spor Gmail-reputation i [Google Postmaster Tools](https://postmaster.google.com/) og Microsoft-reputation i [SNDS](https://sendersupport.olc.protection.outlook.com/snds/).
+</Tip>
+
+## Almindelige fejl
+
+<AccordionGroup>
+  <Accordion title="Brug af et nyt eller nylig registreret domæne">
+    Et domæne med mindre end 6 måneders historik har ingen reputation at bære. Brug et etableret domæne med mindst 6 måneders afsendelseshistorik. Brug ikke et nyt domæne til warmup.
+  </Accordion>
+
+  <Accordion title="At springe dage over">
+    Huller skaber uregelmæssige volumenmønstre. Send hver dag under warmup, selv i små mængder.
+  </Accordion>
+
+  <Accordion title="At øge volumen for hurtigt">
+    Store spring udløser filtre og throttling. Følg den genererede plan.
+  </Accordion>
+
+  <Accordion title="At sende til hele din liste med det samme">
+    Start med nylige, engagerede modtagere og tilføj mindre engagerede segmenter senere.
+  </Accordion>
+
+  <Accordion title="At ignorere advarselstegn">
+    Høje klager, stigende bounces eller lave opens betyder, at du bør sætte på pause, ikke presse igennem.
+  </Accordion>
+</AccordionGroup>
+
+## Re-warming efter en pause
+
+| Inaktiv periode | Sådan genoptager du |
+| --- | --- |
+| 1 til 2 uger | Genoptag ved 50% af tidligere volumen, ramp tilbage over 1 uge |
+| 1 til 2 måneder | Genoptag ved 25% af volumen, følg en 2-ugers ramp |
+| 3+ måneder | Behandl som en ny IP og kør den fulde warmup |
+
+Hvis du warmer op flere IP'er, forskyd startdatoerne med 1 til 2 uger og generer en separat plan for hver IP.
+
+## Relaterede artikler
+
+- [IP-reputation: dedikerede vs. delte IP'er](/da/deliverability/ip-reputation-dedicated-vs-shared-ips)
+- [Forbedr email deliverability](/da/deliverability/improve-email-deliverability)
+- [Håndtering af bounces og klager](/da/deliverability/handling-bounces-and-complaints)

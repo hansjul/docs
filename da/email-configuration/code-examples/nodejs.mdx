@@ -1,0 +1,172 @@
+---
+title: "Node.js-kodeeksempel til mySMTP med Nodemailer"
+sidebarTitle: "Node.js"
+description: "Send e-mail fra Node.js ved hjælp af Nodemailer med STARTTLS på port 587. Inkluderer async sendMail, forbindelsesverifikation og fejlhåndtering."
+---
+
+Nodemailer er det mest populære e-mail-bibliotek til Node.js. Du kan forbinde til mySMTP med STARTTLS på port 587 og verificere forbindelsen, før du sender.
+
+## Forudsætninger
+
+- Node.js 18 eller nyere
+- Dit mySMTP-brugernavn og -adgangskode fra opsætningsmailen
+- Dit mySMTP-værtsnavn fra opsætningsmailen (vist som `relayxx.mysmtp.com` i disse eksempler)
+
+## Installer Nodemailer
+
+<CodeGroup>
+
+```bash npm
+npm install nodemailer
+```
+
+```bash yarn
+yarn add nodemailer
+```
+
+```bash pnpm
+pnpm add nodemailer
+```
+
+</CodeGroup>
+
+## Grundlæggende afsendelseseksempel
+
+```javascript
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: process.env.MYSMTP_HOST || 'relayxx.mysmtp.com',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.MYSMTP_USER,
+    pass: process.env.MYSMTP_PASS,
+  },
+});
+
+async function sendEmail() {
+  const info = await transporter.sendMail({
+    from: '"Your Name" <you@yourdomain.com>',
+    to: 'recipient@example.com',
+    subject: 'Test email from Node.js',
+    text: 'This is a plain text test message sent through mySMTP.',
+  });
+
+  console.log('Message sent successfully');
+  console.log('Message ID:', info.messageId);
+}
+
+sendEmail().catch(console.error);
+```
+
+<Note>
+  Erstat `relayxx.mysmtp.com` med dit rigtige værtsnavn fra mySMTP-opsætningsmailen. Indlæs legitimationsoplysninger fra miljøvariabler, og hårdkod dem aldrig i kildefiler.
+</Note>
+
+## Verificer forbindelsen før afsendelse
+
+```javascript
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: process.env.MYSMTP_HOST || 'relayxx.mysmtp.com',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.MYSMTP_USER,
+    pass: process.env.MYSMTP_PASS,
+  },
+});
+
+async function verifyAndSend() {
+  try {
+    await transporter.verify();
+    console.log('Server is ready to take our messages');
+
+    const info = await transporter.sendMail({
+      from: '"Your Name" <you@yourdomain.com>',
+      to: 'recipient@example.com',
+      subject: 'Test email from Node.js',
+      text: 'This is a plain text test message sent through mySMTP.',
+    });
+
+    console.log('Message sent successfully');
+    console.log('Message ID:', info.messageId);
+  } catch (err) {
+    console.error('Error:', err.message);
+  }
+}
+
+verifyAndSend();
+```
+
+## HTML-e-mail med vedhæftet fil
+
+```javascript
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: process.env.MYSMTP_HOST || 'relayxx.mysmtp.com',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.MYSMTP_USER,
+    pass: process.env.MYSMTP_PASS,
+  },
+});
+
+async function sendHtmlEmail() {
+  const info = await transporter.sendMail({
+    from: '"Your Name" <you@yourdomain.com>',
+    to: 'recipient@example.com',
+    subject: 'HTML email with attachment',
+    text: 'This is the plain text fallback.',
+    html: '<h1>Hello</h1><p>This is an HTML message.</p>',
+    attachments: [
+      {
+        filename: 'invoice.pdf',
+        path: '/path/to/invoice.pdf',
+      },
+    ],
+  });
+
+  console.log('Message sent successfully');
+  console.log('Message ID:', info.messageId);
+}
+
+sendHtmlEmail().catch(console.error);
+```
+
+<Warning>
+  Sæt altid `requireTLS: true`, når du bruger port 587. Dette forhindrer Nodemailer i at falde tilbage til en ukrypteret forbindelse, hvis TLS-forhandlingen mislykkes.
+</Warning>
+
+## Almindelige fejl
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Dit brugernavn eller din adgangskode er forkert, eller din konto er endnu ikke aktiveret. Genindtast legitimationsoplysningerne nøjagtigt som vist i opsætningsmailen. Se [Opsætning af SMTP-legitimationsoplysninger](/da/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Dit netværk eller din vært kan blokere port 587. Prøv port 2525 med de samme indstillinger, eller port 465 med `secure: true`. Se [Understøttede SMTP-porte og -kryptering](/da/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    Indstillingerne `secure` og `requireTLS` matcher ikke porten. For port 587 skal du bruge `secure: false` og `requireTLS: true`. For port 465 skal du bruge `secure: true` og fjerne `requireTLS`.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test din SPF-, DKIM- og DMARC-opsætning med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/), før du sender store volumener.
+</Tip>
+
+## Relaterede artikler
+
+- [Kodeeksempler, oversigt](/da/email-configuration/code-examples)
+- [SMTP-begrænsninger og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

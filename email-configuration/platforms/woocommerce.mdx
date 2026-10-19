@@ -1,0 +1,110 @@
+---
+title: "Send WooCommerce order emails through mySMTP"
+sidebarTitle: "WooCommerce"
+description: "Ensure WooCommerce transactional emails reach customers by routing them through mySMTP with the WP Mail SMTP plugin."
+---
+
+WooCommerce relies on WordPress `wp_mail()` to send order confirmations, shipping notifications, and password resets. To make sure these emails reach customers, route them through mySMTP using the WP Mail SMTP plugin.
+
+## Prerequisites
+
+- WooCommerce installed and active on WordPress
+- Admin access to WordPress
+- Your mySMTP credentials (see [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials))
+- A verified sending domain
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (from your setup email) |
+| Host (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Encryption | TLS |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Connect mySMTP to WordPress
+
+WooCommerce does not have its own SMTP settings. Configure `wp_mail()` at the WordPress level so all WooCommerce emails use mySMTP.
+
+<Steps>
+  <Step title="Install and activate WP Mail SMTP">
+    In WordPress, go to **Plugins → Add New Plugin**. Search for **WP Mail SMTP by WPForms**, then install and activate it.
+  </Step>
+  <Step title="Configure Other SMTP">
+    Go to **WP Mail SMTP → Settings**. Under **Mailer**, choose **Other SMTP**. Fill in:
+
+    - **SMTP Host:** your real mySMTP hostname (from your setup email)
+    - **Encryption:** TLS
+    - **SMTP Port:** `587`
+    - **Authentication:** On
+    - **SMTP Username:** your mySMTP username
+    - **SMTP Password:** your mySMTP password
+  </Step>
+  <Step title="Set the From email and name">
+    Set **From Email** to an address on your authenticated domain (for example, `orders@yourdomain.com`). Set **From Name** to your store name. Enable **Force From Email** and **Force From Name**.
+  </Step>
+  <Step title="Save and test">
+    Click **Save Settings**, then go to **Email Test** and send a test email to yourself.
+  </Step>
+</Steps>
+
+## Match WooCommerce sender settings to mySMTP
+
+WooCommerce lets you define a sender name and address under **WooCommerce → Settings → Emails**. These values must match the authenticated domain you use with mySMTP.
+
+<Steps>
+  <Step title="Open WooCommerce email settings">
+    In WordPress admin, go to **WooCommerce → Settings → Emails**.
+  </Step>
+  <Step title="Set the From address">
+    Scroll to the bottom of the page. Set **From address** to the same domain-verified address you configured in WP Mail SMTP (for example, `orders@yourdomain.com`).
+  </Step>
+  <Step title="Set the From name">
+    Set **From name** to your store or brand name. This appears in the recipient's inbox.
+  </Step>
+  <Step title="Save changes">
+    Click **Save changes** at the bottom of the page.
+  </Step>
+</Steps>
+
+<Warning>
+  If the WooCommerce **From address** uses a different domain than the one authenticated in mySMTP, mailbox providers may reject or filter the mail. Always use the same verified domain.
+</Warning>
+
+## Test order emails
+
+Create a test product and place a test order, or use a sandbox payment gateway. Check that the order confirmation email arrives at the customer address and shows the correct sender name and address.
+
+You can also view recent sends and check for errors in the WP Mail SMTP logs, if logging is enabled.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Order emails not arriving">
+    First confirm the WP Mail SMTP test email succeeds. Then verify that WooCommerce email types are enabled under **WooCommerce → Settings → Emails**. Make sure the order status changes (for example, from Pending to Processing) because some emails trigger only on status transitions.
+  </Accordion>
+
+  <Accordion title="Emails go to spam">
+    Verify SPF, DKIM, and DMARC are configured for your sending domain. See [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Test email works but WooCommerce emails do not">
+    Some WooCommerce email customizer plugins or SMTP plugins conflict with WP Mail SMTP. Disable other email-related plugins temporarily to find the conflict.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [WordPress SMTP configuration](/email-configuration/platforms/wordpress)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)

@@ -1,0 +1,75 @@
+---
+title: "Whitelisting og sikkerhedsbedste praksis"
+sidebarTitle: "Whitelisting"
+description: "Begræns SMTP-adgang med IP-whitelisting, brug stærke legitimationsoplysninger, og overvåg login-aktivitet for at beskytte din mySMTP-konto mod uautoriseret brug."
+---
+
+Disse indstillinger hjælper med at forhindre misbrug, beskytte din afsenderreputation og holde din e-maillevering pålidelig.
+
+## Hvad er IP-whitelisting?
+
+IP-whitelisting begrænser SMTP-forbindelser til godkendte offentlige IP-adresser. Enhver forbindelse fra en IP, der ikke er på listen, afvises.
+
+Dette er nyttigt, når:
+
+- Du bruger en dedikeret IP-server og kender den eksakte kilde-IP for din afsendelsesapplikation.
+- Du vil forhindre at stjålne legitimationsoplysninger bruges uden for dit kontor eller datacenter.
+
+## Sådan whitelister du en IP-adresse
+
+<Steps>
+  <Step title="Log ind på dashboardet">
+    Gå til [app.mysmtp.com](https://app.mysmtp.com) og log ind som kontoejeren.
+  </Step>
+  <Step title="Åbn IP Whitelisting">
+    Naviger til **IP Whitelisting** i venstremenuen.
+  </Step>
+  <Step title="Tilføj en betroet IP">
+    Indtast den offentlige IP-adresse for det system, der forbinder til mySMTP, såsom din applikationsserver, kontornetværk eller VPS. Indtast ikke en privat LAN-adresse.
+  </Step>
+  <Step title="Gem og vent">
+    Gem ændringen. Reglen træder i kraft hurtigt, men propagering kan tage et par minutter.
+  </Step>
+</Steps>
+
+<Tip>
+  Hvis din internetforbindelse har en dynamisk offentlig IP, er whitelisting via statisk IP måske ikke praktisk. I så fald skal du i stedet stole på stærke SMTP-legitimationsoplysninger og overvågning.
+</Tip>
+
+## Legitimationsoplysningssikkerhed
+
+### Brug stærke, unikke adgangskoder
+
+Vælg lange adgangskoder til hver SMTP-bruger. Genbrug ikke adgangskoder på tværs af tjenester. Hvis du mistænker at en legitimationsoplysning er blevet eksponeret, skift adgangskoden i dashboardet under **SMTP Users**.
+
+### Brug én SMTP-bruger per integration
+
+Opret en separat SMTP-bruger til hver e-mailklient, applikation eller teammedlem. Dette gør det nemmere at identificere, hvilken integration der sendte en given besked, og begrænser virkningen af at trække én legitimationsoplysning tilbage.
+
+### Overvåg loginforsøg
+
+Gennemgå afsendelseslogfiler i **Log Reports** for uventet trafik. Hvis du ser mislykkede logins fra ukendte IP'er og bruger IP-whitelisting, fungerer firewallen. Hvis du ikke bruger whitelisting, skal du betragte gentagne fejl som et tegn på at rotere adgangskoder.
+
+### Aktiver Bcc-arkivfunktionen
+
+Hvis din konto understøtter det, brug Bcc-kopimuligheden i **SMTP Users** til at holde et skjult arkiv over al sendt mail. Dette hjælper under audits og fejlfinding.
+
+## Resumé af bedste praksis
+
+| Praksis | Sådan anvender du den |
+| --- | --- |
+| Whitelist kun betroede IP'er | Tilføj den offentlige IP for hvert afsendelsessystem, ikke et bredt interval |
+| Roter adgangskoder efter opsætningsændringer eller mistanke om eksponering | Rediger SMTP-brugeren i dashboardet og opdater applikationen |
+| Separate brugere per integration | Opret én SMTP-bruger per applikation eller teammedlem |
+| Overvåg logfiler regelmæssigt | Tjek Log Reports for volumenstigninger eller bounce-stigninger |
+| Behold et Bcc-arkiv | Aktiver under SMTP Users, hvis tilgængelig |
+
+## Relaterede artikler
+
+- [Dedikeret IP-server-dashboard](/da/getting-started/dedicated-ip-server-dashboard)
+- [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)
+
+<Tip>
+  Usikker på hvad din aktuelle offentlige IP er? Brug det gratis [What Is My IP](https://toolbox.smtp.ai/#what-is-my-ip)-værktøj i mySMTP Deliverability Toolbox. Det viser din IPv4/IPv6-adresse, PTR-post og ASN øjeblikkeligt i din browser.
+</Tip>

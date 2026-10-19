@@ -1,0 +1,64 @@
+---
+title: "EasySendy Pro"
+sidebarTitle: "EasySendy"
+description: "Integrate EasySendy Pro with mySMTP by configuring SMTP server settings on port 587 with TLS encryption for secure campaign delivery."
+---
+
+## Add a delivery server
+
+<Steps>
+  <Step title="Open Delivery Servers">
+    Visit your EasySendy Pro dashboard. Navigate to **Delivery Servers** from the main menu. Click **\+ Add Delivery Server**.
+  </Step>
+  <Step title="Choose SMTP">
+    In the list of delivery server types, choose **SMTP** (typically labelled **SMTP - Generic**). Click **Create Server** or **Next**.
+  </Step>
+  <Step title="Enter mySMTP details">
+    Use the following settings:
+
+    | Setting | Value |
+    | --- | --- |
+    | Server | `relayxx.mysmtp.com` (from your setup email) |
+    | Server (shared IP, DK only) | `mail.mysmtp.com` |
+    | Port | `587` |
+    | Username | Your mySMTP username |
+    | Password | Your mySMTP password |
+    | Protocol | TLS (STARTTLS if available) |
+    | From Email | e.g. `you@yourdomain.com` |
+    | From Name | Your company or sender name |
+    | Reply-To Email | Optional, typically same as From Email |
+    | Bounce Email | Optional (recommended to set up separately) |
+
+    <Note>
+      Shared IP plans are only available to customers in Denmark.
+    </Note>
+  </Step>
+  <Step title="Test and save">
+    Click **Validate Server** or **Test Connection**. If successful, EasySendy confirms the SMTP connection. Save the server. It is now active for sending campaigns.
+  </Step>
+</Steps>
+
+<Tip>
+  Before importing a new list, run it through the [Email List Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+</Tip>
+
+## Send a test campaign
+
+Create a small test campaign to a personal email address. Confirm the message arrives and that the headers show it passed through mySMTP.
+
+## Troubleshooting
+
+- **Connection test fails:** confirm the hostname matches your setup email, the port is 587, and TLS is selected. If your network blocks 587, try port 2525.
+- **Authentication error:** re-enter your mySMTP username and password. Make sure there are no extra spaces.
+- **Emails going to spam:** verify SPF, DKIM, and DMARC are configured for your domain. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+  <Tip>
+    Check your setup with the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+  </Tip>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).
+
+## Related articles
+
+- [Web applications overview](/email-configuration/web-applications)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)

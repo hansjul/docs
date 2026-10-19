@@ -1,0 +1,72 @@
+---
+title: "Overvågning af blacklists og fjernelse fra lister"
+sidebarTitle: "Blacklists"
+description: "Find ud af, hvordan du overvåger dine afsendelses-IP'er og domæner på email-blacklists, og hvilke skridt du skal tage for at blive fjernet fra listen, hvis din mySMTP-IP er blokeret."
+---
+
+<Tip>
+  Start med <a href="https://toolbox.smtp.ai/">Blacklist Checker</a> i mySMTP Deliverability Toolbox. Den tjekker din afsendelses-IP og domæne mod de største blocklists og inkluderer direkte links til fjernelse. Du behøver ikke en konto, og tjekket kører direkte i din browser.
+</Tip>
+
+## Tjek din IP- og domænereputation
+
+Brug disse betroede værktøjer til at se, om din afsendelses-IP eller domæne optræder på større blacklists.
+
+| Værktøj | Hvad det tjekker | URL |
+| --- | --- | --- |
+| mySMTP Blacklist Checker | Større blocklists med links til fjernelse | <a href="https://toolbox.smtp.ai/">toolbox.smtp.ai</a> |
+| MultiRBL | Flere RBL'er på én gang | [multirbl.valli.org](https://multirbl.valli.org/) |
+| MXToolbox | Blacklists, reputation og advarsler | [mxtoolbox.com/blacklists.aspx](https://mxtoolbox.com/blacklists.aspx) |
+| Spamhaus | SBL-, XBL- og PBL-listings | [check.spamhaus.org](https://check.spamhaus.org/) |
+| Talos Intelligence | Globale IP-reputationsscorer | [talosintelligence.com](https://talosintelligence.com/) |
+| Barracuda | Barracuda reputation lookup | [barracudacentral.org/lookups](https://www.barracudacentral.org/lookups) |
+| Google Postmaster Tools | Gmail domænereputation og spam-rate | [postmaster.google.com](https://postmaster.google.com/) |
+| Microsoft SNDS | Outlook.com IP-reputation og spam traps | [postmaster.live.com](https://postmaster.live.com/) |
+
+<Tip>
+  Bogmærk ét eller to værktøjer og tjek din IP ugentligt, eller dagligt under en dedikeret IP warmup.
+</Tip>
+
+## Hvis du er på en blacklist
+
+<Steps>
+  <Step title="Identificer årsagen">
+    Gennemgå den seneste afsendelsesaktivitet i dit mySMTP dashboard. Led efter:
+
+    - Pludselige volumenstigninger
+    - Høje bounce-rater
+    - Spam-klager
+    - Kompromitterede legitimationsoplysninger eller uautoriseret afsendelse
+  </Step>
+  <Step title="Ret rod-problemet">
+    Fjern dårlige adresser fra din liste, sikre eventuelle kompromitterede konti, og sæt kampagner på pause, indtil problemet er løst. Fortsat afsendelse fra en blacklisted IP forværrer reparationsskaden.
+  </Step>
+  <Step title="Anmod om fjernelse">
+    Besøg blacklist-operatørens hjemmeside og følg deres proces for fjernelse. De fleste kræver en selvbetjeningsformular. Nogle fjerner listings automatisk efter en periode med god opførsel. Vær ærlig i din anmodning og forklar, hvilke skridt du har taget for at rette årsagen.
+  </Step>
+  <Step title="Bekræft levering">
+    Efter fjernelse fra listen, send testbeskeder til adresser hos Gmail, Outlook, Yahoo og Apple iCloud. Bekræft, at beskederne ankommer i indbakken og ikke i spam.
+  </Step>
+</Steps>
+
+## Forhindr fremtidige listings
+
+- Hold bounce-rater under 2% og spam-klage-rater under 0,1%.
+- Brug confirmed opt-in og fjern ikke-engagerede modtagere.
+- Autentificer med SPF, DKIM og DMARC. Se [DNS-opsætning til autentificering](/da/deliverability/dns-setup-for-authentication).
+- Warm up nye dedikerede IP'er gradvist. Se [Warm up-planer](/da/deliverability/warm-up-plans).
+- Send konsistente volumener frem for pludselige stigninger.
+
+## Har du brug for hjælp?
+
+Hvis din IP forbliver listet efter du har rettet årsagen og anmodet om fjernelse, [kontakt mySMTP-support](/da/support/contact-support) med din konto-email, blacklist-navnet og eventuelle fejlmeddelelser du har modtaget.
+
+<Tip>
+  Vil du have mySMTP til at overvåge 100+ blacklists for dig og håndtere fjernelse? Se [RepHero](/da/deliverability/rephero).
+</Tip>
+
+## Relaterede artikler
+
+- [IP-reputation: dedikerede vs. delte IP'er](/da/deliverability/ip-reputation-dedicated-vs-shared-ips)
+- [Håndtering af bounces og klager](/da/deliverability/handling-bounces-and-complaints)
+- [Forbedr email deliverability](/da/deliverability/improve-email-deliverability)

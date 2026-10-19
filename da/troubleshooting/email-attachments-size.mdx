@@ -1,0 +1,35 @@
+---
+title: "E-mail vedhæftningsstørrelse"
+sidebarTitle: "Vedhæftningsgrænser"
+description: "Lær om mySMTP's e-mail vedhæftningsstørrelsesgrænse, hvordan Base64 kodning påvirker filstørrelsen, og beregn den reelle maksimale vedhæftningsstørrelse, du kan sende."
+---
+
+## Størrelsesgrænse
+
+| Grænse | Værdi |
+| --- | --- |
+| Maksimal e-mail størrelse (inklusiv vedhæftninger) | **25 MB** |
+| Realistisk maksimal filstørrelse efter Base64 overhead | **~18 MB** |
+
+## Hvorfor den reelle grænse er lavere
+
+E-mail protokoller koder binære vedhæftninger til Base64 tekst før transmission. Denne proces tilføjer cirka **33% overhead** til filstørrelsen. En 18 MB fil bliver til cirka 24 MB når kodet, hvilket passer inden for 25 MB grænsen.
+
+Brug denne formel til at beregne den sikre maksimale filstørrelse:
+
+```text
+Max file size = 25 MB / 1.33 ≈ 18.75 MB
+```
+
+I praksis, hold vedhæftninger under **18 MB** for at være sikkert inden for grænsen.
+
+## Tips til afsendelse af store filer
+
+- Brug et cloud storage link i stedet for at vedhæfte store filer. De fleste moderne klienter viser link previews.
+- Komprimer billeder og PDFs før du vedhæfter dem.
+- Opdel meget stort content over flere e-mails kun, hvis et link ikke er en mulighed.
+
+## Relaterede artikler
+
+- [SMTP grænser og sendehastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [E-mails i spam](/da/troubleshooting/emails-going-to-spam)

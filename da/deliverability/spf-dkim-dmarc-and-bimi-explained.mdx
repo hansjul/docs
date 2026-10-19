@@ -1,0 +1,117 @@
+---
+title: "SPF, DKIM, DMARC og BIMI Forklaret"
+sidebarTitle: "SPF, DKIM, DMARC"
+description: "Forstå SPF, DKIM, DMARC og BIMI på almindeligt dansk. Lær hvordan du opsætter email autentificeringsrecords for at forbedre deliverability og vise dit brand-logo i indbakker."
+---
+
+<Tip>
+  Tjek din autentificeringsopsætning øjeblikkeligt med mySMTP [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) på toolbox.smtp.ai. Ingen konto påkrævet.
+</Tip>
+
+## SPF (Sender Policy Framework)
+
+SPF er som en gæsteliste. Det fortæller internettet, hvilke servere der har tilladelse til at sende emails fra dit domæne.
+
+### DNS-record
+
+Tilføj en TXT-record til dit domænes DNS:
+
+```text
+v=spf1 include:spf1.mysmtp.com ~all
+```
+
+Dette fortæller modtagende servere, at mySMTP er autoriseret til at sende email for dit domæne.
+
+<Note>
+  Hvis dit domæne allerede har en SPF-record, tilføj `include:spf1.mysmtp.com` til den eksisterende record i stedet for at publicere en anden. Kun én SPF-record er tilladt per domæne.
+</Note>
+
+### Sådan verificerer du
+
+Brug mySMTP [SPF Validator](https://toolbox.smtp.ai/) til at udvide hver `include:`, tælle DNS-opslag (grænsen er 10), og fange syntaksfejl eller svage afslutninger som `~all` eller `?all`.
+
+## DKIM (DomainKeys Identified Mail)
+
+DKIM sætter en digital signatur på dine emails, så modtagere ved, at de ikke er blevet ændret undervejs.
+
+### DNS-record
+
+mySMTP giver dig en DKIM-record for din konto. Tilføj den som en TXT-record:
+
+| Felt | Værdi |
+| --- | --- |
+| Type | TXT |
+| Name | `mysmtp._domainkey` (eller den selektor, der blev leveret i din opsætningsmail) |
+| Value | Den 2048-bit offentlige nøgle genereret for din konto |
+
+### Sådan verificerer du
+
+Brug mySMTP [DKIM Checker](https://toolbox.smtp.ai/) til at verificere domænet, selektoren, nøgletypen og nøglelængden. Værktøjet advarer, hvis nøglen er under 1024 bits.
+
+## DMARC (Domain-based Message Authentication)
+
+DMARC fortæller email-tjenester, hvad de skal gøre, når SPF eller DKIM fejler, og det sender dig rapporter, så du kan spotte misbrug.
+
+### DNS-record
+
+Tilføj en TXT-record til din DNS:
+
+```text
+v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
+```
+
+| Tag | Betydning |
+| --- | --- |
+| `v=DMARC1` | Påkrævet versionsidentifikator |
+| `p=none` | Politik: overvåg kun (bloker ikke endnu) |
+| `rua=` | Adresse til modtagelse af aggregate-rapporter |
+
+### Anbefalet udrulning
+
+Start med `p=none` for at samle data uden at afvise mail. Efter 2 til 4 uger med rene rapporter, skift til `p=quarantine` for at sende fejlende mail til spam. Når du er sikker, skift til `p=reject` for at blokere spoofede beskeder helt.
+
+### Sådan verificerer du
+
+Brug mySMTP [DMARC Wizard](https://toolbox.smtp.ai/) til at bygge en record trin for trin, eller [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) til at få et pass/advar/fejl-resume over alle tre, inklusiv alignment med dit From-domæne.
+
+## BIMI (Brand Indicators for Message Identification)
+
+BIMI viser dit brand-logo ved siden af dine emails i understøttende indbakker, såsom Gmail på mobil og web.
+
+### Krav
+
+- DMARC skal være på plads med `p=quarantine` eller `p=reject`
+- Et verificeret Mark Certificate (VMC) eller Common Mark Certificate (CMC) er påkrævet for Gmail
+- Dit logo skal være i SVG Tiny PS format
+
+### DNS-record
+
+Tilføj en TXT-record:
+
+```text
+v=BIMI1; l=https://yourdomain.com/logo.svg;
+```
+
+### Værktøjer
+
+- Konverter dit logo til SVG Tiny PS med mySMTP [BIMI SVG Converter](https://toolbox.smtp.ai/)
+- Generer den fulde BIMI TXT-record med mySMTP [BIMI Generator](https://toolbox.smtp.ai/)
+
+<Note>
+  BIMI understøttes ikke af alle mailbox-udbydere. Selv hvor det understøttes, vises logoet muligvis ikke, hvis DMARC alignment fejler, eller certifikatkravet ikke er opfyldt.
+</Note>
+
+## Hurtig reference: hvad du skal opsætte hvornår
+
+| Fase | Handling | Værktøj |
+| --- | --- | --- |
+| Nyt domæne | Publicer SPF og DKIM | [SPF Validator](https://toolbox.smtp.ai/), [DKIM Checker](https://toolbox.smtp.ai/) |
+| Før første afsendelse | Tilføj DMARC med `p=none` | [DMARC Wizard](https://toolbox.smtp.ai/) |
+| Løbende overvågning | Gennemse DMARC-rapporter og alignment | [One-Click Checker](https://toolbox.smtp.ai/) |
+| Klar til branding | Publicer BIMI med DMARC `p=quarantine` eller `reject` | [BIMI Generator](https://toolbox.smtp.ai/), [BIMI SVG Converter](https://toolbox.smtp.ai/) |
+
+## Relaterede artikler
+
+- [DNS opsætning til autentificering](/da/deliverability/dns-setup-for-authentication)
+- [Forbedr email deliverability](/da/deliverability/improve-email-deliverability)
+- [Deliverability Toolbox](/da/deliverability/deliverability-toolbox)

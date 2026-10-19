@@ -1,0 +1,52 @@
+---
+title: "Thunderbird SMTP-opsætningsguide"
+sidebarTitle: "Thunderbird"
+description: "Opsæt mySMTP i Mozilla Thunderbird. Konfigurer indstillinger for udgående SMTP-server, godkendelse, og indtast dit mySMTP-brugernavn og -adgangskode."
+---
+
+Du har brug for dit SMTP-brugernavn og -adgangskode til at konfigurere Thunderbird. Disse er separatehar brug for dit SMTP-brugernavn og -adgangskode til at konfigurere Thunderbird. Disse er separate fra dine mailbox-legitimationsoplysninger.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** |
+| Forbindelsessikkerhed | **STARTTLS** |
+| GodkendelseGodkendelsesmetode | Normal adgangskode |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+
+## Konfigureer Thunderbird
+
+<Steps>
+  <Step title="Åbn kontoinstillinger">
+    Åbn Thunderbird og gå til **Kontoindstillinger** (menu ☰ > **Kontoindstillinger**).
+  </Step>
+  <Step title="Tilføj den udgående server">
+    Nederst i listen til venstre skal du klikke på **Udgående server (SMTP)**, og derefter klikkei listen til venstre skal du klikke på **Udgående server (SMTP)**, og derefter klikke på **Tilføj...**
+  </Step>
+  <Step title="Indtast SMTP-indstillingerne">
+    Udfyld værdierne fra tabellen ovenfor og klik på **OK**.
+  </Step>
+  <Step title="Tildel serveren til din konto">
+    Markér den konto, du vil bruge sammen med mySMTP, i listen til venstre. Under **Udgående server (SMTP)** skal du vælgeMarkér den konto, du vil bruge sammen med mySMTP, i listen til venstre. Under **Udgående server (SMTP)** skal du vælge den mySMTP-server, du lige har tilføjet.
+  </Step>
+  <Step title="Send en testmail">
+    Når du er færdig, vil Thunderbird bede dig om SMTP-adgangskoden næste gang du sender en Thunderbird bede dig om SMTP-adgangskoden næste gang du sender en mail. Dette bør ske én gang for at aktivere SMTP-kontoen.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+- **Login fejler:** Kontroller, at godkendelsesmetoden er **Normal adgangskode**,Kontroller, at godkendelsesmetoden er **Normal adgangskode**, og at brugernavnet er dit mySMTP SMTP-brugernavn.
+- **Forbindelsen udløber:** Dit netværk kan blokereDit netværk kan blokere port 587. Prøv port **2525**.
+- **Relay nægtet:** Sørg for, at afsenderadressen bruger et domæne, der er godkendt for din mySMTP-konto. Se [DNS-indstillinger,Sørg for, at afsenderadressen bruger et domæne, der er godkendt for din mySMTP-konto. Se DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).
+
+## Relaterede artikler
+
+- [Oversigt over emailmailklienter](/da/email-configuration/email-clients)
+- [SMTP-grænser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [DNS-indstillinger,, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)

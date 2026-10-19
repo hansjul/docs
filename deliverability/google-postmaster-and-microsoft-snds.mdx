@@ -1,0 +1,90 @@
+---
+title: "Set Up Google Postmaster Tools and Microsoft SNDS Monitoring"
+sidebarTitle: "Postmaster & SNDS"
+description: "Monitor your sender reputation with Google Postmaster Tools and Microsoft SNDS. Learn how to verify access, read the dashboards, and keep your IP healthy."
+---
+
+Google Postmaster Tools and Microsoft Smart Network Data Services (SNDS) are free dashboards that show how major mailbox providers view your mail. Setting up both lets you spot reputation problems before they become delivery failures.
+
+<Card title="Open the mySMTP Deliverability Toolbox" icon="toolbox" horizontal href="https://toolbox.smtp.ai/">
+  19 free browser-based tools for authentication, reputation, and warmup. No account required.
+</Card>
+
+## Google Postmaster Tools
+
+Google Postmaster Tools shows reputation, authentication, and complaint data for domains sending to Gmail.
+
+### Add your domain
+
+<Steps>
+  <Step title="Sign in">
+    Go to [Google Postmaster Tools](https://postmaster.google.com) and sign in with a Google account.
+  </Step>
+  <Step title="Add a domain">
+    Click the **\+** button and enter the domain you send mail from.
+  </Step>
+  <Step title="Verify ownership">
+    Google gives you a DNS TXT record. Add the TXT record at your DNS provider, then return to Postmaster Tools and click **Verify**.
+  </Step>
+</Steps>
+
+### Dashboards and data
+
+| Dashboard | What it shows |
+| --- | --- |
+| Spam rate | The percentage of Gmail users who reported your mail as spam. Keep this below 0.1%. |
+| Domain reputation | A high/medium/low rating based on spam rate, volume, and user engagement. |
+| IP reputation | Reputation for individual sending IPs tied to your domain. |
+| Authentication | Pass/fail rates for SPF, DKIM, and DMARC on your mail. |
+| Encryption | Percentage of mail sent with TLS. |
+| Compliance status | Whether your mail meets sender guidelines. |
+
+<Note>
+  Data may take several days to appear after verification, and dashboards only populate when Gmail receives enough volume from your domain.
+</Note>
+
+## Microsoft SNDS
+
+Microsoft SNDS provides data for mail sent to Outlook.com, Hotmail, and Exchange Online Protection.
+
+### Sign up and request IP access
+
+<Steps>
+  <Step title="Create an account">
+    Go to [Microsoft SNDS](https://sendersupport.olc.protection.outlook.com/snds) and sign up or sign in with a Microsoft account.
+  </Step>
+  <Step title="Request IP data">
+    Navigate to the IP data request section and enter your dedicated IP address.
+  </Step>
+  <Step title="Complete verification">
+    Microsoft sends a verification email to the contact address associated with your IP. This may be the WHOIS or abuse contact, or the address from your rDNS PTR record.
+  </Step>
+</Steps>
+
+<Warning>
+  SNDS only works for dedicated IPs. It does not provide data for shared IPs.
+</Warning>
+
+### When mySMTP must approve
+
+If the verification email goes to a mySMTP-managed contact address, mySMTP may need to approve the request. If you do not receive the verification email or your request is pending, contact [support@mysmtp.com](mailto:support@mysmtp.com).
+
+### Interpreting SNDS data
+
+| Metric | What to watch |
+| --- | --- |
+| Green/Yellow/Red status | Green is healthy. Yellow means caution. Red means your IP is blocked or filtered. |
+| Spam complaint rate | Keep below 0.1%. |
+| Trap hits | Messages sent to spam trap addresses. Even a few hits can damage reputation. |
+| Message volume | Sudden spikes without warmup can trigger throttling. |
+| Filter results | Whether messages were delivered, filtered to junk, or rejected. |
+
+<Tip>
+  Use the warmup generator at [toolbox.smtp.ai](https://toolbox.smtp.ai/#warmup-generator) to build a safe volume ramp when launching a new dedicated IP.
+</Tip>
+
+## Related articles
+
+- [IP reputation: dedicated vs shared IPs](/deliverability/ip-reputation-dedicated-vs-shared-ips)
+- [Feedback loops and complaint rates](/deliverability/feedback-loops)
+- [Handling bounces and complaints](/deliverability/handling-bounces-and-complaints)

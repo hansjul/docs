@@ -1,0 +1,63 @@
+---
+title: "Supported SMTP Ports and Encryption"
+sidebarTitle: "Ports & Encryption"
+description: "Choose the right SMTP port and encryption for mySMTP. Understand STARTTLS and implicit TLS so you can send securely from any email client or application."
+---
+
+mySMTP supports multiple ports and encryption methods so you can connect from almost any network. For the best balance of compatibility and security, use port **587 with STARTTLS**.
+
+## Supported ports
+
+| Port | Encryption | When to use |
+| --- | --- | --- |
+| 587 | STARTTLS (recommended) | Default for email clients, applications, and SMTP relay |
+| 465 | Implicit TLS | Alternative when 587 is blocked or your application requires TLS from the start |
+| 25 | None / STARTTLS | Server-to-server relay only; most ISPs and cloud providers block outbound port 25 |
+| 2525 | STARTTLS | Fallback when 587 is blocked by a firewall or ISP |
+
+<Note>
+  mySMTP recommends port **587 with STARTTLS** for all outbound mail from email clients and applications.
+</Note>
+
+## Encryption methods
+
+mySMTP only accepts **TLS 1.2** and **TLS 1.3**. SSL (SSLv2, SSLv3) and the older TLS 1.0 and TLS 1.1 protocols are not supported. If your application or device cannot negotiate TLS 1.2 or later, update its software or firmware.
+
+<Note>
+  Some applications and devices still label their encryption setting "SSL", "SSL/TLS", or "Use SSL". These labels are historical. Enabling them uses TLS 1.2 or 1.3 when the software supports it.
+</Note>
+
+### STARTTLS (port 587)
+
+STARTTLS begins as a plain-text connection, then upgrades to TLS encryption after the SMTP greeting. This is the modern standard for authenticated email submission (RFC 6409, updated by RFC 8314). It offers the widest compatibility because it works on the same port as unauthenticated submission, and most mail clients support it by default.
+
+### Implicit TLS (port 465)
+
+Implicit TLS (SMTPS) wraps the entire SMTP session in TLS from the first byte. It is useful for older applications or networks that block port 587, but it is less common than STARTTLS for client submission.
+
+### Port 25
+
+Port 25 is intended for MTA-to-MTA relay, not for sending from an email client or application. ISPs commonly block outbound port 25 to reduce spam. If your application requires port 25, verify that your hosting provider allows outbound traffic on that port.
+
+## How to choose
+
+- **Email clients and web apps:** use port **587 with STARTTLS**.
+- **If 587 is blocked:** try port **2525 with STARTTLS**.
+- **If your application requires TLS from the start (implicit TLS):** use port **465**.
+- **Server-to-server relay only:** use port **25**, if allowed by your network.
+
+## How to verify your connection
+
+1. Send a test email from your client or application to an address you control.
+2. Check the received message headers for TLS version information.
+3. Use [test.smtp.ai](https://test.smtp.ai) to confirm port connectivity, encryption negotiation, and authentication.
+
+## Troubleshooting
+
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| Connection refused or timed out | Port blocked by ISP or firewall | Switch to 587, 465, or 2525 |
+| TLS handshake failure | Wrong encryption method selected, or the client only supports SSL or TLS 1.0/1.1 | Match the encryption to the port (STARTTLS for 587/2525, implicit TLS for 465) and make sure the client supports TLS 1.2 or 1.3 |
+| Mail rejected after connection | No authentication sent | Enable SMTP authentication and provide your mySMTP username and password |
+
+To check if a port is reachable from your network, see [Check if an SMTP port is open](/troubleshooting/check-smtp-port-with-telnet). For more details on credentials, see [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials). For error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

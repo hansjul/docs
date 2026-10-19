@@ -1,0 +1,114 @@
+---
+title: "Brother, Kyocera, and Sharp Printer SMTP Setup"
+sidebarTitle: "Brother / Kyocera / Sharp"
+description: "Configure mySMTP on Brother, Kyocera, and Sharp printers. Use each brand's web panel to set the SMTP server, port, and authentication."
+---
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Connection encryption | **STARTTLS** |
+| Authentication | Enabled |
+| User Name | Your mySMTP SMTP username |
+| Password | Your mySMTP password |
+
+<Note>
+  Use the exact relay hostname from your mySMTP setup email. `relayxx.mysmtp.com` is only an example.
+</Note>
+
+<Note>
+  Shared IP plans are only available to customers in Denmark. All other customers use a dedicated hostname.
+</Note>
+
+## Setup by brand
+
+<Tabs>
+  <Tab title="Brother">
+    <Steps>
+      <Step title="Open Web Based Management">
+        Open a web browser, enter the printer's IP address, and log in as an administrator.
+      </Step>
+      <Step title="Navigate to SMTP settings">
+        Go to **Network** > **Protocol** > **SMTP Advanced Settings**.
+      </Step>
+      <Step title="Enter the SMTP server">
+        In **SMTP Server**, enter your mySMTP relay hostname (e.g. `relayxx.mysmtp.com`).
+      </Step>
+      <Step title="Set the port and encryption">
+        Set **SMTP Port** to **587** and set **SSL/TLS** or **Security** to **STARTTLS**.
+      </Step>
+      <Step title="Enable authentication">
+        Turn on **SMTP Authentication** and enter your mySMTP **User Name** and **Password**.
+      </Step>
+      <Step title="Set the sender address">
+        Enter the **Sender E-mail Address** (for example, `printer@yourdomain.com`). This domain must be on your mySMTP account.
+      </Step>
+      <Step title="Save and test">
+        Click **Submit** or **Apply**. Send a test scan-to-email to confirm delivery.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Kyocera">
+    <Steps>
+      <Step title="Open Command Center RX">
+        Open a web browser, enter the device's IP address, and log in with admin credentials.
+      </Step>
+      <Step title="Navigate to E-mail settings">
+        Go to **Function Settings** (or **Network Settings**) > **E-mail** > **SMTP**.
+      </Step>
+      <Step title="Enter the SMTP server">
+        In **SMTP Server**, enter your mySMTP relay hostname (e.g. `relayxx.mysmtp.com`).
+      </Step>
+      <Step title="Set the port and encryption">
+        Set **SMTP Port** to **587** and set **SSL/TLS** or **Encryption** to **STARTTLS**.
+      </Step>
+      <Step title="Enable authentication">
+        Turn on **SMTP Authentication** and enter your mySMTP **User Name** and **Password**.
+      </Step>
+      <Step title="Set the sender address">
+        Enter the **Sender E-mail Address** (for example, `mfp@yourdomain.com`). This domain must be authenticated on your mySMTP account.
+      </Step>
+      <Step title="Save and test">
+        Click **Submit** or **Apply**. Send a test scan-to-email to verify.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Sharp">
+    <Steps>
+      <Step title="Open the Sharp web panel">
+        Open a web browser, enter the device's IP address, and log in as an administrator.
+      </Step>
+      <Step title="Navigate to SMTP settings">
+        Go to **System Settings** > **Network Settings** > **Services Settings** > **SMTP**.
+      </Step>
+      <Step title="Enter the SMTP server">
+        In **SMTP Server**, enter your mySMTP relay hostname (e.g. `relayxx.mysmtp.com`).
+      </Step>
+      <Step title="Set the port and encryption">
+        Set **SMTP Port** to **587** and set **SSL/TLS** or **Encryption** to **STARTTLS**.
+      </Step>
+      <Step title="Enable authentication">
+        Turn on **SMTP Authentication** and enter your mySMTP **User Name** and **Password**.
+      </Step>
+      <Step title="Set the device email">
+        Enter the **Device E-mail Address** (for example, `scanner@yourdomain.com`). This domain must be on your mySMTP account.
+      </Step>
+      <Step title="Save and test">
+        Click **Submit** or **Apply**. Send a test scan-to-email to confirm delivery.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+- **Cannot connect:** check that your firewall allows outbound traffic on port 587. If blocked, try port **2525** or **25**.
+- **Authentication failed:** re-enter your mySMTP username and password. They are case-sensitive.
+- **Relay denied:** the sender address must use a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+- **No STARTTLS option:** on older models, choose **TLS** or enable the highest available encryption setting and confirm the port is 587.
+
+For general scan-to-email guidance, see [Scan to email](/email-configuration/email-clients/scan-to-email). For error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

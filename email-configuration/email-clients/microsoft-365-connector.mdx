@@ -1,0 +1,101 @@
+---
+title: "Microsoft 365 Outbound Connector for mySMTP"
+sidebarTitle: "Microsoft 365"
+description: "Route outbound mail from Microsoft 365 through mySMTP using an Exchange Online outbound connector. Set up a smart host with TLS and IP-based authorization."
+---
+
+Microsoft 365 does not support username and password authentication to an external smart host. Contact mySMTP support to arrange IP-based authorization before creating the connector.
+
+## Before you start
+
+Have these details ready:
+
+| Setting | Value |
+| --- | --- |
+| Smart host | Your relay hostname, e.g. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Encryption | **TLS (STARTTLS)** |
+| Authentication | IP-based (contact mySMTP support) |
+
+<Note>
+  Use the exact relay hostname from your setup email. `relayxx.mysmtp.com` is only an example.
+</Note>
+
+## Create the outbound connector
+
+<Steps>
+  <Step title="Open the Exchange admin center">
+    Go to the [Exchange admin center](https://admin.exchange.microsoft.com) and sign in with a Global Administrator or Exchange Administrator account.
+  </Step>
+  <Step title="Start a new connector">
+    1. Go to **Mail flow** > **Connectors**.
+    2. Click **Add a connector**.
+    3. Select **Connection from:** **Office 365**.
+    4. Select **Connection to:** **Partner organization**.
+    5. Click **Next**.
+  </Step>
+  <Step title="Name the connector">
+    Enter a name such as `mySMTP outbound` and an optional description. Click **Next**.
+  </Step>
+  <Step title="Choose when to use the connector">
+    Select **Only when email messages are sent to these domains**. Click the **\+** icon, enter `*` as the domain, and click **OK**. Click **Next**.
+  </Step>
+  <Step title="Set the smart host">
+    1. Select **Route email through these smart hosts**.
+    2. Click the **\+** icon and enter your relay hostname (e.g. `relayxx.mysmtp.com`).
+    3. Click **Save**, then **Next**.
+  </Step>
+  <Step title="Require TLS">
+    1. Select **Always use Transport Layer Security (TLS) to secure the connection**.
+    2. Choose **Issued by a trusted certificate authority (for example, DigiCert or GlobalSign)**.
+    3. Click **Next**.
+  </Step>
+  <Step title="Review and create">
+    Review the settings and click **Create connector**.
+  </Step>
+</Steps>
+
+<Warning>
+  Microsoft 365 outbound connectors do not support username and password authentication to an external smart host. Authentication is handled by the sending IP address or a certificate. Contact [mySMTP support](/support/contact-support) to authorize Microsoft 365's outbound IP ranges for your account.
+</Warning>
+
+## Create the connector with PowerShell
+
+If you prefer PowerShell, connect to [Exchange Online PowerShell](https://learn.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell) and run:
+
+```powershell
+New-OutboundConnector -Name "mySMTP outbound" `
+  -ConnectorType Partner `
+  -RecipientDomains "*" `
+  -SmartHosts "relayxx.mysmtp.com" `
+  -TlsSettings CertificateValidation `
+  -UseMxRecord $false
+```
+
+Replace `relayxx.mysmtp.com` with your actual relay hostname.
+
+## SPF record
+
+Add both Microsoft 365 and mySMTP to your domain's SPF record. A typical record looks like:
+
+```text
+v=spf1 include:spf.protection.outlook.com include:spf1.mysmtp.com ~all
+```
+
+<Warning>
+  If you already have an SPF record, add the includes without removing existing entries. Too many DNS lookups can cause SPF failures. Use the [Deliverability Toolbox](https://toolbox.smtp.ai/) to check your SPF record.
+</Warning>
+
+## Test the connection
+
+1. Send a test email from a Microsoft 365 mailbox to an external address, such as a Gmail account or your own.
+2. Confirm the message arrives. In the received message headers you should see it passed through your mySMTP relay.
+3. If the message does not arrive, check the **Message trace** in the Exchange admin center under **Mail flow** > **Message trace**.
+
+## Troubleshooting
+
+- **Connector not used:** Make sure no other outbound connector with a higher priority or matching rule is intercepting the mail. Microsoft 365 evaluates connectors in order.
+- **TLS handshake fails:** Confirm the connector requires TLS and that your network allows outbound connections on port **587**.
+- **Relay access denied:** Verify that mySMTP support has authorized Microsoft 365's outbound IP ranges for your account.
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

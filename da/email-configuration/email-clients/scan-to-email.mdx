@@ -1,0 +1,123 @@
+---
+title: "Opsæt Scan to Email og multifunktionsprintere (MFP)"
+sidebarTitle: "Scan to Email"
+description: "Konfigurer Scan to Email på en vilkårlig multifunktionsprinter med mySMTP. Brug port 587 STARTTLS, eller fald tilbage til port 2525, hvis din printer ikke understøtter moderne TLS."
+---
+
+De fleste printere bruger en Embedded Web Server til opsætning, men ældre firmware understøtter muligvis ikke STARTTLS.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server (dedikeret) | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, DK kun) | `mail.mysmtp.com` |
+| Port | **587** (primær, med STARTTLS) |
+| Alternativ port | **2525** eller **25** (hvis STARTTLS ikke understøttes) |
+| Kryptering | STARTTLS |
+| Autentificering | SMTP-brugernavn og -kodeord fra mySMTP |
+| Fra-adresse | En adresse på dit autentificerede domæne |
+
+<Note>
+  Port 587 med STARTTLS er den anbefalede indstilling. Brug kun port 2525, hvis din printer ikke understøtter STARTTLS. Port 25 er tilgængelig, men bør kun bruges som en sidste udvej.
+</Note>
+
+## Generel opsætning via Embedded Web Server (EWS)
+
+De fleste printere har et webbaseret konfigurationspanel, der kaldes Embedded Web Server. Du tilgår det ved at indtaste printerens IP-adresse i en webbrowser på samme netværk.
+
+<Steps>
+  <Step title="Find printerens IP-adresse">
+    Udskriv en netværkskonfigurationsside fra printerens frontpanel, eller tjek din routers DHCP-klientliste for printerens hostnavn.
+  </Step>
+  <Step title="Åbn EWS">
+    I en browser på samme netværk skal du indtaste printerens IP-adresse (for eksempel `http://192.168.1.50`). Log ind med printerens admin-credentials, hvis du bliver spurgt.
+  </Step>
+  <Step title="Find email- eller SMTP-indstillingerne">
+    Led efter en sektion med navnet **Email**, **Scan to Email**, **SMTP** eller **Network Settings**. Den præcise menu-sti varierer efter mærke og firmware.
+  </Step>
+  <Step title="Indtast server og port">
+    Indtast dit dedikerede relay-hostnavn (for eksempel `relayxx.mysmtp.com`) og port **587**. Aktivér STARTTLS eller TLS, hvis afkrydsningsfeltet er tilgængeligt.
+  </Step>
+  <Step title="Indtast autentificering">
+    Vælg **SMTP authentication** (nogle gange kaldet **Authenticated SMTP**). Indtast dit mySMTP-brugernavn og -kodeord.
+  </Step>
+  <Step title="Sæt afsenderadressen">
+    I feltet **From** eller **Sender Email** skal du indtaste en adresse, der bruger et domæne autentificeret på din mySMTP-konto.
+  </Step>
+  <Step title="Anvend og test">
+    Gem indstillingerne og send en testscan til din egen email-adresse. Tjek din indbakke og spam-mappe.
+  </Step>
+</Steps>
+
+## Firmware og TLS-kompatibilitet
+
+Ældre printere og kopimaskiner leveres ofte med firmware, der mangler understøttelse af TLS 1.2, hvilket betyder at de ikke kan gennemføre et STARTTLS-handshake på port 587.
+
+### Hvad du skal prøve først
+
+1. Brug port **587** med STARTTLS, hvis printeren tilbyder det.
+2. Hvis forbindelsen fejler, eller printeren rapporterer en TLS-fejl, skal du skifte til port **2525** uden kryptering eller med krypteringsindstillingen slået fra.
+3. Hvis port 2525 også er blokeret eller afvist, skal du tjekke om printeren tilbyder en **TLS**-tilstand (nogle gange kaldet **TLS/SSL**) i stedet for STARTTLS, og prøve den på port 587. Printeren skal understøtte TLS 1.2 eller 1.3.
+
+### Når printeren kun understøtter port 25
+
+Nogle meget gamle enheder sender kun ukrypteret SMTP på port 25. Du kan prøve port 25 som en sidste udvej, men mange netværk og internetudbydere blokerer den.
+
+<Tip>
+  Tjek producentens supportsite for en firmware-opdatering. En nyere firmware-version tilføjer ofte TLS 1.2 og STARTTLS-understøttelse, så du kan bruge den sikre port 587-indstilling.
+</Tip>
+
+## IP-whitelisting for printere
+
+Hvis din printer ikke kan autentificere over TLS, eller hvis dit netværksmiljø gør STARTTLS upålidelig, kan du begrænse SMTP-adgangen til dit kontors IP og lade printeren sende uden fuld kryptering. Se siden [Whitelisting og sikkerhedsbedste praksis](/da/getting-started/whitelisting-and-security-best-practices) for detaljer.
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Vigtige afsendelseskrav
+
+### Fra-adressen skal matche dit autentificerede domæne
+
+Afsenderadressen konfigureret på printeren skal bruge et domæne, der er autentificeret på din mySMTP-konto. Hvis du bruger et ikke-autentificeret domæne eller en generisk adresse (for eksempel `scanner@localhost`), kan meddelelser blive afvist eller filtreret som spam.
+
+### Vedhæftningsstørrelse
+
+Scanninger kan være store. mySMTP tillader email-vedhæftninger på op til cirka **18 MB** efter Base64-kodnings-overhead. For flere detaljer, se [Email vedhæftningsstørrelse](/da/troubleshooting/email-attachments-size).
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Test-scan ankommer aldrig">
+    Tjek printerens netværksindstillinger og bekræft at den har internetadgang. Verificer SMTP-hostnavnet, porten og credentials. Prøv at sende til en anden modtageradresse.
+  </Accordion>
+
+  <Accordion title="Forbindelsesfejl på port 587">
+    Skift til port **2525** og deaktivér TLS/STARTTLS. Hvis printeren understøtter det, skal du anvende en firmware-opdatering og prøve port 587 igen.
+  </Accordion>
+
+  <Accordion title="Autentificering fejlede">
+    Indtast igen dit mySMTP brugernavn og kodeord præcis som vist i dashboardet. Sørg for at printeren ikke tilføjer ekstra mellemrum eller ændrer størrelsen på bogstaverne.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Bekræft at afsenderadressen bruger dit autentificerede domæne. Se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+
+  <Accordion title="Scanninger ankommer, men billeder mangler">
+    Meddelelsen kan have overskredet vedhæftningsstørrelsesgrænsen. Sænk scan-opløsningen eller del jobbet i mindre dokumenter. Se [Email vedhæftningsstørrelse](/da/troubleshooting/email-attachments-size).
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede opsætningsguides
+
+<CardGroup cols={2}>
+  <Card title="HP-printere" icon="printer" href="/da/email-configuration/email-clients/hp-printers">
+    Konfigurer Scan to Email på HP LaserJet, OfficeJet og PageWide printere.
+  </Card>
+
+  <Card title="Canon-printere" icon="printer" href="/da/email-configuration/email-clients/canon-printers">
+    Konfigurer Scan to Email på Canon imageRUNNER og PIXMA printere.
+  </Card>
+</CardGroup>

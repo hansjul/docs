@@ -1,0 +1,64 @@
+---
+title: "Code Examples for mySMTP Integration"
+sidebarTitle: "Code Examples"
+description: "Copy and paste ready-to-send examples for PHP, Python, Node.js, .NET, Java, and command line to connect your application to mySMTP."
+---
+
+You can integrate mySMTP into any application using standard SMTP libraries. Each example below uses secure authentication and TLS encryption.
+
+## Connection settings
+
+| Setting | Value |
+| --- | --- |
+| Hostname | `relayxx.mysmtp.com` (your real hostname is in your setup email) |
+| Shared IP hostname (DK only) | `mail.mysmtp.com` |
+| Port (recommended) | `587` with STARTTLS |
+| Alternative ports | `465` (implicit TLS), `2525` (STARTTLS fallback) |
+| Authentication | SMTP username and password |
+
+<Warning>
+  Never hardcode SMTP passwords in source code. Load credentials from environment variables, secrets managers, or encrypted configuration files.
+</Warning>
+
+## Choose your language or tool
+
+<CardGroup cols={3}>
+  <Card title="PHP" icon="code" href="/email-configuration/code-examples/php">
+    PHPMailer and Symfony Mailer examples with Composer.
+  </Card>
+
+  <Card title="Python" icon="code" href="/email-configuration/code-examples/python">
+    smtplib standard library examples with STARTTLS and implicit TLS.
+  </Card>
+
+  <Card title="Node.js" icon="code" href="/email-configuration/code-examples/nodejs">
+    Nodemailer with async sendMail and connection verification.
+  </Card>
+
+  <Card title=".NET" icon="code" href="/email-configuration/code-examples/dotnet">
+    MailKit with STARTTLS, secure socket options, and MIME support.
+  </Card>
+
+  <Card title="Java" icon="code" href="/email-configuration/code-examples/java">
+    Jakarta Mail (Angus Mail) with Session and Authenticator.
+  </Card>
+
+  <Card title="Command Line" icon="terminal" href="/email-configuration/code-examples/command-line-test">
+    Test with swaks, OpenSSL, and telnet for quick debugging.
+  </Card>
+</CardGroup>
+
+<Note>
+  Shared IP plans are only available to customers in Denmark. All other customers use a dedicated IP hostname from the setup email.
+</Note>
+
+<Tip>
+  Before sending from production, verify your domain authentication with the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/). It includes 19 free tools including SPF validation and sender readiness checks.
+</Tip>
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption)
+- [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

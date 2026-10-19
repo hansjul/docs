@@ -1,0 +1,87 @@
+---
+title: "Outlook 2025 SMTP-opsætningsguide"
+sidebarTitle: "Outlook 2025"
+description: "Opsæt mySMTP i Outlook 2025. Konfigurer den udgående SMTP-server, porte, TLS-kryptering og godkendelse med dine mySMTP-legitimationsoplysninger."
+---
+
+Opsæt Outlook til at sende mails via mySMTP ved at opdatere den udgående (SMTP) server på din eksisterende konto. Indstillingerne for indgående mails via mySMTP ved at opdatere den udgående (SMTP) server på din eksisterende konto. Indstillingerne for indgående mail forbliver uændrede.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Udgående mailserver | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Udgående mailserver (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** |
+| Kryptering | **STARTTLS** |
+| GodkendelseGodkendelse | Påkrævet |
+| Brugernavn / adgangskode | Dit mySMTP SMTP-brugernavn og -adgangskode |
+
+<Note>
+  Delt IP-abonnementabonnementer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Konfigureer Outlook
+
+<Tabs>
+  <Tab title="Outlook 2025 (beta)">
+    Desktop-klienten Outlook 2025 er endnu ikke annonceret som færdig, så dette er guiden til-klienten Outlook 2025 er endnu ikke annonceret som færdig, så dette er guiden til dem, der tester BETA-versionen.
+
+    <Steps>
+      <Step title="Åbn kontoinstillinger">
+        Åbn Outlook, klik på ikonet **Indstillinger**, og klik derefter på **Administrer** for den emailkonto, du vil bruge sammenmailkonto, du vil bruge sammen med mySMTP.
+      </Step>
+      <Step title="Lås kontoredigering op">
+        Indtast **Adgangskoden** til den indgående mail for at aktivere kontotil den indgående mail for at aktivere kontoredigering.
+      </Step>
+      <Step title="Indtast SMTP-indstillingerne">
+        I sektionen for udgående (SMTP) mail) mail, indtast server, port, kryptering, brugernavn og adgangskode fra tabellen ovenfor.
+      </Step>
+      <Step title="Gem">
+        Klik på **Fortsæt** og vent på bekræftelse.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Outlook 2016 til 2025">
+    <Note>
+      Din konto bruger allerede IMAP til indgående mail. Følg trinnene nedenfor for at konfigurere den udgående SMTP-server.
+    </Note>
+
+    <Steps>
+      <Step title="Åbn kontoinstillinger">
+        Gå til **Filer** > **Kontoindstillinger** > **Kontoindstillinger...**
+      </Step>
+      <Step title="Vælg din konto">
+        Markér din eksisterende emailMarkér din eksisterende emailkonto **(IMAP)** og klik på **Rediger...**
+      </Step>
+      <Step title="Angiv den udgående server">
+        IndstilIndstil **Udgående mailserver (SMTP)** til din mySMTP-server, og klik derefter på **Flere indstillinger...**
+      </Step>
+      <Step title="Slå godkendelse tilSlå godkendelse til">
+        På fanen **Udgående server** skal du markere **Min udgående server (SMTP) kræver godkendelse**, derefter vælge **Log på med** og indtastePå fanen **Udgående server** skal du markere **Min udgående server (SMTP) kræver godkendelse**, derefter vælge **Log på med** og indtaste dit mySMTP-brugernavn og -adgangskode.
+
+        Hvis dit mySMTP-login er det samme som dit login til indgående mail, kan du i stedet vælge **Brug samme indstillinger som min indgående mailserver**.
+      </Step>
+      <Step title="Angiv port og kryptering">
+        På fanen **Avanceret** skal du indstillePå fanen **Avanceret** skal du indstille **Udgående server (SMTP)** til **587** og **Brug følgende type krypteret forbindelse** til **STARTTLS**. Klik på **OK**.
+      </Step>
+      <Step title="Test og afslut">
+        Klik på **Næste** for at teste dine indstillinger. Når testen lykkes, klik på **Luk**, derefter **Afslut**.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Fejlfinding
+
+- **Testen fejler på den udgående server:** Kontroller,Kontroller, at brugernavnet og adgangskoden er dine mySMTP SMTP-legitimationsoplysninger, ikke dit mailbox-login.
+- **Forbindelsen udløber:** Dit netværk kan blokereDit netværk kan blokere port 587. Prøv port **2525**.
+- **Relay nægtet:** Sørg for, at afsenderadressen bruger et domæne, der er godkendt for din mySMTP-konto. Se [DNS-indstillinger,Sørg for, at afsenderadressen bruger et domæne, der er godkendt for din mySMTP-konto. Se DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).
+
+## Relaterede artikler
+
+- [Oversigt over emailmailklienter](/da/email-configuration/email-clients)
+- [SMTP-grænser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [DNS-indstillinger,, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)

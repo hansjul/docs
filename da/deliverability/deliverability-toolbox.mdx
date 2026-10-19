@@ -1,0 +1,86 @@
+---
+title: "mySMTP Deliverability Toolbox: Gratis Email Sender Værktøjer"
+sidebarTitle: "Deliverability Toolbox"
+description: "Brug den gratis mySMTP Deliverability Toolbox på toolbox.smtp.ai til at tjekke SPF, DKIM, DMARC, rDNS og MX, bygge BIMI-records, planlægge IP warmup og rense lister."
+---
+
+Ingen konto er påkrævet, og der er ingen rate limits. Hver tjek kører i din browser, så dine data sendes aldrig til mySMTP servere.
+
+<Card title="Åbn Deliverability Toolbox" icon="toolbox" horizontal href="https://toolbox.smtp.ai/">
+  19 gratis værktøjer til DNS, autentificering, deliverability og mere
+</Card>
+
+## Værktøjer efter kategori
+
+<Tabs>
+  <Tab title="DNS & Autentificering">
+    | Værktøj | Brug det til |
+    | --- | --- |
+    | **SPF Validator** | Udvid hver `include:`, tæl DNS-opslag (grænse 10), og fang syntaksfejl og svage `~all` / `?all` afslutninger |
+    | **DKIM Checker** | Verificer et domæne og selektor, nøgletype og nøglelængde (advarer under 1024 bits) |
+    | **DMARC Wizard** | Byg en DMARC-record trin for trin: politik, alignment, rapportadresser og procent |
+    | **One-Click SPF / DKIM / DMARC Checker** | Få et pass/advar/fejl-resume over alle tre, inklusiv alignment med dit From-domæne |
+  </Tab>
+  <Tab title="Deliverability">
+    | Værktøj | Brug det til |
+    | --- | --- |
+    | **Warmup Plan Generator** | Få en dag-for-dag warmup-plan for en ny IP eller et nyt domæne |
+    | **Sender Readiness Checklist** | Kør et pre-send tjek af autentificering, rDNS, unsubscribe og listehygiejne |
+    | **Blacklist Checker** | Tjek din sendende IP og domæne mod store blocklists, med fjernelseslinks |
+    | **MailWizz Quota Optimizer** | Beregn batch-størrelser, delivery servere og tidsplan for MailWizz-kampagner |
+  </Tab>
+  <Tab title="Branding & BIMI">
+    | Værktøj | Brug det til |
+    | --- | --- |
+    | **BIMI Generator** | Opret BIMI TXT-recorden for `default._bimi.yourdomain.com` og forhåndsvis dit logo |
+    | **BIMI SVG Converter** | Konverter et standard SVG-logo til det krævede SVG Tiny PS format |
+  </Tab>
+  <Tab title="Diagnostik">
+    | Værktøj | Brug det til |
+    | --- | --- |
+    | **MX Lookup** | Vis et domænes mailservere, prioriteter og IP-adresser |
+    | **PTR / rDNS Checker** | Bekræft at din sendende IP har et matchende reverse og forward DNS-record (FCrDNS) |
+    | **Bounce Code Decoder** | Konverter SMTP-svar som `550 5.1.1` til en klar årsag og løsning |
+    | **Email Header Analyzer** | Spor relay-hops og forsinkelser, og læs SPF, DKIM og DMARC-resultater |
+    | **What Is My IP** | Se din offentlige IPv4/IPv6-adresse, PTR og ASN |
+    | **CNAME Lookup** | Spor CNAME-kæder for tracking, bounce og DKIM-domæner |
+  </Tab>
+  <Tab title="Utilities">
+    | Værktøj | Brug det til |
+    | --- | --- |
+    | **Email List Analyzer** | Find syntaksfejl, dubletter, role- og disposable-adresser før du importerer en liste |
+    | **Email Template Verifier** | Tjek en HTML-skabelon for unsubscribe-links, ødelagte links og spam-triggere |
+    | **Password Generator** | Opret stærke SMTP-adgangskoder lokalt i din browser |
+  </Tab>
+</Tabs>
+
+## Hvilket værktøj skal du bruge hvornår
+
+| Situation | Start med |
+| --- | --- |
+| Opsætning af et nyt sendedomæne | [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/), derefter DMARC Wizard |
+| Start på en ny dedikeret IP | PTR / rDNS Checker, derefter Warmup Plan Generator |
+| Mails lander i spam | Sender Readiness Checklist og Email Header Analyzer |
+| En besked bouncede | Bounce Code Decoder |
+| Afsendelse blev pludselig blokeret | Blacklist Checker |
+| Før import af en ny liste | Email List Analyzer |
+
+## Relaterede guides
+
+<CardGroup cols={2}>
+  <Card title="SPF, DKIM, DMARC og BIMI" icon="key" href="/da/deliverability/spf-dkim-dmarc-and-bimi-explained">
+    Hvad hver record gør, og hvordan du publicerer den
+  </Card>
+
+  <Card title="Warm-up planer" icon="temperature-arrow-up" href="/da/deliverability/warm-up-plans">
+    Sådan skalerer du en ny IP sikkert
+  </Card>
+
+  <Card title="Blacklists" icon="ban" href="/da/deliverability/blacklist-monitoring-and-delisting">
+    Overvågning og fjernelse
+  </Card>
+
+  <Card title="Almindelige SMTP-fejl" icon="triangle-exclamation" href="/da/troubleshooting/common-smtp-errors">
+    Ret de mest hyppige afsendelsesfejl
+  </Card>
+</CardGroup>

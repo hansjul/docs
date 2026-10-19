@@ -1,0 +1,81 @@
+---
+title: "Migrer fra Postmark til mySMTP"
+sidebarTitle: "Postmark"
+description: "Skift fra Postmark SMTP til mySMTP. Opdater hostnavn, legitimationsoplysninger, port, SPF og DKIM. Eksporter din suppression-liste og opvarm din nye IP for et rent skift."
+---
+
+At flytte fra Postmark til mySMTP betyder at opdatere dit SMTP-hostnavn, godkendelsesmetode og domænes DNS-poster. Denne vejledningflytte fra Postmark til mySMTP betyder at opdatere dit SMTP-hostnavn, godkendelsesmetode og domænes DNS-poster. Denne vejledning viser præcis, hvad du skal ændre, så intet går i stykker under overgangen.
+
+## Hvad ændres
+
+| Indstilling | Postmark (gammel) | mySMTP (ny) |
+| --- | --- | --- |
+| SMTP-server | `smtp.postmarkapp.com` | `relayxx.mysmtp.com` (fra din opsætningse-mail) |
+| Delt IP (kun DK) | `smtp.postmarkapp.com` | `mail.mysmtp.com` |
+| Port | `587` (anbefalet) eller `465` | `587` (STARTTLS, anbefalet) eller `465` |
+| Brugernavn | Dit Postmark server-t Postmark server-token | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit Postmark server-t Postmark server-token | Dit mySMTP SMTP-adgangskode |
+| SPF-postpost | `v=spf1 include:spf.mtasv.net ~all` | `v=spf1 include:spf1.mysmtp.com ~all` |
+| SPF under overgang |  | `v=spf1 include:spf.mtasv.net include:spf1.mysmtp.com ~all` |
+
+<Note>
+  Dit rigtige mySMTP-hostnavn står i din opsætningse-mail. Brug ikke `smtp.mysmtp.com`.
+</Note>
+
+<Warning>
+  Postmark bruger beskedstrømme (identificeret af en header som `X-PM-Message-Stream`). mySMTP bruger ikke beskedstrømmebeskedstrømme (identificeret af en header som `X-PM-Message-Stream`). mySMTP bruger ikke beskedstrømme. Fjern eller erstat eventuelle Postmark-specifikke headers i din kode, når du skifter til mySMTP.
+</Warning>
+
+## Før du skifter
+
+1. **Eksporter din suppression-liste** fra Postmark (bounces, spam-klager, afmeldinger). Send ikke til disse adresser fra mySMTP. mySMTP importerer ikke suppression--liste fra Postmark (bounces, spam-klager, afmeldinger). Send ikke til disse adresser fra mySMTP. mySMTP importerer ikke suppression-lister automatisk.
+2. **Verificer DNS** for mySMTP. Tilføj `include:spf1.mysmtp.com` til din eksisterende SPF-post (for eksempel `v=spf1 include:spf.mtasv.net include:spf1.mysmtp.com ~all`) og tilføj mySMTP DKIM TXT/CNAME-poster. Behold Postmarks posterpost (for eksempel `v=spf1 include:spf.mtasv.net include:spf1.mysmtp.com ~all`) og tilføj mySMTP DKIM TXT/CNAME-poster. Behold Postmarks poster indtil overgangen er stabil.
+3. **Test forbindelsen** med [test.smtp.ai](https://test.smtp.ai) ved hjælp af dine mySMTP-legitimationsoplysninger.
+
+## Skridt til skiftet
+
+<Steps>
+  <Step title="Opdater applikationens SMTP-indstillinger">
+    Erstat Postmarks `smtp.postmarkapp.com` med dit mySMTP-hostnavn, indtast dit mySMTP-brugernavn og -adgangskode, og brug port `587` med STARTTLS.
+  </Step>
+  <Step title="Fjern Postmark-specifikke headers">
+    Hvis din applikation sætter `X-PM-Message-Stream` eller andre Postmark-headers, skal du fjerne eller erstatte dem. mySMTP kræver ikke beskedstrøskal du fjerne eller erstatte dem. mySMTP kræver ikke beskedstrøm-headers.
+  </Step>
+  <Step title="Send testbeskeder">
+    Send et par test-e-mails til adresser, du kontrollerer. Verificer headers, at godkendelse går igennem, og at beskederet par test-e-mails til adresser, du kontrollerer. Verificer headers, at godkendelse går igennem, og at beskeder lander i indbakken.
+  </Step>
+  <Step title="Overvåg leveringsmålinger">
+    Hold øje med bounces, klager og indbakkens ns placering i 24 til 72 timer. Brug [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+  </Step>
+  <Step title="Opvarm din dedikerede IP">
+    Hvis du er på en dedikeret IP-plan (standard), skal du øge volumen gradvist. Se [Opvarmningsplaner](/da/deliverability/warm-up-plans) og brug [warm-up skal du øge volumen gradvist. Se ](https://toolbox.smtp.ai/#warmup-generator)[Opvarmningsplaner](/da/deliverability/warm-up-plans) og brug [warm-up generatoren](https://toolbox.smtp.ai/#warmup-generator).
+  </Step>
+  <Step title="Fjern Postmark DNS-poster DNS-poster">
+    Når afsendelsen er stabil og dine reputation-målinger ser gode ud, skal du fjerne `include:spf.mtasv.net`, så din SPF-post lyder `v=spf1 include:spf1.mysmtp.com ~all`, og slette Postmarks DKIM CNAME/TXT-poster-målinger ser gode ud, skal du fjerne `include:spf.mtasv.net`, så din SPF-post lyder `v=spf1 include:spf1.mysmtp.com ~all`, og slette Postmarks DKIM CNAME/TXT-poster.
+  </Step>
+</Steps>
+
+<AccordionGroup>
+  <Accordion title="Jeg brugte Postmarks HTTP API, ikke SMTP. Hvad gør jeg?">
+    mySMTP's HTTP API kommer i 4. kvartal 2026. Indtil videre skal du skifte4. kvartal 2026. Indtil videre skal du skifte til SMTP ved at opdatere din integration til at bruge indstillingerne i tabellen ovenfor. Se [Kodeeksempler](/da/email-configuration/code-examples) for biblioteker i PHP, Python, Node.js, .NET og Java.
+  </Accordion>
+
+  <Accordion title="Kan jeg beholde Postmark som backup under overgangen?">
+    Ja. Behold Postmarks DNS-posterposter og legitimationsoplysninger aktive, mens du opvarmer mySMTP. Fjern dem først, når du har bekræftet stabil levering.
+  </Accordion>
+
+  <Accordion title="Skal jeg ændre min fra-fra-adresse?">
+    Nej. Du kan beholde de samme fra-fra-adresser og domæner. Sørg bare for, at domænets SPF og DKIM inkluderer mySMTP.
+  </Accordion>
+
+  <Accordion title="Hvad hvis jeg ser en stigning i bounces efter skiftet?">
+    Hvis du ikke eksporterede og ekskluderede din Postmark-suppression-liste, kan du maile til kendte dårlige adresser. Pause afsendelsen, rens din liste, og genoptag med en-liste, kan du maile til kendte dårlige adresser. Pause afsendelsen, rens din liste, og genoptag med en mindre volumen.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [Migrer til mySMTP oversigtMigrer til mySMTP oversigt](/da/email-configuration/migration)
+- [Opvarmningsplaner](/da/deliverability/warm-up-plans)
+- [Kodeeksempler](/da/email-configuration/code-examples)
+- [DNS-opsætning til godkendelse](/da/deliverability/dns-setup-for-authentication)

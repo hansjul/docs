@@ -1,0 +1,80 @@
+---
+title: "Konfigurer HP-printere til Scan to Email med mySMTP"
+sidebarTitle: "HP-printere"
+description: "Opsæt Scan to Email på HP LaserJet, OfficeJet og PageWide printere via Embedded Web Server. Indtast mySMTP relay, port 587 og SMTP-credentials."
+---
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server (dedikeret) | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, DK kun) | `mail.mysmtp.com` |
+| Port | **587** |
+| Kryptering | STARTTLS |
+| Autentificering | SMTP-brugernavn og -kodeord fra mySMTP |
+| Fra-adresse | En adresse på dit autentificerede domæne |
+
+<Note>
+  Brug dit præcise dedikerede relay-hostnavn. Delte IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Opsæt Scan to Email på HP LaserJet / OfficeJet / PageWide
+
+<Steps>
+  <Step title="Åbn printerens Embedded Web Server">
+    Udskriv en netværkskonfigurationsside fra printerens kontrolpanel for at finde dens IP-adresse. Indtast IP-adressen i en browser på samme netværk (for eksempel `http://192.168.1.50`). Log ind med printerens admin-kodeord, hvis du bliver bedt om det.
+  </Step>
+  <Step title="Naviger til Scan to Email indstillinger">
+    Gå til **Scan** > **Scan to Email** > **Outgoing Email Profiles** (eller **Email Setup** på nogle modeller). Den præcise sti varierer efter firmware.
+  </Step>
+  <Step title="Tilføj eller rediger en udgående email-profil">
+    Klik på **Add** eller vælg standardprofilen. Indtast et profilnavn (for eksempel `mySMTP`).
+  </Step>
+  <Step title="Indtast SMTP-serverdetaljer">
+    Indtast dit mySMTP relay-hostnavn i feltet **SMTP Server**. Sæt porten til **587**.
+  </Step>
+  <Step title="Aktivér kryptering">
+    Hvis printeren tilbyder et afkrydsningsfelt **Use TLS/SSL** eller **Require TLS**, skal du aktivere det. På nogle modeller hedder det **Enable SMTP over TLS**.
+  </Step>
+  <Step title="Indtast autentificering">
+    Aktivér **SMTP Authentication** (eller **Use authentication**). Indtast dit mySMTP-brugernavn og -kodeord.
+  </Step>
+  <Step title="Sæt afsenderadressen">
+    I feltet **From** eller **Default From Address** skal du indtaste en email-adresse på et domæne, der er autentificeret for din mySMTP-konto.
+  </Step>
+  <Step title="Gem og test">
+    Gem profilen og send en testscan til din egen email-adresse. Tjek din indbakke og spam-mappe.
+  </Step>
+</Steps>
+
+## Bemærkning om HP Smart app
+
+HP Smart mobil- og desktop-appen lader dig scanne og sende fra din computer eller telefon, men den bruger HP's cloud relay som standard. Hvis du vil at printeren selv skal sende direkte via mySMTP, skal du konfigurere profilen i EWS som beskrevet ovenfor. Du kan stadig bruge HP Smart til at scanne til en fil og derefter sende filen fra din email-klient.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="TLS-forbindelse fejler på port 587">
+    Nogle ældre HP-firmware understøtter ikke STARTTLS. Skift til port **2525** og deaktivér TLS. Tjek HP's supportsite for en firmware-opdatering.
+  </Accordion>
+
+  <Accordion title="Autentificering fejlede">
+    Indtast igen dit mySMTP brugernavn og kodeord. Sørg for at printeren ikke tilføjer mellemrum efter kodeordet.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Bekræft at **From**-adressen bruger et domæne autentificeret på din mySMTP-konto.
+  </Accordion>
+
+  <Accordion title="Scanninger afvises på grund af størrelse">
+    Store scanninger kan overskride vedhæftningsgrænsen. Reducer opløsningen eller brug farve-/gråtonerindstillinger, der producerer mindre filer. Se [Email vedhæftningsstørrelse](/da/troubleshooting/email-attachments-size).
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [Scan to Email generisk guide](/da/email-configuration/email-clients/scan-to-email)
+- [Canon-printere](/da/email-configuration/email-clients/canon-printers)
+- [Email vedhæftningsstørrelse](/da/troubleshooting/email-attachments-size)
+- [Whitelisting og sikkerhedsbedste praksis](/da/getting-started/whitelisting-and-security-best-practices)

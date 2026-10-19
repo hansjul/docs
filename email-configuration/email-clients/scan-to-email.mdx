@@ -1,0 +1,125 @@
+---
+title: "Set Up Scan to Email and Multifunction Printers (MFP)"
+sidebarTitle: "Scan to Email"
+description: "Configure scan to email on any multifunction printer with mySMTP. Use port 587 STARTTLS, or fall back to port 2525 if your printer does not support modern TLS."
+---
+
+Most printers use an Embedded Web Server for setup, but older firmware may not support STARTTLS.
+
+## SMTP settings
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated) | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** (primary, with STARTTLS) |
+| Alternative port | **2525** or **25** (if STARTTLS is not supported) |
+| Encryption | STARTTLS |
+| Authentication | SMTP username and password from mySMTP |
+| From address | An address on your authenticated domain |
+
+<Note>
+  Port 587 with STARTTLS is the recommended setting. Use port 2525 only if your printer does not support STARTTLS. Port 25 is available but should be a last resort.
+</Note>
+
+## General setup via the Embedded Web Server (EWS)
+
+Most printers expose a web-based configuration panel called the Embedded Web Server. You reach it by entering the printer's IP address in a web browser on the same network.
+
+<Steps>
+  <Step title="Find the printer IP address">
+    Print a network configuration page from the printer's front panel, or check your router's DHCP client list for the printer hostname.
+  </Step>
+  <Step title="Open the EWS">
+    In a browser on the same network, enter the printer IP address (for example, `http://192.168.1.50`). Log in with the printer admin credentials if asked.
+  </Step>
+  <Step title="Locate the email or SMTP settings">
+    Look for a section named **Email**, **Scan to Email**, **SMTP**, or **Network Settings**. The exact menu path varies by brand and firmware.
+  </Step>
+  <Step title="Enter the server and port">
+    Enter your dedicated relay hostname (for example, `relayxx.mysmtp.com`) and port **587**. Enable STARTTLS or TLS if the checkbox is available.
+  </Step>
+  <Step title="Enter authentication">
+    Choose **SMTP authentication** (sometimes labeled **Authenticated SMTP**). Enter your mySMTP username and password.
+  </Step>
+  <Step title="Set the sender address">
+    In the **From** or **Sender Email** field, enter an address that uses a domain authenticated on your mySMTP account.
+  </Step>
+  <Step title="Apply and test">
+    Save the settings and send a test scan to your own email address. Check your inbox and spam folder.
+  </Step>
+</Steps>
+
+## Firmware and TLS compatibility
+
+Older printers and copiers often ship with firmware that lacks TLS 1.2 support, which means they cannot complete a STARTTLS handshake on port 587.
+
+### What to try first
+
+1. Use port **587** with STARTTLS if the printer offers it.
+2. If the connection fails or the printer reports a TLS error, switch to port **2525** with no encryption or with the encryption option turned off.
+3. If port 2525 is also blocked or rejected, check whether the printer offers a **TLS** mode (sometimes labeled **TLS/SSL**) instead of STARTTLS and try that on port 587. The printer must support TLS 1.2 or 1.3.
+
+### When the printer only supports port 25
+
+Some very old devices only send unencrypted SMTP on port 25. You can try port 25 as a last resort, but many networks and ISPs block it.
+
+<Tip>
+  Check the manufacturer's support site for a firmware update. A newer firmware version often adds TLS 1.2 and STARTTLS support, which lets you use the secure port 587 setting.
+</Tip>
+
+## IP whitelisting for printers
+
+If your printer cannot authenticate over TLS, or if your network environment makes STARTTLS unreliable, you can restrict SMTP access to your office IP and allow the printer to send without full encryption. See the [Whitelisting and Security Best Practices](/getting-started/whitelisting-and-security-best-practices) page for details.
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Important sending requirements
+
+### From address must match your authenticated domain
+
+The sender address configured on the printer must use a domain that is authenticated for your mySMTP account. If you use an unauthenticated domain or a generic address (for example, `scanner@localhost`), messages may be rejected or filtered as spam.
+
+### Attachment size
+
+Scanned documents can be large. mySMTP allows email attachments up to roughly **18 MB** after Base64 encoding overhead. For more details, see [Email Attachments Size](/troubleshooting/email-attachments-size).
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Test scan never arrives">
+    Check the printer's network settings and confirm it has internet access. Verify the SMTP hostname, port, and credentials. Try sending to a different recipient address.
+  </Accordion>
+
+  <Accordion title="Connection error on port 587">
+    Switch to port **2525** and disable TLS/STARTTLS. If the printer supports it, apply a firmware update and retry port 587.
+  </Accordion>
+
+  <Accordion title="Authentication failed">
+    Re-enter your mySMTP username and password exactly as shown in the dashboard. Make sure the printer is not adding extra spaces or altering the case.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Confirm the sender address uses your authenticated domain. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+
+  <Accordion title="Scans arrive but images are missing">
+    The message may have exceeded the attachment size limit. Lower the scan resolution or split the job into smaller documents. See [Email Attachments Size](/troubleshooting/email-attachments-size).
+  </Accordion>
+</AccordionGroup>
+
+## Related setup guides
+
+<CardGroup cols={2}>
+  <Card title="HP Printers" icon="printer" href="/email-configuration/email-clients/hp-printers">
+    Configure Scan to Email on HP LaserJet, OfficeJet, and PageWide printers.
+  </Card>
+
+  <Card title="Canon Printers" icon="printer" href="/email-configuration/email-clients/canon-printers">
+    Configure Scan to Email on Canon imageRUNNER and PIXMA printers.
+  </Card>
+</CardGroup>

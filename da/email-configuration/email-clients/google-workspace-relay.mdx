@@ -1,0 +1,86 @@
+---
+title: "Google Workspace SMTP Relay med mySMTP"
+sidebarTitle: "Google Workspace"
+description: "Send Google Workspace udgående mail via mySMTP ved hjælp af Gmail routing hosts og outbound gateway indstillinger. Konfigurer TLS og IP-baseret autorisation."
+---
+
+Google Workspace host routes understøtter ikke brugernavn og kodeord autentificering. Kontakt mySMTP support for at arrangere IP-baseret autorisation.
+
+## Før du går i gang
+
+Sørg for at have disse oplysninger klar:
+
+| Indstilling | Værdi |
+| --- | --- |
+| Host | Dit relay-hostnavn, f.eks. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Kryptering | **TLS (STARTTLS)** |
+| Autentificering | IP-baseret (kontakt mySMTP support) |
+
+<Note>
+  Brug det præcise relay-hostnavn fra din opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Note>
+
+## Tilføj mySMTP som en host route
+
+<Steps>
+  <Step title="Åbn Admin-konsollen">
+    Gå til [Google Admin konsol](https://admin.google.com) og log ind med en Super Admin-konto.
+  </Step>
+  <Step title="Gå til Gmail hosts">
+    Naviger til **Apps** > **Google Workspace** > **Gmail** > **Hosts**.
+  </Step>
+  <Step title="Tilføj en ny host">
+    1. Klik på **Add route** eller **Configure**.
+    2. Indtast et navn, f.eks. `mySMTP`.
+    3. Under **Specify email server**, indtast dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+    4. Sæt **Port** til **587**.
+    5. Vælg **Require TLS connection**.
+    6. Klik på **Save**.
+  </Step>
+</Steps>
+
+## Anvend routen på udgående mail
+
+<Steps>
+  <Step title="Åbn Gmail routing">
+    I Admin-konsollen skal du gå til **Apps** > **Google Workspace** > **Gmail** > **Routing**.
+  </Step>
+  <Step title="Opret en outbound gateway-regel">
+    1. Scroll ned til **Outbound** og klik på **Configure** eller **Add another rule**.
+    2. Giv reglen et navn, f.eks. `Route via mySMTP`.
+    3. Under **For the above types of messages, do the following**, vælg **Change route**.
+    4. Vælg den `mySMTP` host route, du har oprettet.
+    5. Klik på **Save**.
+  </Step>
+</Steps>
+
+<Warning>
+  Google Workspace host routes understøtter ikke brugernavn og kodeord autentificering til en ekstern SMTP-host. Autentificering håndteres via afsenderens IP-adresse. Kontakt [mySMTP support](/da/support/contact-support) for at autorisere Google Workspaces udgående IP-ranges på din konto.
+</Warning>
+
+## SPF-record
+
+Tilføj både Google Workspace og mySMTP i din domains SPF-record. En typisk record ser sådan ud:
+
+```text
+v=spf1 include:_spf.google.com include:spf1.mysmtp.com ~all
+```
+
+<Warning>
+  Hvis du allerede har en SPF-record, skal du tilføje includes uden at fjerne eksisterende indgange. For mange DNS-opslag kan medføre SPF-fejl. Brug [Deliverability Toolbox](https://toolbox.smtp.ai/) til at tjekke din SPF-record.
+</Warning>
+
+## Test forbindelsen
+
+1. Send en testmail fra en Google Workspace-postkasse til en ekstern adresse, f.eks. en Gmail-konto eller din egen.
+2. Bekræft at meddelelsen ankommer. I de modtagne besked-headers skal du kunne se, at den er gået gennem dit mySMTP relay.
+3. Hvis meddelelsen ikke ankommer, tjek **Email log search** i Admin-konsollen under **Reports** > **Email log search**.
+
+## Fejlfinding
+
+- **Meddelelser går stadig direkte gennem Google:** Sørg for at routing-reglen er aktiveret og gælder for udgående mail. Tjek at ingen anden routing-regel med højere prioritet overskriver den.
+- **TLS-forbindelse fejler:** Bekræft at host routen kræver TLS, og at dit netværk tillader udgående forbindelser på port **587**.
+- **Relay access denied:** Verificer at mySMTP support har autoriseret Google Workspaces udgående IP-ranges for din konto.
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

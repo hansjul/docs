@@ -1,0 +1,99 @@
+---
+title: "Forbind Instantly til mySMTP til cold email-kampagner"
+sidebarTitle: "Instantly"
+description: "Integrer mySMTP med Instantly ved at tilføje en brugerdefineret SMTP-server. Brug port 587 og TLS med dine dedikerede IP-legitimationsoplysninger til at sende cold emails."
+---
+
+Du skal bruge en aktiv mySMTP-konto med en dedikeret IP og dine SMTP-legitimationsoplysninger.
+
+## Før du starter
+
+Hav disse oplysninger fra din mySMTP-opsætningsmail klar:
+
+| Indstilling | Værdi |
+| --- | --- |
+| SMTP-vært | f.eks. `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Port | `587` |
+| Kryptering | `TLS` |
+| Brugernavn | Dit mySMTP-brugernavn |
+| Adgangskode | Dit mySMTP-adgangskode |
+
+<Note>
+  Brug det nøjagtige relay-værtsnavn fra din opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Note>
+
+## Tilføj mySMTP i Instantly
+
+<Steps>
+  <Step title="Åbn Email Accounts">
+    Log ind på [https://app.instantly.ai](https://app.instantly.ai). I menuen til venstre skal du klikke på **Email Accounts** og derefter på **\+ Add Email Account**.
+  </Step>
+  <Step title="Vælg Custom SMTP">
+    Rul ned på listen over udbydere, og vælg **Other SMTP** eller **Custom SMTP**.
+  </Step>
+  <Step title="Indtast SMTP-legitimationsoplysninger">
+    Udfyld felterne med dine mySMTP-detaljer:
+
+    | Felt | Værdi |
+    | --- | --- |
+    | SMTP Username | Dit mySMTP-brugernavn |
+    | SMTP Password | Dit mySMTP-adgangskode |
+    | SMTP Host | `relayxx.mysmtp.com` (fra opsætningsmail) |
+    | SMTP Port | `587` |
+    | Encryption | `TLS` |
+    | From Name | Dit navn eller brand |
+    | From Email | `you@yourdomain.com` (skal matche dit SPF/DKIM-domæne) |
+  </Step>
+  <Step title="Send en testmail">
+    Klik på **Send Test**. Hvis forbindelsen lykkes, ser du en grøn bekræftelse.
+  </Step>
+  <Step title="Gem kontoen">
+    Klik på **Save & Continue**. Kontoen er nu klar til kampagner i Instantly.
+  </Step>
+</Steps>
+
+## DNS og deliverability
+
+Sørg for, at dit afsenderdomæne har de korrekte TXT-poster for at nå indbakken:
+
+| Post | Værdi |
+| --- | --- |
+| SPF | `v=spf1 include:spf1.mysmtp.com ~all` |
+| DKIM | Opsættes i dit [mySMTP dashboard](https://dashboard.mysmtp.com) |
+| DMARC | Start med `v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com` |
+
+<Tip>
+  Valider dine DNS-poster med [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) eller byg en DMARC-post med [DMARC Wizard](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+</Tip>
+
+## Warm-up-tips
+
+Før du lancerer store kampagner, skal du varme mailboxen op for at opbygge afsenderreputation:
+
+- Start med 10 til 20 e-mails om dagen.
+- Øg gradvist volumen over 2 til 4 uger.
+- Bland svar og engagement ind.
+
+Du kan også bruge Instantly's indbyggede warm-up-automation, hvis den er tilgængelig på din plan.
+
+<Tip>
+  Generer en dag-til-dag-plan med [Warmup Plan Generator](https://toolbox.smtp.ai/#warmup-generator) i mySMTP Deliverability Toolbox.
+</Tip>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="SMTP-forbindelse mislykkedes">
+    Bekræft, at værten matcher din opsætningsmail nøjagtigt, at porten er 587, og at TLS er valgt. Hvis dit netværk blokerer 587, kan du prøve port 2525.
+  </Accordion>
+
+  <Accordion title="Godkendelsesfejl (535)">
+    Genindtast dit mySMTP-brugernavn og din adgangskode. Sørg for, at der ikke er ekstra mellemrum.
+  </Accordion>
+
+  <Accordion title="E-mails lander i spam">
+    Verificer, at SPF, DKIM og DMARC er opsat for domænet i din From Email. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [Forbedr e-mail deliverability](/da/deliverability/improve-email-deliverability).
+  </Accordion>
+</AccordionGroup>
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

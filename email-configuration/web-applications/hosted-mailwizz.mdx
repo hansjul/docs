@@ -1,0 +1,136 @@
+---
+title: "mySMTP Hosted MailWizz: Managed Email Marketing Platform"
+sidebarTitle: "Hosted MailWizz"
+description: "Get a hosted MailWizz platform tuned for mySMTP dedicated servers, with onboarding help, unlimited subscribers, and TLS for tracking domains, ready within an hour."
+---
+
+Hosted MailWizz is an add-on to any mySMTP Marketing & Transactional Emails package. mySMTP installs, hosts, and configures the full MailWizz platform for you, so there is nothing to install or maintain.
+
+<Note>
+  Hosted MailWizz runs on mySMTP's own infrastructure and sends only through mySMTP IPs. You cannot connect external SMTP providers or third-party delivery servers to it.
+</Note>
+
+<Tip>
+  Already running your own MailWizz installation? A mySMTP dedicated IP also works with an external, self-hosted MailWizz. See [Connect MailWizz to mySMTP](/email-configuration/web-applications/mailwizz) to add mySMTP as a delivery server.
+</Tip>
+
+## Why choose hosted MailWizz
+
+<CardGroup cols={2}>
+  <Card title="Tuned for deliverability" icon="inbox">
+    Custom settings make full use of your mySMTP dedicated servers.
+  </Card>
+
+  <Card title="Onboarding support" icon="user-gear">
+    MailWizz specialists help you configure your infrastructure and streamline setup.
+  </Card>
+
+  <Card title="Unlimited subscribers" icon="users">
+    Upload as many subscribers as your email marketing needs, with no subscriber caps.
+  </Card>
+
+  <Card title="TLS for tracking domains" icon="lock">
+    mySMTP secures your tracking domains with TLS certificates so recipients reach your links securely.
+  </Card>
+</CardGroup>
+
+## Self-hosted vs hosted MailWizz
+
+|  | Self-hosted MailWizz | mySMTP hosted MailWizz |
+| --- | --- | --- |
+| Hosting | Your own server | mySMTP infrastructure |
+| Installation and updates | You | mySMTP |
+| Sending IPs | Your mySMTP dedicated IP (other delivery servers possible) | mySMTP IPs only |
+| Delivery server setup | You add mySMTP as an SMTP delivery server | Preconfigured |
+| Bounce and complaint handling | You configure bounce and FBL servers | Set up during onboarding |
+| TLS for tracking domains | You manage certificates | Included |
+| Subscriber limits | Depends on your server | Unlimited |
+| Setup time | Varies | Ready to send within an hour |
+
+## Get started
+
+<Steps>
+  <Step title="Order a package">
+    Choose any [Marketing & Transactional Emails package](https://mysmtp.com/marketing-transactional-emails) and add hosted MailWizz.
+  </Step>
+  <Step title="Send your sending domains">
+    The only information mySMTP needs to configure your account is the list of domains you will send from.
+  </Step>
+  <Step title="Add the DNS records">
+    mySMTP sends you the DNS settings for each domain (SPF, DKIM, and tracking domain). Add them at your DNS provider. Your SPF record should include `include:spf1.mysmtp.com ~all`. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+  </Step>
+  <Step title="Start sending">
+    Your MailWizz account is ready to send within an hour of payment. Import your lists, create a campaign, and send a small test first.
+  </Step>
+</Steps>
+
+<Note>
+  On a new dedicated IP, ramp volume gradually. Build a schedule with the [warm-up generator](https://toolbox.smtp.ai/#warmup-generator) and read [Warm-up plans](/deliverability/warm-up-plans).
+</Note>
+
+## Included features
+
+### Campaigns and lists
+
+| Feature | What it does |
+| --- | --- |
+| Overview dashboard | Counters for lists, campaigns, subscribers, segments, and delivery servers, plus a recent activity report |
+| Email lists | Manage all lists in one place |
+| Campaigns | Regular and autoresponder campaigns, shown together or separately |
+| Surveys | Build surveys and view detailed stats for each one |
+| Email templates | Create and categorise templates, or upload almost any existing HTML template |
+| List page types | Set default subscribe, unsubscribe, and call-to-action pages that every list inherits |
+
+### Deliverability and list hygiene
+
+| Feature | What it does |
+| --- | --- |
+| Sending domains | Match the From address of your campaigns and add DKIM signatures to the email headers |
+| SPF/DKIM settings | Sending domains generate their own DKIM keys, or you can force a global DKIM signature |
+| Tracking domains | Replace the domain in tracking URLs with your own branded domain |
+| Bounce servers | Process bounces automatically when you deliver through mySMTP servers |
+| Feedback loop servers | Process spam complaints automatically when you deliver through mySMTP servers |
+| Email box monitors | Watch mailboxes and act on subscribers based on the content of incoming emails |
+| Email blacklist | Global blocklist: listed addresses never receive email from the system |
+| Email block requests | Recipients can ask never to be emailed. mySMTP recommends approving every request. |
+
+### Analytics and data
+
+| Feature | What it does |
+| --- | --- |
+| Detailed logs | Delivery logs and analytics to guide deliverability decisions |
+| Campaign stats | Opens, clicks, and performance per campaign |
+| IP location and GEO stats | See where subscribers open and click, using the MaxMind GeoIP2 city database |
+| Countries and zones databases | Ready-made country and state lists for signup forms and custom fields |
+| API settings | Require signed API requests and allow or block IP addresses and ranges |
+
+<Tip>
+  Plan batch sizes and delivery schedules with the [MailWizz Quota Optimizer](https://toolbox.smtp.ai/), and check campaigns before sending with the [Sender Readiness Checklist](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+</Tip>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Which mySMTP subscriptions work with hosted MailWizz?">
+    Any mySMTP Marketing & Transactional Emails package can be combined with hosted MailWizz.
+  </Accordion>
+
+  <Accordion title="What do I need to provide for onboarding?">
+    Only your sending domains. mySMTP configures your MailWizz account and sends you the DNS settings for those domains.
+  </Accordion>
+
+  <Accordion title="How long does setup take?">
+    Your MailWizz account is configured and ready to send within an hour after payment.
+  </Accordion>
+
+  <Accordion title="Where can I learn more about MailWizz itself?">
+    Visit [mailwizz.com](https://www.mailwizz.com/) for product details and a test drive.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [Connect a self-hosted MailWizz to mySMTP](/email-configuration/web-applications/mailwizz)
+- [Handling bounces and complaints](/deliverability/handling-bounces-and-complaints)
+- [Transactional vs marketing emails](/email-configuration/transactional-vs-marketing-emails)
+- [Contact support](/support/contact-support)

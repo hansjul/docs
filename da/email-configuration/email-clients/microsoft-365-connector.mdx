@@ -1,0 +1,101 @@
+---
+title: "Microsoft 365 Outbound Connector til mySMTP"
+sidebarTitle: "Microsoft 365"
+description: "Diriger udgående mail fra Microsoft 365 via mySMTP ved hjælp af en Exchange Online outbound connector. Opsæt en smart host med TLS og IP-baseret autorisation."
+---
+
+Microsoft 365 understøtter ikke brugernavn- og adgangskodegodkendelse til en ekstern smart host. Kontakt mySMTP-support for at arrangere IP-baseret autorisation, før du opretter connectoren.
+
+## Før du starter
+
+Ha' disse oplysninger klar:
+
+| Indstilling | Værdi |
+| --- | --- |
+| Smart host | Dit relay-hostnavn, f.eks. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Kryptering | **TLS (STARTTLS)** |
+| Godkendelse | IP-baseret (kontakt mySMTP-support) |
+
+<Note>
+  Brug det eksakte relay-hostnavn fra din opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Note>
+
+## Opret outbound connectoren
+
+<Steps>
+  <Step title="Åbn Exchange-administrationscenteret">
+    Gå til [Exchange admin center](https://admin.exchange.microsoft.com) og log ind med en Global Administrator- eller Exchange Administrator-konto.
+  </Step>
+  <Step title="Start en ny connector">
+    1. Gå til **Mail flow** > **Connectors**.
+    2. Klik på **Add a connector**.
+    3. Vælg **Connection from:** **Office 365**.
+    4. Vælg **Connection to:** **Partner organization**.
+    5. Klik på **Next**.
+  </Step>
+  <Step title="Navngiv connectoren">
+    Indtast et navn som f.eks. `mySMTP outbound` og en valgfri beskrivelse. Klik på **Next**.
+  </Step>
+  <Step title="Vælg hvornår connectoren skal bruges">
+    Vælg **Only when email messages are sent to these domains**. Klik på ikonet **\+**, indtast `*` som domænet, og klik på **OK**. Klik på **Next**.
+  </Step>
+  <Step title="Angiv smart host">
+    1. Vælg **Route email through these smart hosts**.
+    2. Klik på ikonet **\+** og indtast dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+    3. Klik på **Save**, og derefter **Next**.
+  </Step>
+  <Step title="Kræv TLS">
+    1. Vælg **Always use Transport Layer Security (TLS) to secure the connection**.
+    2. Vælg **Issued by a trusted certificate authority (for example, DigiCert or GlobalSign)**.
+    3. Klik på **Next**.
+  </Step>
+  <Step title="Gennemgå og opret">
+    Gennemgå indstillingerne og klik på **Create connector**.
+  </Step>
+</Steps>
+
+<Warning>
+  Microsoft 365 outbound connectors understøtter ikke brugernavn- og adgangskodegodkendelse til en ekstern smart host. Godkendelse håndteres ved afsenderens IP-adresse eller et certifikat. Kontakt [mySMTP-support](/da/support/contact-support) for at autorisere Microsoft 365's udgående IP-intervaller for din konto.
+</Warning>
+
+## Opret connectoren med PowerShell
+
+Hvis du foretrækker PowerShell, skal du forbinde til [Exchange Online PowerShell](https://learn.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell) og køre:
+
+```powershell
+New-OutboundConnector -Name "mySMTP outbound" `
+  -ConnectorType Partner `
+  -RecipientDomains "*" `
+  -SmartHosts "relayxx.mysmtp.com" `
+  -TlsSettings CertificateValidation `
+  -UseMxRecord $false
+```
+
+Erstat `relayxx.mysmtp.com` med dit faktiske relay-hostnavn.
+
+## SPF-post
+
+Tilføj både Microsoft 365 og mySMTP til dit domænes SPF-post. En typisk post ser således ud:
+
+```text
+v=spf1 include:spf.protection.outlook.com include:spf1.mysmtp.com ~all
+```
+
+<Warning>
+  Hvis du allerede har en SPF-post, skal du tilføje includes uden at fjerne eksisterende poster. For mange DNS-opslag kan forårsage SPF-fejl. Brug [Deliverability Toolbox](https://toolbox.smtp.ai/) til at tjekke din SPF-post.
+</Warning>
+
+## Test forbindelsen
+
+1. Send en testmail fra en Microsoft 365-mailbox til en ekstern adresse, som f.eks. en Gmail-konto eller din egen.
+2. Bekræft, at beskeden ankommer. I de modtagne beskedheaders bør du se, at den er passeret gennem din mySMTP-relay.
+3. Hvis beskeden ikke ankommer, skal du tjekke **Message trace** i Exchange admin center under **Mail flow** > **Message trace**.
+
+## Fejlfinding
+
+- **Connectoren bruges ikke:** Sørg for, at ingen anden outbound connector med højere prioritet eller matchende regel opsnapper mailen. Microsoft 365 evaluerer connectorer i rækkefølge.
+- **TLS-handshake fejler:** Bekræft, at connectoren kræver TLS, og at dit netværk tillader udgående forbindelser på port **587**.
+- **Relay-adgang nægtet:** Bekræft, at mySMTP-support har autoriseret Microsoft 365's udgående IP-intervaller for din konto.
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

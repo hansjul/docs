@@ -1,0 +1,84 @@
+---
+title: "Connect PrestaShop to mySMTP for transactional email"
+sidebarTitle: "PrestaShop"
+description: "Configure PrestaShop to send emails through mySMTP by entering your custom SMTP parameters and testing the connection before saving."
+---
+
+PrestaShop supports custom SMTP servers natively. Connect it to mySMTP so order confirmations, account emails, and marketing messages are delivered reliably.
+
+## Prerequisites
+
+- Admin access to the PrestaShop back office
+- Your mySMTP credentials (see [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials))
+- A verified sending domain
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (from your setup email) |
+| Host (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Encryption | TLS |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure SMTP in PrestaShop
+
+<Steps>
+  <Step title="Open E-mail settings">
+    Log in to your PrestaShop back office. Go to **Advanced Parameters → E-mail**.
+  </Step>
+  <Step title="Select custom SMTP">
+    Under **Send emails to**, choose **Set my own SMTP parameters**. The SMTP configuration fields appear.
+  </Step>
+  <Step title="Enter mySMTP settings">
+    Fill in the form:
+
+    - **SMTP server:** your real mySMTP hostname (from your setup email)
+    - **SMTP username:** your mySMTP username
+    - **SMTP password:** your mySMTP password
+    - **Encryption:** TLS
+    - **Port:** `587`
+  </Step>
+  <Step title="Send a test email">
+    Enter an email address you control under **Test your email configuration**, then click **Send a test email**. Check your inbox for the message.
+  </Step>
+  <Step title="Save settings">
+    Click **Save** at the bottom of the page.
+  </Step>
+</Steps>
+
+<Warning>
+  Make sure the From address used by PrestaShop belongs to your authenticated domain. You can set this under **Shop Parameters → Contact → Stores** for contact emails, or in the relevant module settings for marketing emails.
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Test email fails">
+    Confirm you entered your real mySMTP hostname (not `relayxx.mysmtp.com`), port 587, and TLS. Re-enter your username and password without extra spaces. If your hosting provider blocks 587, try port 2525.
+  </Accordion>
+
+  <Accordion title="Emails go to spam">
+    Verify SPF, DKIM, and DMARC are configured for your domain. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="No Set my own SMTP parameters option">
+    This option is standard in PrestaShop 1.7 and 8.x. If you do not see it, check that your shop is not using the PHP mail() function setting, which PrestaShop labels differently in some older versions.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+- [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials)

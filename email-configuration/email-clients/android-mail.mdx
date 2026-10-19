@@ -1,0 +1,87 @@
+---
+title: "Set Up Android Mail and Gmail App to Send via mySMTP"
+sidebarTitle: "Android Mail"
+description: "Configure mySMTP outgoing server settings on Android Mail and the Gmail app. Use port 587, STARTTLS, and your mySMTP credentials."
+---
+
+Use the built-in Mail app or the Gmail app to send mail. Incoming mail settings stay unchanged if you only need to change the outgoing server.Use the built-in Mail app or the Gmail app to send mail. Incoming mail settings stay unchanged if you only need to change the outgoing server.Use the built-in Mail app or the Gmail app to send mail. Incoming mail settings stay unchanged if you only need to change the outgoing server.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Security type | **STARTTLS** or **TLS** |
+| Require sign-in | Enabled |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+<Warning>
+  Do not use port 465. mySMTP requires **STARTTLS on port 587**.
+</Warning>
+
+## Android Mail app
+
+<Steps>
+  <Step title="Open account settings">
+    Open the **Mail** app, tap the menu, and go to **Settings**. Select the account you want to configure.
+  </Step>
+  <Step title="Edit outgoing server">
+    Scroll to **Outgoing server settings** and tap it.
+  </Step>
+  <Step title="Enter mySMTP details">
+    Fill in the fields using the values in the table above. For the SMTP server, enter the relay hostname from your mySMTP setup email (for example, `relayxx.mysmtp.com`).
+  </Step>
+  <Step title="Save and test">
+    Tap **Done** or **Save**. The app may run a quick connection test. Send a test email to confirm delivery.
+  </Step>
+</Steps>
+
+## Gmail app
+
+<Steps>
+  <Step title="Open account settings">
+    Open the **Gmail** app, tap your profile picture, and select **Manage accounts on this device**. Choose the account to edit.
+  </Step>
+  <Step title="Change outgoing settings">
+    Tap **Account settings**, then scroll to **Outgoing settings**.
+  </Step>
+  <Step title="Enter mySMTP details">
+    Update the fields with the values in the table above, then tap **Save**.
+  </Step>
+  <Step title="Send a test message">
+    Compose an email and send it. Check the recipient mailbox to confirm it arrived.
+  </Step>
+</Steps>
+
+<Tip>
+  Generate a strong SMTP password securely with the free mySMTP [Password Generator](https://toolbox.smtp.ai/).
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection test fails">
+    Make sure you entered the correct relay hostname, username, and password from your mySMTP setup email. Confirm your network allows outbound traffic on port 587.
+  </Accordion>
+
+  <Accordion title="Messages stay in the outbox">
+    Restart the Mail or Gmail app. If the problem persists, remove the account and add it again with the settings above.
+  </Accordion>
+
+  <Accordion title="Emails arrive but go to spam">
+    Check that your sending domain has published SPF, DKIM, and DMARC records. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [Email clients overview](/email-configuration/email-clients)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)

@@ -1,0 +1,112 @@
+---
+title: "DNS Setup for Authentication"
+sidebarTitle: "DNS Setup"
+description: "Learn why DNS matters for email authentication and how SPF, DKIM, DMARC, and BIMI rely on DNS TXT records to protect sender reputation."
+---
+
+<Tip>
+  Use the <a href="https://toolbox.smtp.ai/">One-Click SPF / DKIM / DMARC Checker</a> in the mySMTP Deliverability Toolbox to verify your records after you publish them. The tool runs in your browser and shows pass, warn, or fail for each protocol.
+</Tip>
+
+## How DNS powers email authentication
+
+DNS acts as a public directory for your domain. Authentication protocols store verification data in TXT records that receiving servers look up before accepting your mail.
+
+| Protocol | DNS record type | What it proves |
+| --- | --- | --- |
+| SPF | TXT | Which servers are allowed to send email for your domain |
+| DKIM | TXT | That the message signature matches your public key |
+| DMARC | TXT | Your policy for handling messages that fail SPF or DKIM |
+| BIMI | TXT | Where to find your brand logo for inbox display |
+
+Without these records, receivers have no way to confirm your messages are legitimate. Missing or incorrect DNS setup is one of the most common causes of emails landing in spam folders.
+
+## Core records for mySMTP
+
+These are the minimum records you should publish when sending through mySMTP.
+
+### SPF
+
+Authorizes mySMTP servers to send on your behalf.
+
+```text
+v=spf1 include:spf1.mysmtp.com ~all
+```
+
+If you already have an SPF record, add `include:spf1.mysmtp.com` before the final mechanism.
+
+### DKIM
+
+mySMTP provides a unique DKIM key for your domain. Add it as a TXT record at the host `mysmtp._domainkey`.
+
+```text
+Type:  TXT
+Name:  mysmtp._domainkey
+Value: The 2048-bit key from your mySMTP setup email
+```
+
+### DMARC
+
+Start with a monitoring policy, then gradually enforce it.
+
+```text
+v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
+```
+
+<Steps>
+  <Step title="Monitor">
+    Begin with `p=none` to collect reports without affecting delivery.
+  </Step>
+  <Step title="Quarantine">
+    After 2 to 4 weeks of clean reports, move to `p=quarantine` to send failing messages to spam.
+  </Step>
+  <Step title="Reject">
+    Once you are confident all legitimate mail passes authentication, use `p=reject` to block forged messages entirely.
+  </Step>
+</Steps>
+
+<Warning>
+  Do not jump straight to `p=reject`. Misconfigured authentication can block your own legitimate mail.
+</Warning>
+
+## General DNS guidance
+
+### Where to add records
+
+Add TXT records at the DNS provider where your domain's nameservers are pointed. This is usually your domain registrar (GoDaddy, Namecheap, One.com) or a dedicated DNS host (Cloudflare, Route 53).
+
+### Common mistakes to avoid
+
+| Mistake | Why it matters | How to fix |
+| --- | --- | --- |
+| Multiple SPF records | Receivers ignore all but one, causing random failures | Combine every `include:` into a single record |
+| SPF over 10 DNS lookups | Exceeds the RFC limit and causes SPF permerror | Use the <a href="https://toolbox.smtp.ai/">SPF Validator</a> to count lookups and flatten includes |
+| DKIM key too short | 512-bit or 768-bit keys are no longer trusted | Use the 2048-bit key from mySMTP |
+| DMARC without reporting | You cannot spot authentication gaps | Always include a `rua` address |
+| CNAME at the apex | Most providers do not support CNAME on root domains | Use an ALIAS or ANAME record, or point the A record instead |
+
+### Propagation and caching
+
+DNS changes are not instant. TTL (time-to-live) values on old records determine how long resolvers cache the previous data.
+
+| TTL value | Typical wait time |
+| --- | --- |
+| 300 seconds (5 minutes) | 5 to 15 minutes |
+| 3600 seconds (1 hour) | 1 to 4 hours |
+| 86400 seconds (24 hours) | Up to 24 hours |
+
+Lower your TTL to 300 before making changes, then raise it back to 3600 or 86400 once the records are verified.
+
+## Testing your DNS records
+
+After you publish your records, verify them before sending campaigns:
+
+1. Wait up to 24 hours for DNS propagation. In most cases records are live within minutes.
+2. Send a test email to <a href="https://test.smtp.ai/">test.smtp.ai</a> and check that SPF, DKIM, and DMARC all pass.
+3. Use the <a href="https://toolbox.smtp.ai/">DMARC Wizard</a> to review your policy and alignment settings.
+4. Review the DMARC aggregate reports sent to your `rua` address to confirm authentication alignment.
+
+## Next steps
+
+- For a step-by-step walkthrough of adding records at your domain registrar, see [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+- For a deeper explanation of each protocol, see [SPF, DKIM, DMARC and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).

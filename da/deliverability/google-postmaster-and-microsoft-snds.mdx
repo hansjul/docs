@@ -1,0 +1,90 @@
+---
+title: "Opsætning af Google Postmaster Tools og Microsoft SNDS-overvågning"
+sidebarTitle: "Postmaster og SNDS"
+description: "Overvåg dit afsenderrygte med Google Postmaster Tools og Microsoft SNDS. Lær hvordan du verificerer adgang, læser dashboards og holder din IP sund."
+---
+
+Google Postmaster Tools og Microsoft Smart Network Data Services (SNDS) er gratis dashboards, der viser, hvordan større postkasseudbydere ser din mail. At opsætte begge lader dig opdage ryteørre postkasseudbydere ser din mail. At opsætte begge lader dig opdage ryteproblemer, før de bliver leveringsfejl.
+
+<Card title="Åbn mySMTP Deliverability Toolbox" icon="toolbox" horizontal href="https://toolbox.smtp.ai/">
+  19 gratis browserbaserede værktøjer til autentificering, rygte og opvarmningygte og opvarmning. Ingen konto påkrævet.
+</Card>
+
+## Google Postmaster Tools
+
+Google Postmaster Tools viser rygte, autentificering og klagygte, autentificering og klagdata for domæner, der sender til Gmail.
+
+### Tilføj dit domæne
+
+<Steps>
+  <Step title="Log ind">
+    Gå til [Google Postmaster Tools](https://postmaster.google.com),, og log ind med en Google-konto.
+  </Step>
+  <Step title="Tilføj et domæne">
+    Klik på **\+** knappen, knappen, og indtast det domæne, du sender mail fra.
+  </Step>
+  <Step title="Verificer ejerskab">
+    Google giver dig en DNS TXT-post. Tilføj TXT-posten hos din DNS-udbyder, og vend derefter tilbage til Postmaster Tools, og klik påpost. Tilføj TXT-posten hos din DNS-udbyder, og vend derefter tilbage til Postmaster Tools, og klik på **Verificer**.
+  </Step>
+</Steps>
+
+### Dashboards og data
+
+| Dashboard | Hvad det viser |
+| --- | --- |
+| Spam-takt-takt | Procentdelen af Gmail-brugere, der har rapporteret din mail som spam. Hold dennehar rapporteret din mail som spam. Hold denne under 0,1%. |
+| Domænerygteygte | En høj/medium/lav-bedømmelse baseret på spamtaktdium/lav-bedømmelse baseret på spamtakt, volumen og brugerengagement. |
+| IP-rygteygte | Rygte for individuelle afsendende IP-adressygte for individuelle afsendende IP-adresser knyttet til dit domæne. |
+| Autentificering | Pass/fail-taktakter for SPF, DKIM og DMARC på din mail. |
+| Kryptering | Procentdel af mail sendt med TLS. |
+| OverholdelsesOverholdelsesstatus | Om din mail opfylder afsenderretningslinjer. |
+
+<Note>
+  Data kan tage flere dage at vises efter verificering, og dashboards udfyldes kun, når Gmail modtager tilstrækkeligtvises efter verificering, og dashboards udfyldes kun, når Gmail modtager tilstrækkeligt volumen fra dit domæne.
+</Note>
+
+## Microsoft SNDS
+
+Microsoft SNDS leverer data for mail sendt til Outlook.com, Hotmail og Exchange Online Protection.
+
+### Tilmeld dig, og anmod om IP-adgangs, og anmod om IP-adgangs
+
+<Steps>
+  <Step title="Opret en konto">
+    Gå til [Microsoft SNDS](https://sendersupport.olc.protection.outlook.com/snds),, og tilmeld dig eller log ind med en Microsoft-konto.
+  </Step>
+  <Step title="Anmod om IP-data">
+    Naviger til sektionen for anmodning om IP-data,sektionen for anmodning om IP-data, og indtast din dedikerede IP-adresse.
+  </Step>
+  <Step title="Fuldfør verificeringcering">
+    Microsoft sender en verificerings-e-mail til den kontaktadresse, der er knyttet til din IP. Dette kan være WHOIS- eller abuse-kontakten, eller adressen fra din rDNS PTR-postcerings-e-mail til den kontaktadresse, der er knyttet til din IP. Dette kan være WHOIS- eller abuse-kontakten, eller adressen fra din rDNS PTR-post.
+  </Step>
+</Steps>
+
+<Warning>
+  SNDS virker kun for dedikerede IP-adresser. Det leverer ikke data for delte IP-adress-adresser. Det leverer ikke data for delte IP-adresser.
+</Warning>
+
+### Når mySMTP skal godkende
+
+Hvis verificerings-e-mailen går til en mySMTP-administreret kontaktadresse, skal mySMTP muligvis godkende anmodningen. Hvis du ikke modtager verificerings-e-mailen, eller din anmodning afventer, skal du kontaktecerings-e-mailen går til en mySMTP-administreret kontaktadresse, skal mySMTP muligvis godkende anmodningen. Hvis du ikke modtager verificerings-e-mailen, eller din anmodning afventer, skal du kontakte [support@mysmtp.com](mailto:support@mysmtp.com).
+
+### Fortolkning af SNDS-data
+
+| NøgletalNøgletal | Hvad du skal holde øje med |
+| --- | --- |
+| Grøn/Gul/Rød status | Grøn er sund. Gul betyder forsigtighed. Rød betyder, at din IP er blokeret eller filtreret. |
+| Spam-klagetakt-klagetakt | Hold under 0,1%. |
+| Trap--hits | Beskeder sendt til spamfældeadresser. Selv få hits kan skade rygtefældeadresser. Selv få hits kan skade rygte. |
+| Beskedvolumen | Pludselige spidser uden opvarmning kan udløse begrænsndser uden opvarmning kan udløse begrænsning. |
+| Filterresultater | Om beskeder blev leveret, filtreret til junk eller afvist. |
+
+<Tip>
+  Brug opvarmningsgeneratoren på [toolbox.smtp.ai](https://toolbox.smtp.ai/#warmup-generator) til at bygge en sikker volumenoptrapningopvarmningsgeneratoren på [toolbox.smtp.ai](https://toolbox.smtp.ai/#warmup-generator) til at bygge en sikker volumenoptrapning, når du lancerer en ny dedikeret IP.
+</Tip>
+
+## Relaterede artikler
+
+- [IP-rygte: dedikeret vs. delte IP-adressygte: dedikeret vs. delte IP-adresser](/da/deliverability/ip-reputation-dedicated-vs-shared-ips)
+- [Feedback loops og klagetakttakter](/da/deliverability/feedback-loops)
+- [Håndtering af bounces og klager](/da/deliverability/handling-bounces-and-complaints)

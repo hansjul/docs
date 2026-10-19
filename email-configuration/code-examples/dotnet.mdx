@@ -1,0 +1,115 @@
+---
+title: ".NET Code Example for mySMTP with MailKit"
+sidebarTitle: ".NET"
+description: "Send email from .NET using MailKit with STARTTLS on port 587. Includes install, MIME construction, and secure socket options for mySMTP."
+---
+
+Use MailKit to send email from .NET applications through mySMTP. MailKit is the recommended library because Microsoft does not recommend `System.Net.Mail.SmtpClient` for new development.
+
+## Prerequisites
+
+- .NET 6 or later
+- Your mySMTP username and password from the setup email
+- Your mySMTP hostname from the setup email (shown as `relayxx.mysmtp.com` in these examples)
+
+## Install MailKit
+
+```bash
+dotnet add package MailKit
+```
+
+## Basic send example
+
+```csharp
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
+
+var host = Environment.GetEnvironmentVariable("MYSMTP_HOST") ?? "relayxx.mysmtp.com";
+var user = Environment.GetEnvironmentVariable("MYSMTP_USER");
+var pass = Environment.GetEnvironmentVariable("MYSMTP_PASS");
+
+var message = new MimeMessage();
+message.From.Add(new MailboxAddress("Your Name", "you@yourdomain.com"));
+message.To.Add(new MailboxAddress("Recipient Name", "recipient@example.com"));
+message.Subject = "Test email from .NET";
+message.Body = new TextPart("plain")
+{
+    Text = "This is a plain text test message sent through mySMTP."
+};
+
+using var client = new SmtpClient();
+await client.ConnectAsync(host, 587, SecureSocketOptions.StartTls);
+await client.AuthenticateAsync(user, pass);
+await client.SendAsync(message);
+await client.DisconnectAsync(true);
+
+Console.WriteLine("Message sent successfully");
+```
+
+<Note>
+  Replace `relayxx.mysmtp.com` with your real hostname from the mySMTP setup email. Load credentials from environment variables, never hardcode them in source files.
+</Note>
+
+## HTML email with attachment
+
+```csharp
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
+
+var host = Environment.GetEnvironmentVariable("MYSMTP_HOST") ?? "relayxx.mysmtp.com";
+var user = Environment.GetEnvironmentVariable("MYSMTP_USER");
+var pass = Environment.GetEnvironmentVariable("MYSMTP_PASS");
+
+var message = new MimeMessage();
+message.From.Add(new MailboxAddress("Your Name", "you@yourdomain.com"));
+message.To.Add(new MailboxAddress("Recipient Name", "recipient@example.com"));
+message.Subject = "HTML email with attachment";
+
+var builder = new BodyBuilder
+{
+    TextBody = "This is the plain text fallback.",
+    HtmlBody = "<h1>Hello</h1><p>This is an HTML message.</p>"
+};
+builder.Attachments.Add("/path/to/invoice.pdf");
+message.Body = builder.ToMessageBody();
+
+using var client = new SmtpClient();
+await client.ConnectAsync(host, 587, SecureSocketOptions.StartTls);
+await client.AuthenticateAsync(user, pass);
+await client.SendAsync(message);
+await client.DisconnectAsync(true);
+
+Console.WriteLine("Message sent successfully");
+```
+
+<Warning>
+  Microsoft recommends against using `System.Net.Mail.SmtpClient` for new development because it is considered obsolete and does not support modern protocols. Use MailKit instead.
+</Warning>
+
+## Common errors
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Your username or password is incorrect, or your account is not yet activated. Re-enter credentials exactly as shown in the setup email. See [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Your network or host may block port 587. Try port 2525 with `SecureSocketOptions.StartTls`, or port 465 with `SecureSocketOptions.SslOnConnect`. See [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    The `SecureSocketOptions` value does not match the port. Use `StartTls` for ports 587 and 2525. Use `SslOnConnect` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test your SPF, DKIM, and DMARC setup with the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) before sending large volumes.
+</Tip>
+
+## Related articles
+
+- [Code Examples overview](/email-configuration/code-examples)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

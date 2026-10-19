@@ -1,0 +1,156 @@
+---
+title: "Command Line SMTP Testing for mySMTP"
+sidebarTitle: "Command Line"
+description: "Test mySMTP from the command line using swaks, OpenSSL, telnet, and PowerShell. Verify ports, authentication, and TLS before sending from an application."
+---
+
+You can test mySMTP connectivity and authentication directly from the terminal before integrating it into an application. Use swaks for quick tests, OpenSSL for TLS inspection, and telnet or PowerShell for port verification.
+
+## Prerequisites
+
+- Your mySMTP username and password from the setup email
+- Your mySMTP hostname from the setup email (shown as `relayxx.mysmtp.com` in these examples)
+- swaks, OpenSSL, or telnet installed on your system
+
+## Test with swaks
+
+swaks is a command-line SMTP testing tool that handles authentication and TLS automatically.
+
+### Install swaks
+
+<CodeGroup>
+
+```bash Debian/Ubuntu
+sudo apt-get install swaks
+```
+
+```bash macOS (Homebrew)
+brew install swaks
+```
+
+```bash Fedora/RHEL
+sudo dnf install swaks
+```
+
+</CodeGroup>
+
+### Send a test email
+
+```bash
+swaks \
+  --server relayxx.mysmtp.com \
+  --port 587 \
+  --tls \
+  --auth LOGIN \
+  --auth-user YOUR_USERNAME \
+  --auth-password YOUR_PASSWORD \
+  --from you@yourdomain.com \
+  --to recipient@example.com \
+  --header "Subject: Test from swaks" \
+  --body "This is a test message sent through mySMTP."
+```
+
+<Note>
+  Replace `relayxx.mysmtp.com`, `YOUR_USERNAME`, and `YOUR_PASSWORD` with your real hostname and credentials from the setup email.
+</Note>
+
+## Test TLS with OpenSSL
+
+Use OpenSSL to inspect the TLS handshake and send a manual SMTP session.
+
+### STARTTLS on port 587
+
+```bash
+openssl s_client -starttls smtp -connect relayxx.mysmtp.com:587
+```
+
+After the TLS handshake completes, start the SMTP session:
+
+```text
+EHLO yourdomain.com
+AUTH LOGIN
+```
+
+The server responds with `334 VXNlcm5hbWU6`, which is the Base64 prompt for username. Encode your username and password in Base64:
+
+```bash
+echo -n 'YOUR_USERNAME' | base64
+echo -n 'YOUR_PASSWORD' | base64
+```
+
+Paste each encoded string at the prompt. Then send the message:
+
+```text
+MAIL FROM:<you@yourdomain.com>
+RCPT TO:<recipient@example.com>
+DATA
+Subject: Test from OpenSSL
+
+This is a test message.
+.
+QUIT
+```
+
+### Implicit TLS on port 465
+
+```bash
+openssl s_client -connect relayxx.mysmtp.com:465
+```
+
+After the handshake, use the same SMTP commands as above.
+
+## Verify port reachability
+
+### Windows (PowerShell)
+
+```powershell
+Test-NetConnection -ComputerName relayxx.mysmtp.com -Port 587
+```
+
+### Linux and macOS (telnet)
+
+```bash
+telnet relayxx.mysmtp.com 587
+```
+
+If the connection succeeds, you see an SMTP greeting like `220 relayxx.mysmtp.com ESMTP`. Type `QUIT` to close. If the connection times out, the port is blocked by a firewall or ISP.
+
+### Linux and macOS (nc)
+
+```bash
+nc -vz relayxx.mysmtp.com 587
+```
+
+<Warning>
+  Never paste real passwords into shared terminals or log files. Use test credentials or a dedicated test account when possible.
+</Warning>
+
+## Automated online testing
+
+Run a full deliverability and authentication test at [test.smtp.ai](https://test.smtp.ai). It checks port connectivity, TLS negotiation, authentication, and DNS records in one step.
+
+<Tip>
+  After confirming the connection works, verify your domain authentication with the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/). It includes 19 free tools including SPF validation and sender readiness checks.
+</Tip>
+
+## Common errors
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Your username or password is incorrect, or your account is not yet activated. Re-enter credentials exactly as shown in the setup email. See [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Your network or host may block port 587. Try port 2525 with the same swaks command, or port 465 with OpenSSL. See [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    The OpenSSL flags do not match the port. Use `-starttls smtp` for ports 587 and 2525. Use `-connect` without `-starttls` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [Code Examples overview](/email-configuration/code-examples)
+- [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

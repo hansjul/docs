@@ -1,0 +1,68 @@
+---
+title: "CMS and Frameworks: mySMTP email configuration guides"
+sidebarTitle: "CMS & Frameworks"
+description: "Find step-by-step mySMTP setup guides for WordPress, WooCommerce, Magento, PrestaShop, Shopify, Odoo, Laravel, and Django."
+---
+
+This section covers how to connect mySMTP to popular CMS platforms and web frameworks. Each guide includes the correct SMTP settings, step-by-step configuration, and troubleshooting tips.
+
+## Common SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (from your setup email) |
+| Host (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Encryption | TLS / STARTTLS |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark. For plans and IPs, see [Shared IPs or dedicated IPs](/getting-started/shared-ips-or-dedicated).
+</Note>
+
+## Platform guides
+
+<CardGroup cols={2}>
+  <Card title="WordPress" icon="wordpress" href="/email-configuration/platforms/wordpress">
+    Configure WP Mail SMTP with mySMTP credentials and send a test email from your WordPress admin.
+  </Card>
+
+  <Card title="WooCommerce" icon="shopping-bag" href="/email-configuration/platforms/woocommerce">
+    Route WooCommerce order emails through mySMTP by setting up WordPress SMTP first, then matching sender settings.
+  </Card>
+
+  <Card title="Magento" icon="shopping-cart" href="/email-configuration/platforms/magento">
+    Use Magento 2 native SMTP settings or a third-party module for earlier versions.
+  </Card>
+
+  <Card title="PrestaShop" icon="store" href="/email-configuration/platforms/prestashop">
+    Enter custom SMTP parameters in PrestaShop and send a built-in test email.
+  </Card>
+
+  <Card title="Shopify" icon="shopify" href="/email-configuration/platforms/shopify">
+    Understand Shopify's SMTP limitations and where mySMTP still fits in your stack.
+  </Card>
+
+  <Card title="Odoo" icon="gear" href="/email-configuration/platforms/odoo">
+    Add an outgoing mail server in Odoo, test the connection, and set from-address filters.
+  </Card>
+
+  <Card title="Laravel" icon="code" href="/email-configuration/platforms/laravel">
+    Update .env with mySMTP settings, clear config cache, and test with Tinker.
+  </Card>
+
+  <Card title="Django" icon="python" href="/email-configuration/platforms/django">
+    Configure the SMTP backend in settings.py and test with send_mail.
+  </Card>
+</CardGroup>
+
+## Need help?
+
+If your platform is not listed, you can usually connect any system that supports SMTP by entering the settings above. For provider-specific steps, contact [support@mysmtp.com](mailto:support@mysmtp.com).
+
+## Related articles
+
+- [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials)
+- [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

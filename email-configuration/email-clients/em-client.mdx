@@ -1,0 +1,56 @@
+---
+title: "Set up mySMTP in eM Client"
+sidebarTitle: "eM Client"
+description: "Configure mySMTP in eM Client using the SMTP tab in account settings. Set the relay host, port 587, STARTTLS security, and authentication."
+---
+
+eM Client lets you edit SMTP settings without removing the account. Make sure you have your mySMTP SMTP credentials ready.eM Client lets you edit SMTP settings without removing the account. Make sure you have your mySMTP SMTP credentials ready.eM Client lets you edit SMTP settings without removing the account. Make sure you have your mySMTP SMTP credentials ready.eM Client lets you edit SMTP settings without removing the account. Make sure you have your mySMTP SMTP credentials ready.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated IP) | e.g. `relayxx.mysmtp.com` (your hostname is in the setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Security policy | **Use if available** or **Required** (STARTTLS) |
+| Authentication | On, with your SMTP username and password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure eM Client
+
+<Steps>
+  <Step title="Open account settings">
+    In eM Client, go to **Menu** > **Accounts**.
+  </Step>
+  <Step title="Select your account">
+    Click the email account you want to configure in the left panel.
+  </Step>
+  <Step title="Open the SMTP tab">
+    Click the **SMTP** tab to edit the outgoing server settings.
+  </Step>
+  <Step title="Enter the server details">
+    Fill in the fields:
+
+    - **Host**: your relay hostname (e.g. `relayxx.mysmtp.com`)
+    - **Port**: **587**
+    - **Security policy**: select **Use if available** or **Required** for STARTTLS
+    - **Use authentication**: check the box
+    - **User Name**: your mySMTP SMTP username
+    - **Password**: your mySMTP SMTP password
+  </Step>
+  <Step title="Save and test">
+    Click **OK** or **Save** to apply the changes. Send a test email to confirm delivery.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+- **Cannot send mail:** verify the host matches the one in your setup email.
+- **Connection fails:** check that the port is **587** and the security policy enables STARTTLS. If your network blocks 587, try **2525**.
+- **Authentication error:** re-enter your mySMTP username and password, and confirm **Use authentication** is checked.
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

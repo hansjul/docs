@@ -1,0 +1,116 @@
+---
+title: "Konfigurer mySMTP med Magento 2 SMTP-indstillinger"
+sidebarTitle: "Magento"
+description: "Send transaktionsmails fra Magento 2 eller Adobe Commerce via mySMTP ved at konfigurere de indbyggede SMTP-mailindstillinger med dine loginoplysninger."
+---
+
+Magento 2 og Adobe Commerce kan sende transaktionsmails via mySMTP ved at bruge den indbyggede SMTP-transport, som er tilgaengelig i version 2.4.7 og nyere, eller et tredjeparts SMTP-modul til tidligere versioner.
+
+## Forudsaetninger
+
+- Admin-adgang til Magento admin-panel
+- Dine mySMTP-loginoplysninger (se [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials))
+- Et verificeret afsenderdomaene
+
+## SMTP-indstillinger
+
+| Indstilling | Vaerdi |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (fra din opsaetningsmail) |
+| Host (shared IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Kryptering | TLS (STARTTLS) |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Shared IP-planer er kun tilgaengelige for kunder i Danmark.
+</Note>
+
+## Indbygget SMTP-konfiguration (Magento 2.4.7+)
+
+<Steps>
+  <Step title="Aaben Mail Sending Settings">
+    Log ind paa Magento admin-panel. Ga til **Stores → Configuration → Advanced → System**.
+  </Step>
+  <Step title="Udvid Mail Sending Settings">
+    Scroll til **Mail Sending Settings**. Udvid sektionen og saet **Transport** til **SMTP**.
+  </Step>
+  <Step title="Indtast mySMTP-host og -port">
+    Udfyld felterne:
+
+    - **SMTP Host:** dit reelle mySMTP-hostname (fra din opsaetningsmail)
+    - **SMTP Port:** `587`
+  </Step>
+  <Step title="Aktiver godkendelse">
+    Saet **Authentication** til **Login**, og indtast:
+
+    - **Username:** dit mySMTP-brugernavn
+    - **Password:** dit mySMTP-adgangskode
+  </Step>
+  <Step title="Gem og ryd cache">
+    Klik pa **Save Config** øverst til højre. Ga derefter til **System → Cache Management** og klik pa **Flush Magento Cache**.
+  </Step>
+</Steps>
+
+<Tip>
+  Menunavne kan variere lidt mellem Magento-versioner. Hvis du ikke ser SMTP-muligheder under Mail Sending Settings, saa tjek, at du koerer Magento 2.4.7 eller senere.
+</Tip>
+
+## Til versioner aeldre end 2.4.7
+
+Magento-versioner foer 2.4.7 indeholder ikke en indbygget SMTP-transport. Installer en velvedligeholdt tredjeparts SMTP-udvidelse fra Magento Marketplace, og indtast derefter den samme host, port, brugernavn og adgangskode, som vises i tabellen ovenfor. Vaelg altid en udvidelse fra en anerkendt udvikler, og hold den opdateret.
+
+## Saet butiks-emailadresser
+
+Sorg for, at de adresser, Magento bruger som afsendere, er paa dit autentificerede domaene.
+
+<Steps>
+  <Step title="Aaben Store Email Addresses">
+    I Magento admin-panel gaar du til **Stores → Configuration → General → Store Email Addresses**.
+  </Step>
+  <Step title="Saet afsenderadresser">
+    Opdater adresserne for **General Contact**, **Sales Representative**, **Customer Support** og **Custom Email 1/2** til at bruge dit verificerede domaene (for eksempel `salg@ditdomaene.dk` og `support@ditdomaene.dk`).
+  </Step>
+  <Step title="Gem aendringer">
+    Klik pa **Save Config**.
+  </Step>
+</Steps>
+
+<Warning>
+  At bruge en standardadresse som `example.com` eller et uautentificeret domaene kan foraarsage, at mail afvises eller filtreres af mailbox-providere.
+</Warning>
+
+## Send en testmail
+
+Ga til **Stores → Configuration → Advanced → System → Mail Sending Settings** (eller din tredjeparts SMTP-udvidelses testside) og send en testmail til en adresse, du kontrollerer. Bekraeft, at den ankommer og viser det korrekte afsenderdomaene.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="SMTP-mulighed mangler">
+    Det betyder, at din Magento-version er aeldre end 2.4.7. Brug i stedet en anerkendt tredjeparts SMTP-udvidelse.
+  </Accordion>
+
+  <Accordion title="Forbindelsestest fejler">
+    Dobbelttjek dit reelle mySMTP-hostname, port 587 og TLS-valg. Hvis din server-firewall blokerer 587, saa prov port 2525.
+  </Accordion>
+
+  <Accordion title="Emails havner i spam">
+    Bekraeft, at SPF, DKIM og DMARC-poster er sat op korrekt. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Koer [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Afsenderadresse stemmer ikke overens">
+    Bekraeft, at adressen under **Store Email Addresses** matcher det autentificerede domaene i mySMTP. Uoverensstemmende domaener skader deliverability.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [SMTP-graenser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)
+- [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)

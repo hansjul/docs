@@ -1,0 +1,65 @@
+---
+title: "Opsæt mySMTP på iPhone og iPad Mail"
+sidebarTitle: "iPhone/iPad Mail"
+description: "Konfigurer mySMTP i Mail-appen til iPhone og iPad for iOS og iPadOS 17 og 18. Angiv den udgående SMTP-server, port 587 og godkendelse."
+---
+
+Brug Mail-appen på iPhone eller iPad til at sende mails via mySMTP. Vælg IMAP under kontotilføjelse.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server (dedikeret IP) | f.eks. `relayxx.mysmtp.com` (dit hostnavn står i opsætningsmailen) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** |
+| Sikkerhed | **STARTTLS** (kontakten "Brug SSL" til) |
+| Godkendelse | Adgangskode |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Delt IP-abonnementer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Konfigurer iPhone eller iPad Mail
+
+<Steps>
+  <Step title="Åbn Mail-kontoinstillinger">
+    Åbn **Indstillinger**, og gå derefter til **Apps** > **Mail** > **Mail-konti**.
+
+    <Tip>
+      På ældre iOS-versioner er stien **Indstillinger** > **Mail** > **Konti**.
+    </Tip>
+  </Step>
+  <Step title="Vælg din konto">
+    Tryk på den emailkonto, du vil konfigurere.
+  </Step>
+  <Step title="Åbn SMTP-indstillinger">
+    Tryk på **Konto**, og tryk derefter på **SMTP** under **Udgående mailserver**.
+  </Step>
+  <Step title="Tilføj eller rediger den primære server">
+    Tryk på den eksisterende primære server, eller tryk på **Tilføj server** for at oprette en ny.
+  </Step>
+  <Step title="Indtast serveroplysningerne">
+    Udfyld felterne:
+
+    - **Hostnavn**: dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`)
+    - **Brugernavn**: dit mySMTP SMTP-brugernavn
+    - **Adgangskode**: dit mySMTP SMTP-adgangskode
+    - **Brug SSL**: slå **til**
+    - **Godkendelse**: vælg **Adgangskode**
+    - **Serverport**: **587**
+  </Step>
+  <Step title="Gem og verificer">
+    Tryk på **Færdig**, og tryk derefter på **Konto** > **Færdig** for at gemme. Send en testmail for at bekræfte levering.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+- **Kan ikke sende mail:** Bekræft, at hostnavnet matcher det i din opsætningsmail.
+- **Forbindelsen fejler:** Kontroller, at **Brug SSL** er slået til, og at porten er **587**. Hvis dit netværk blokerer 587, prøv **2525**.
+- **Godkendelsesfejl:** Genindtast dit mySMTP-brugernavn og -adgangskode. Sørg for, at **Godkendelse** er indstillet til **Adgangskode**.
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

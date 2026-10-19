@@ -1,0 +1,60 @@
+---
+title: "Konica Minolta bizhub SMTP Setup via PageScope"
+sidebarTitle: "Konica Minolta"
+description: "Configure mySMTP on Konica Minolta bizhub devices through PageScope Web Connection. Set the SMTP server, port 587, STARTTLS, and SMTP authentication."
+---
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Encryption (labeled "SSL/TLS") | **STARTTLS** |
+| SMTP authentication | Enabled |
+| User Name | Your mySMTP SMTP username |
+| Password | Your mySMTP password |
+
+<Note>
+  Use the exact relay hostname from your mySMTP setup email. `relayxx.mysmtp.com` is only an example.
+</Note>
+
+<Note>
+  Shared IP plans are only available to customers in Denmark. All other customers use a dedicated hostname.
+</Note>
+
+## Configure the device
+
+<Steps>
+  <Step title="Open PageScope Web Connection">
+    Open a web browser, enter the device's IP address, and log in as **Administrator**.
+  </Step>
+  <Step title="Navigate to E-mail Settings">
+    Go to **Administrator** > **Network** > **E-mail Setting** > **E-mail TX (SMTP)**.
+  </Step>
+  <Step title="Enter the SMTP server">
+    In **SMTP Server**, enter your mySMTP relay hostname (e.g. `relayxx.mysmtp.com`).
+  </Step>
+  <Step title="Set the port and encryption">
+    Set **SMTP Port** to **587** and set **SSL/TLS** or **Encryption** to **STARTTLS**.
+  </Step>
+  <Step title="Enable SMTP authentication">
+    Turn on **SMTP Authentication** and enter your mySMTP **User Name** and **Password**.
+  </Step>
+  <Step title="Set the sender address">
+    Enter the **Sender E-mail Address** (for example, `scanner@yourdomain.com`). This domain must be authenticated for your mySMTP account.
+  </Step>
+  <Step title="Save and test">
+    Click **OK** or **Apply** to save. Send a test scan-to-email to confirm delivery.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+- **Cannot connect to server:** confirm your firewall allows outbound traffic on port 587. If blocked, try port **2525** or **25**.
+- **Invalid user name or password:** re-enter your mySMTP username and password carefully. They are case-sensitive.
+- **Relay denied:** the sender address domain must be on your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+- **STARTTLS not listed:** on some models, choose **TLS** or enable encryption after confirming the port is 587.
+
+For more guidance, see [Scan to email](/email-configuration/email-clients/scan-to-email) and [Common SMTP errors](/troubleshooting/common-smtp-errors).

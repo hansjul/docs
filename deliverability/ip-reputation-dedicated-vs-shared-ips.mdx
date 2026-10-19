@@ -1,0 +1,80 @@
+---
+title: "IP Reputation & Dedicated vs. Shared IPs"
+sidebarTitle: "IP Reputation"
+description: "Learn how IP reputation affects email deliverability and compare dedicated and shared IPs to choose the right sending setup for your mySMTP account."
+---
+
+<Tip>
+  Before you choose a dedicated IP, run the <a href="https://toolbox.smtp.ai/">PTR / rDNS Checker</a> and <a href="https://toolbox.smtp.ai/#warmup-generator">Warmup Plan Generator</a> in the mySMTP Deliverability Toolbox to verify reverse DNS and build a day-by-day warmup schedule.
+</Tip>
+
+## What is IP reputation?
+
+IP reputation is a trust score that ISPs assign to the IP address sending your mail. Reputation algorithms weigh multiple signals:
+
+| Signal | Impact |
+| --- | --- |
+| Spam complaints | High. Rates above 0.1% hurt deliverability. |
+| Hard bounces | High. Rates above 2% suggest poor list hygiene. |
+| Engagement (opens, clicks) | Positive. Strong engagement improves inbox placement. |
+| Authentication (SPF, DKIM, DMARC) | Required. Missing auth causes filtering or rejection. |
+| Blacklist status | High. Listing on major blacklists causes blocks. |
+| Volume consistency | Positive. Gradual, predictable volume builds trust. |
+
+## Shared IPs (DK only)
+
+On a shared IP, your mail travels from the same address as other mySMTP customers. mySMTP monitors the pool and enforces best practices to keep the shared reputation healthy. Shared IP plans are only available to customers in Denmark.
+
+**Good fit for you if:**
+
+- You send fewer than 100,000 emails per month.
+- Your volume fluctuates (for example, seasonal campaigns).
+- You prefer to avoid IP warmup and reputation management overhead.
+- You want a cost-effective sending setup.
+
+**Tradeoffs:**
+
+- Your reputation is partially influenced by other senders in the pool, though mySMTP actively manages this.
+- You cannot fully control the IP's historical reputation or branding with receivers.
+
+## Dedicated IPs
+
+A dedicated IP is reserved exclusively for your account. Your sending behavior alone determines its reputation.
+
+**Good fit for you if:**
+
+- You send high volumes consistently (for example, 100,000 or more emails per month).
+- You want full control over sender reputation.
+- You need custom authentication and branding alignment with receivers.
+- You operate in a regulated industry with strict compliance requirements.
+
+**Tradeoffs:**
+
+- You must warm up the IP for 21 to 45 days before sending at full volume.
+- A poor sending strategy (sudden spikes, high bounces, complaints) can damage the IP quickly.
+
+## Choosing your IP strategy
+
+| Factor | Shared IP (DK only) | Dedicated IP |
+| --- | --- | --- |
+| Volume | Under 100,000 / month | Over 100,000 / month |
+| Consistency | Fluctuating or seasonal | Steady, daily sending |
+| Reputation control | Managed by mySMTP | Fully your responsibility |
+| Warmup required | No | Yes, 21 to 45 days |
+| Cost | Lower | Higher |
+| Setup time | Immediate | Includes warmup period |
+
+## Best practices for strong IP reputation
+
+1. **Authenticate every message.** Publish SPF, DKIM, and DMARC records for every sending domain. See [DNS setup for authentication](/deliverability/dns-setup-for-authentication).
+2. **Warm up dedicated IPs.** Use the [mySMTP Warmup Schedule Generator](/deliverability/warm-up-plans) to build ISP trust gradually.
+3. **Monitor metrics daily.** Watch bounce rates, complaint rates, and engagement in your mySMTP dashboard and in [Google Postmaster Tools](https://postmaster.google.com/).
+4. **Clean your lists.** Remove invalid addresses and non-engagers before every major send.
+5. **Follow compliance rules.** Honor opt-outs, include unsubscribe links, and adhere to GDPR and CAN-SPAM guidelines. See [CAN-SPAM and email compliance](/security-compliance/can-spam-and-email-compliance).
+
+## Related articles
+
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)
+- [Warm up plans](/deliverability/warm-up-plans)
+- [Blacklist monitoring and delisting](/deliverability/blacklist-monitoring-and-delisting)
+- [Handling bounces and complaints](/deliverability/handling-bounces-and-complaints)

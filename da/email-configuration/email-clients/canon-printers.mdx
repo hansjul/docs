@@ -1,0 +1,81 @@
+---
+title: "Konfigurer Canon-printere til Scan to Email med mySMTP"
+sidebarTitle: "Canon-printere"
+description: "Opsæt Scan to Email på Canon imageRUNNER og imageRUNNER ADVANCE printere via Remote UI. Indtast mySMTP relay, port 587 og SMTP-autentificeringsdetaljer."
+---
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server (dedikeret) | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, DK kun) | `mail.mysmtp.com` |
+| Port | **587** |
+| Kryptering | STARTTLS |
+| Autentificering | SMTP-autentificering med dit mySMTP-brugernavn og -kodeord |
+| Fra-adresse | En adresse på dit autentificerede domæne |
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Opsæt Scan to Email på imageRUNNER / imageRUNNER ADVANCE
+
+<Steps>
+  <Step title="Åbn Remote UI">
+    Find printerens IP-adresse på enhedens kontrolpanel eller ved at udskrive en netværksindstillingsside. Indtast IP-adressen i en browser (for eksempel `http://192.168.1.50`). Log ind som administrator, hvis det kræves.
+  </Step>
+  <Step title="Naviger til email-indstillinger">
+    Gå til **Settings/Registration** > **Send** > **E-mail/I-Fax Settings**. På nogle modeller er stien **Network Settings** > **E-mail Settings**.
+  </Step>
+  <Step title="Indtast SMTP-server">
+    I feltet **SMTP Server** skal du indtaste dit mySMTP relay-hostnavn (for eksempel `relayxx.mysmtp.com`). Sæt porten til **587**.
+  </Step>
+  <Step title="Aktivér SMTP-autentificering">
+    Slå **SMTP Authentication** til, og indtast dit mySMTP-brugernavn og -kodeord.
+  </Step>
+  <Step title="Konfigurer TLS">
+    Aktivér **Use TLS for SMTP** eller **SMTP TX (TLS)**, hvis muligheden er tilgængelig. Aktivér ikke **POP before SMTP**.
+  </Step>
+  <Step title="Sæt afsenderadressen">
+    I feltet **From Address** eller **Default Sender** skal du indtaste en email-adresse, der bruger et domæne autentificeret på din mySMTP-konto.
+  </Step>
+  <Step title="Gem og test">
+    Gem indstillingerne og send en testscan til din egen email-adresse. Tjek din indbakke og spam-mappe.
+  </Step>
+</Steps>
+
+<Warning>
+  Aktivér ikke **POP before SMTP** på Canon-enheder. mySMTP bruger SMTP-autentificering, ikke POP-autentificering.
+</Warning>
+
+## Bemærkning om PIXMA og MAXIFY
+
+PIXMA og MAXIFY all-in-one printere viser ikke altid fulde SMTP-indstillinger i Remote UI. Nogle modeller kræver at du bruger IJ Scan Utility eller Canon PRINT app til at scanne til en fil og derefter sende den manuelt. Hvis din PIXMA eller MAXIFY printer tilbyder Scan to Email i EWS, skal du anvende de samme server- og autentificeringsindstillinger som angivet ovenfor.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="TLS-fejl på port 587">
+    Ældre Canon-firmware understøtter muligvis ikke STARTTLS. Skift til port **2525** og deaktivér TLS. Tjek Canons supportsite for en firmware-opdatering.
+  </Accordion>
+
+  <Accordion title="Autentificering fejlede">
+    Indtast igen dit mySMTP brugernavn og kodeord. Aktivér ikke POP before SMTP.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Bekræft at **From Address** bruger et domæne autentificeret på din mySMTP-konto.
+  </Accordion>
+
+  <Accordion title="Scanfil er for stor">
+    Reducer opløsningen eller brug sort-hvid scanning for at holde filen under vedhæftningsstørrelsesgrænsen. Se [Email vedhæftningsstørrelse](/da/troubleshooting/email-attachments-size).
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [Scan to Email generisk guide](/da/email-configuration/email-clients/scan-to-email)
+- [HP-printere](/da/email-configuration/email-clients/hp-printers)
+- [Email vedhæftningsstørrelse](/da/troubleshooting/email-attachments-size)
+- [Whitelisting og sikkerhedsbedste praksis](/da/getting-started/whitelisting-and-security-best-practices)

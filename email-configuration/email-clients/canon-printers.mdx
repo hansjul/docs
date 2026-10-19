@@ -1,0 +1,81 @@
+---
+title: "Configure Canon Printers for Scan to Email with mySMTP"
+sidebarTitle: "Canon Printers"
+description: "Set up Scan to Email on Canon imageRUNNER and imageRUNNER ADVANCE printers via Remote UI. Enter mySMTP relay, port 587, and SMTP authentication details."
+---
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated) | `relayxx.mysmtp.com` (from your setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Encryption | STARTTLS |
+| Authentication | SMTP authentication with your mySMTP username and password |
+| From address | An address on your authenticated domain |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Set up Scan to Email on imageRUNNER / imageRUNNER ADVANCE
+
+<Steps>
+  <Step title="Open the Remote UI">
+    Find the printer IP address on the device control panel or by printing a network settings page. Enter the IP in a browser (for example, `http://192.168.1.50`). Log in as an administrator if required.
+  </Step>
+  <Step title="Navigate to email settings">
+    Go to **Settings/Registration** > **Send** > **E-mail/I-Fax Settings**. On some models the path is **Network Settings** > **E-mail Settings**.
+  </Step>
+  <Step title="Enter the SMTP server">
+    In the **SMTP Server** field, enter your mySMTP relay hostname (for example, `relayxx.mysmtp.com`). Set the port to **587**.
+  </Step>
+  <Step title="Enable SMTP authentication">
+    Turn on **SMTP Authentication** and enter your mySMTP username and password.
+  </Step>
+  <Step title="Configure TLS">
+    Enable **Use TLS for SMTP** or **SMTP TX (TLS)** if the option is available. Do not enable **POP before SMTP**.
+  </Step>
+  <Step title="Set the sender address">
+    In the **From Address** or **Default Sender** field, enter an email address that uses a domain authenticated on your mySMTP account.
+  </Step>
+  <Step title="Save and test">
+    Save the settings and send a test scan to your own email address. Check your inbox and spam folder.
+  </Step>
+</Steps>
+
+<Warning>
+  Do not enable **POP before SMTP** on Canon devices. mySMTP uses SMTP authentication, not POP authentication.
+</Warning>
+
+## PIXMA and MAXIFY note
+
+PIXMA and MAXIFY all-in-one printers do not always expose full SMTP settings in the Remote UI. Some models require you to use the IJ Scan Utility or Canon PRINT app to scan to a file and then send it manually. If your PIXMA or MAXIFY printer does offer Scan to Email in the EWS, apply the same server and authentication settings listed above.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="TLS error on port 587">
+    Older Canon firmware may not support STARTTLS. Switch to port **2525** and disable TLS. Check Canon’s support site for a firmware update.
+  </Accordion>
+
+  <Accordion title="Authentication failed">
+    Re-enter your mySMTP username and password. Do not enable POP before SMTP.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Confirm the **From Address** uses a domain authenticated on your mySMTP account.
+  </Accordion>
+
+  <Accordion title="Scan file is too large">
+    Reduce the resolution or use black-and-white scanning to keep the file under the attachment size limit. See [Email Attachments Size](/troubleshooting/email-attachments-size).
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [Scan to Email generic guide](/email-configuration/email-clients/scan-to-email)
+- [HP Printers](/email-configuration/email-clients/hp-printers)
+- [Email Attachments Size](/troubleshooting/email-attachments-size)
+- [Whitelisting and Security Best Practices](/getting-started/whitelisting-and-security-best-practices)

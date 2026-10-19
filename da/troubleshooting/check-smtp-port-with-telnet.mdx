@@ -1,0 +1,83 @@
+---
+title: "Tjek om en SMTP port er åben med Telnet eller PowerShell"
+sidebarTitle: "Tjek port med Telnet"
+description: "Test om porte 587, 2525, 465 eller 25 er tilgængelige fra dit netværk til mySMTP relay ved hjælp af telnet på Windows, macOS og Linux, eller PowerShell."
+---
+
+Brug dit relay hostnavn fra mySMTP opsætningsmail. Eksemplerne nedenfor bruger sample host `relayxx.mysmtp.com`.
+
+## Aktiver telnet
+
+<Tabs>
+  <Tab title="Windows">
+    1. Åbn **Control Panel** > **Programs** > **Turn Windows features on or off**.
+    2. Sæt flueben ved **Telnet Client** og klik **OK**.
+
+    Eller kør dette i en administrator Command Prompt:
+
+    ```bash
+    dism /online /Enable-Feature /FeatureName:TelnetClient
+    ```
+  </Tab>
+  <Tab title="macOS">
+    Installer telnet med [Homebrew](https://brew.sh):
+
+    ```bash
+    brew install telnet
+    ```
+  </Tab>
+  <Tab title="Linux">
+    ```bash
+    sudo apt install telnet    # Debian, Ubuntu
+    sudo dnf install telnet    # Fedora, RHEL
+    ```
+  </Tab>
+</Tabs>
+
+## Test porten
+
+<Steps>
+  <Step title="Kør telnet">
+    Åbn en terminal eller Command Prompt og forbind til den port, du vil teste:
+
+    ```bash
+    telnet relayxx.mysmtp.com 587
+    ```
+
+    Udskift `587` med `2525`, `465` eller `25` for at teste en anden port.
+  </Step>
+  <Step title="Læs resultatet">
+    | Resultat | Betydning |
+    | --- | --- |
+    | En linje der starter med `220` | Porten er åben, og serveren svarede |
+    | Blank skærm med forbindelse etableret (port 465) | Porten er åben. Port 465 forventer TLS med det samme, så der vises ingen `220` hilsen i telnet |
+    | `Connection timed out` | Porten er blokeret af en firewall, router eller din internetudbyder |
+    | `Connection refused` | Noget på vejen afviste forbindelsen; tjek hostnavn og port |
+    | `Could not resolve host` / `Unknown host` | Hostnavnet er forkert eller DNS virker ikke |
+  </Step>
+  <Step title="Luk sessionen">
+    Skriv `QUIT` og tryk **Enter**. Hvis sessionen ikke svarer, tryk **Ctrl + ]**, skriv derefter `quit`.
+  </Step>
+</Steps>
+
+## Alternativ: PowerShell på Windows
+
+Ingen telnet behøves. Kør:
+
+```powershell
+Test-NetConnection -ComputerName relayxx.mysmtp.com -Port 587
+```
+
+`TcpTestSucceeded : True` betyder, at porten er åben. `False` betyder, at den er blokeret.
+
+## Hvis porten er blokeret
+
+- Prøv port **2525**, som sjældent er blokeret.
+- Bed din netværksadministrator eller hostingudbyder om at tillade udgående trafik til porten.
+- De fleste internetudbydere og cloud udbydere blokkerer udgående port **25**. Brug i stedet 587 eller 2525.
+
+<Tip>
+  Brug [test.smtp.ai](https://test.smtp.ai) til at tjekke forbindelsen, TLS 1.2/1.3 forhandling og autentificering i én test.
+</Tip>
+
+For port og krypteringsdetaljer, se [Understøttede SMTP porte og kryptering](/da/getting-started/supported-smtp-ports-and-encryption). For fulde SMTP session tests, se [Kommandolinje test](/da/email-configuration/code-examples/command-line-test).

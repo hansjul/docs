@@ -1,0 +1,136 @@
+---
+title: "mySMTP Hosted MailWizz: Administreret e-mailmarketingplatform"
+sidebarTitle: "Hosted MailWizz"
+description: "Få en hosted MailWizz-platform optimeret til mySMTP dedikerede servere, med onboarding-hjælp, ubegrænsede abonnenter og TLS til tracking-domæner, klar inden for en time."
+---
+
+Hosted MailWizz er et tillæg til ethvert mySMTP Marketing & Transactional Emails-pakke. mySMTP installerer, hoster og konfigurerer den fulde MailWizz-platform for dig, så der ikke er noget at installere eller vedligeholde.
+
+<Note>
+  Hosted MailWizz kører på mySMTP's egen infrastruktur og sender kun via mySMTP-IP'er. Du kan ikke tilkoble eksterne SMTP-udbydere eller tredjeparts delivery servers til den.
+</Note>
+
+<Tip>
+  Kører du allerede din egen MailWizz-installation? En mySMTP dedikeret IP virker også med en ekstern, selvhostet MailWizz. Se [Forbind MailWizz til mySMTP](/da/email-configuration/web-applications/mailwizz) for at tilføje mySMTP som en delivery server.
+</Tip>
+
+## Hvorfor vælge hosted MailWizz
+
+<CardGroup cols={2}>
+  <Card title="Optimeret til deliverability" icon="inbox">
+    Brugertilpassede indstillinger udnytter dine mySMTP dedikerede servere fuldt ud.
+  </Card>
+
+  <Card title="Onboarding-support" icon="user-gear">
+    MailWizz-specialister hjælper dig med at konfigurere din infrastruktur og strømline opsætningen.
+  </Card>
+
+  <Card title="Ubegrænsede abonnenter" icon="users">
+    Upload så mange abonnenter, som din e-mailmarketing har brug for, uden abonnenters loft.
+  </Card>
+
+  <Card title="TLS til tracking-domæner" icon="lock">
+    mySMTP sikrer dine tracking-domæner med TLS-certifikater, så modtagere når dine links sikkert.
+  </Card>
+</CardGroup>
+
+## Selvhostet vs hosted MailWizz
+
+|  | Selvhostet MailWizz | mySMTP hosted MailWizz |
+| --- | --- | --- |
+| Hosting | Din egen server | mySMTP-infrastruktur |
+| Installation og opdateringer | Dig | mySMTP |
+| Afsendelses-IP'er | Din mySMTP dedikerede IP (andre delivery servers mulige) | Kun mySMTP-IP'er |
+| Delivery server-opsætning | Du tilføjer mySMTP som en SMTP delivery server | Prækonfigureret |
+| Bounce og complaint-håndtering | Du konfigurerer bounce og FBL servere | Opsættes under onboarding |
+| TLS til tracking-domæner | Du administrerer certifikater | Inkluderet |
+| Abonnentgrænser | Afhænger af din server | Ubegrænsede |
+| Opsætningstid | Varierer | Klar til at sende inden for en time |
+
+## Kom i gang
+
+<Steps>
+  <Step title="Bestil en pakke">
+    Vælg en hvilken som helst [Marketing & Transactional Emails-pakke](https://mysmtp.com/marketing-transactional-emails), og tilføj hosted MailWizz.
+  </Step>
+  <Step title="Send dine afsenderdomæner">
+    Den eneste information, mySMTP har brug for for at konfigurere din konto, er listen over domæner, du vil sende fra.
+  </Step>
+  <Step title="Tilføj DNS-posterne">
+    mySMTP sender dig DNS-indstillingerne for hvert domæne (SPF, DKIM og tracking-domæne). Tilføj dem hos din DNS-udbyder. Din SPF-post skal indeholde `include:spf1.mysmtp.com ~all`. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+  </Step>
+  <Step title="Start med at sende">
+    Din MailWizz-konto er klar til at sende inden for en time efter betaling. Importer dine lister, opret en kampagne, og send først en lille test.
+  </Step>
+</Steps>
+
+<Note>
+  På en ny dedikeret IP skal du øge volumen gradvist. Byg en plan med [warm-up-generatoren](https://toolbox.smtp.ai/#warmup-generator), og læs [Warm-up-planer](/da/deliverability/warm-up-plans).
+</Note>
+
+## Inkluderede funktioner
+
+### Kampagner og lister
+
+| Funktion | Hvad den gør |
+| --- | --- |
+| Oversigt dashboard | Tællere for lister, kampagner, abonnenter, segmenter og delivery servers, plus en seneste aktivitetsrapport |
+| E-mail-lister | Administrer alle lister ét sted |
+| Kampagner | Regulære og autoresponder-kampagner, vist sammen eller separat |
+| Undersøgelser | Byg undersøgelser, og se detaljerede statistikker for hver enkelt |
+| E-mail-skabeloner | Opret og kategoriser skabeloner, eller upload næsten enhver eksisterende HTML-skabelon |
+| Listesidetyper | Angiv standard tilmeldings-, afmeldings- og call-to-action-sider, som alle lister arver |
+
+### Deliverability og listehygiejne
+
+| Funktion | Hvad den gør |
+| --- | --- |
+| Afsenderdomæner | Match kampagners From-adresse, og tilføj DKIM-signaturer til e-mail-headerne |
+| SPF/DKIM-indstillinger | Afsenderdomæner genererer deres egne DKIM-nøgler, eller du kan tvinge en global DKIM-signatur |
+| Tracking-domæner | Erstat domænet i tracking-URL'er med dit eget branded domæne |
+| Bounce-servere | Behandl bounces automatisk, når du leverer via mySMTP-servere |
+| Feedback loop-servere | Behandl spam-klager automatisk, når du leverer via mySMTP-servere |
+| E-mail box monitors | Hold øje med mailboxe, og handle på abonnenter baseret på indholdet af indgående e-mails |
+| E-mail blacklist | Global blokliste: listede adresser modtager aldrig e-mail fra systemet |
+| E-mail block-anmodninger | Modtagere kan anmode om aldrig at blive mailet. mySMTP anbefaler at godkende enhver anmodning. |
+
+### Analyser og data
+
+| Funktion | Hvad den gør |
+| --- | --- |
+| Detaljerede logs | Leveringslogs og analyser til at guide deliverability-beslutninger |
+| Kampagnestatistikker | Åbninger, klik og præstation per kampagne |
+| IP-placering og GEO-statistikker | Se hvor abonnenter åbner og klikker, ved hjælp af MaxMind GeoIP2 city-databasen |
+| Lande- og zonedatabaser | Klar-til-brug lande- og statelister til tilmeldingsformularer og brugerdefinerede felter |
+| API-indstillinger | Kræv underskrevne API-forespørgsler, og tillad eller blokér IP-adresser og -områder |
+
+<Tip>
+  Planlæg batchstørrelser og leveringsskemaer med [MailWizz Quota Optimizer](https://toolbox.smtp.ai/), og tjek kampagner, før du sender, med [Sender Readiness Checklist](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+</Tip>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Hvilke mySMTP-abonnementer virker med hosted MailWizz?">
+    Ethvert mySMTP Marketing & Transactional Emails-pakke kan kombineres med hosted MailWizz.
+  </Accordion>
+
+  <Accordion title="Hvad skal jeg give til onboarding?">
+    Kun dine afsenderdomæner. mySMTP konfigurerer din MailWizz-konto og sender dig DNS-indstillingerne for disse domæner.
+  </Accordion>
+
+  <Accordion title="Hvor lang tid tager opsætningen?">
+    Din MailWizz-konto konfigureres og er klar til at sende inden for en time efter betaling.
+  </Accordion>
+
+  <Accordion title="Hvor kan jeg lære mere om MailWizz?">
+    Besøg [mailwizz.com](https://www.mailwizz.com/) for produktdetaljer og en testrunde.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [Forbind en selvhostet MailWizz til mySMTP](/da/email-configuration/web-applications/mailwizz)
+- [Håndtering af bounces og klager](/da/deliverability/handling-bounces-and-complaints)
+- [Transaktionelle vs marketing-e-mails](/da/email-configuration/transactional-vs-marketing-emails)
+- [Kontakt support](/da/support/contact-support)

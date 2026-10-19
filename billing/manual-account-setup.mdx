@@ -1,0 +1,60 @@
+---
+title: "Manual Account Setup: Order mySMTP by Bank Transfer"
+sidebarTitle: "Manual Setup Form"
+description: "No company credit card? Download the mySMTP account setup form in English or Danish to order a subscription manually and pay by bank transfer instead."
+---
+
+Use the manual setup form when your company cannot pay online by credit card, for example when invoices must be paid by bank transfer or through an EAN number (Denmark).
+
+## Download the form
+
+<CardGroup cols={2}>
+  <Card title="Account setup form (English)" icon="file-pdf" href="https://mysmtp.com/images/documents/account-setup-form_EN.pdf">
+    For customers outside Denmark. Includes VAT number for EU companies.
+  </Card>
+
+  <Card title="Kontooprettelse (Dansk)" icon="file-pdf" href="https://mysmtp.com/images/documents/kontooprettelse_DA.pdf">
+    Til danske kunder. Inkluderer EAN nummer og valg af månedlig eller årlig betaling.
+  </Card>
+</CardGroup>
+
+## Order manually
+
+<Steps>
+  <Step title="Download and fill in the form">
+    Choose the English or Danish version and complete all fields.
+  </Step>
+  <Step title="Select Bank as payment method">
+    Tick **Bank** under **Payment method** (Danish form: **Betalingsmetode**).
+  </Step>
+  <Step title="Sign and send the form">
+    Date and sign the form, then email it to [support@mysmtp.com](mailto:support@mysmtp.com).
+  </Step>
+  <Step title="Receive your setup email">
+    When your order is processed, you receive a setup email with your SMTP hostname, login details and DNS instructions.
+  </Step>
+</Steps>
+
+## Form fields
+
+| Field | English form | Danish form |
+| --- | --- | --- |
+| Company | Company | Virksomhed |
+| Tax or invoicing ID | VAT no. (if inside EU) | EAN nummer |
+| Contact person and phone | Contact person, Phone | Navn kontaktperson, Tlf. |
+| Address | Address, Postal code, City | Adresse, Postnummer, By |
+| Email and website | Email, Website | Email, Website |
+| Package | What package | Hvilken pakke |
+| Sending domains | Sending domain(s) | Sende domæne(r) |
+| Complaints address | Email for feedback loops / complaints | Not included |
+| Billing period | Not included | SMTP ordre type: Månedlig or 1 år (-25%) |
+| Payment method | Credit card, PayPal, Bank, Crypto | Credit card, PayPal, Bank, Crypto |
+| Date and signature | Date, Signature | Dato, Underskrift |
+
+<Tip>
+  List every domain you plan to send from under **Sending domain(s)**. Check their SPF, DKIM and DMARC records first with the free [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/).
+</Tip>
+
+<Note>
+  Have a company credit card? Order online instead for faster activation. See [Sign Up & Activate](/getting-started/sign-up-and-activate-your-account).
+</Note>

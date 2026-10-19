@@ -1,0 +1,61 @@
+---
+title: "Opsæt mySMTP i Samsung Email"
+sidebarTitle: "Samsung Email"
+description: "Konfigurer mySMTP i Samsung Email-appen. Angiv den udgående SMTP-server, sikkerhedstype TLS/STARTTLS, port 587, og kræv godkendelse."
+---
+
+Du har brug for dit mySMTP SMTP-brugernavn, -adgangskode og relay-hostnavn. Indstillingerne for Samsung Email-appen adskiller sig lidt fra den generiske Android Mail-app.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server (dedikeret IP) | f.eks. `relayxx.mysmtp.com` (dit hostnavn står i opsætningsmailen) |
+| Server (delt IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** |
+| Sikkerhedstype | **TLS** / **STARTTLS** |
+| Kræv godkendelse | Til |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Delt IP-abonnementer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+## Konfigurer Samsung Email
+
+<Steps>
+  <Step title="Åbn kontoinstillinger">
+    Åbn Samsung Email-appen, tryk på menuikonet, og tryk derefter på **Indstillinger**.
+  </Step>
+  <Step title="Vælg din konto">
+    Tryk på den emailkonto, du vil konfigurere.
+  </Step>
+  <Step title="Åbn serverindstillinger">
+    Tryk på **Serverindstillinger** eller **Administrer konto**.
+  </Step>
+  <Step title="Rediger den udgående server">
+    Tryk på **Udgående server** eller **SMTP-server**.
+  </Step>
+  <Step title="Indtast serveroplysningerne">
+    Udfyld felterne:
+
+    - **SMTP-server**: dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`)
+    - **Sikkerhedstype**: vælg **TLS** eller **STARTTLS**
+    - **Port**: **587**
+    - **Kræv godkendelse**: slå **til**
+    - **Brugernavn**: dit mySMTP SMTP-brugernavn
+    - **Adgangskode**: dit mySMTP SMTP-adgangskode
+  </Step>
+  <Step title="Gem og test">
+    Tryk på **Færdig** eller **Gem**. Send en testmail for at bekræfte levering.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+- **Kan ikke sende mail:** Bekræft, at SMTP-serveren matcher hostnavnet i din opsætningsmail.
+- **Forbindelsen fejler:** Kontroller, at sikkerhedstypen er **TLS** eller **STARTTLS**, og at porten er **587**. Hvis dit netværk blokerer 587, prøv **2525**.
+- **Godkendelsesfejl:** Genindtast dit mySMTP-brugernavn og -adgangskode, og bekræft at **Kræv godkendelse** er slået til.
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

@@ -1,0 +1,117 @@
+---
+title: "SPF, DKIM, DMARC and BIMI Explained"
+sidebarTitle: "SPF, DKIM, DMARC"
+description: "Understand SPF, DKIM, DMARC, and BIMI in plain English. Learn how to set up email authentication records to improve deliverability and show your brand logo in inboxes."
+---
+
+<Tip>
+  Check your authentication setup instantly with the mySMTP [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) at toolbox.smtp.ai. No account required.
+</Tip>
+
+## SPF (Sender Policy Framework)
+
+SPF is like a guest list. It tells the internet which servers are allowed to send emails from your domain.
+
+### DNS record
+
+Add a TXT record to your domain's DNS:
+
+```text
+v=spf1 include:spf1.mysmtp.com ~all
+```
+
+This tells receiving servers that mySMTP is authorized to send email for your domain.
+
+<Note>
+  If your domain already has an SPF record, add `include:spf1.mysmtp.com` to the existing record instead of publishing a second one. Only one SPF record is allowed per domain.
+</Note>
+
+### How to verify
+
+Use the mySMTP [SPF Validator](https://toolbox.smtp.ai/) to expand every `include:`, count DNS lookups (limit is 10), and catch syntax errors or weak endings like `~all` or `?all`.
+
+## DKIM (DomainKeys Identified Mail)
+
+DKIM puts a digital signature on your emails so recipients know they have not been altered in transit.
+
+### DNS record
+
+mySMTP gives you a DKIM record for your account. Add it as a TXT record:
+
+| Field | Value |
+| --- | --- |
+| Type | TXT |
+| Name | `mysmtp._domainkey` (or the selector provided in your setup email) |
+| Value | The 2048-bit public key generated for your account |
+
+### How to verify
+
+Use the mySMTP [DKIM Checker](https://toolbox.smtp.ai/) to verify the domain, selector, key type, and key length. The tool warns if the key is under 1024 bits.
+
+## DMARC (Domain-based Message Authentication)
+
+DMARC tells email services what to do when SPF or DKIM fail, and it sends you reports so you can spot abuse.
+
+### DNS record
+
+Add a TXT record to your DNS:
+
+```text
+v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com
+```
+
+| Tag | Meaning |
+| --- | --- |
+| `v=DMARC1` | Required version identifier |
+| `p=none` | Policy: monitor only (do not block yet) |
+| `rua=` | Aggregate report delivery address |
+
+### Recommended rollout
+
+Start with `p=none` to collect data without rejecting mail. After 2 to 4 weeks of clean reports, move to `p=quarantine` to send failing mail to spam. Once you are confident, move to `p=reject` to block spoofed messages entirely.
+
+### How to verify
+
+Use the mySMTP [DMARC Wizard](https://toolbox.smtp.ai/) to build a record step by step, or the [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) to get a pass/warn/fail summary of all three, including alignment with your From domain.
+
+## BIMI (Brand Indicators for Message Identification)
+
+BIMI displays your brand logo next to your emails in supporting inboxes, such as Gmail on mobile and web.
+
+### Requirements
+
+- DMARC must be in place with `p=quarantine` or `p=reject`
+- A verified Mark Certificate (VMC) or Common Mark Certificate (CMC) is required for Gmail
+- Your logo must be in SVG Tiny PS format
+
+### DNS record
+
+Add a TXT record:
+
+```text
+v=BIMI1; l=https://yourdomain.com/logo.svg;
+```
+
+### Tools
+
+- Convert your logo to SVG Tiny PS with the mySMTP [BIMI SVG Converter](https://toolbox.smtp.ai/)
+- Generate the full BIMI TXT record with the mySMTP [BIMI Generator](https://toolbox.smtp.ai/)
+
+<Note>
+  BIMI is not supported by every mailbox provider. Even where it is supported, the logo may not appear if DMARC alignment fails or the certificate requirement is not met.
+</Note>
+
+## Quick reference: what to set up when
+
+| Stage | Action | Tool |
+| --- | --- | --- |
+| New domain | Publish SPF and DKIM | [SPF Validator](https://toolbox.smtp.ai/), [DKIM Checker](https://toolbox.smtp.ai/) |
+| Before first send | Add DMARC with `p=none` | [DMARC Wizard](https://toolbox.smtp.ai/) |
+| Ongoing monitoring | Review DMARC reports and alignment | [One-Click Checker](https://toolbox.smtp.ai/) |
+| Ready for branding | Publish BIMI with DMARC `p=quarantine` or `reject` | [BIMI Generator](https://toolbox.smtp.ai/), [BIMI SVG Converter](https://toolbox.smtp.ai/) |
+
+## Related articles
+
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)
+- [Improve email deliverability](/deliverability/improve-email-deliverability)
+- [Deliverability Toolbox](/deliverability/deliverability-toolbox)

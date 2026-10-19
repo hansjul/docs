@@ -1,0 +1,87 @@
+---
+title: "Outlook 2025 SMTP Setup Guide"
+sidebarTitle: "Outlook 2025"
+description: "Set up mySMTP in Outlook 2025. Configure the outgoing SMTP server, ports, TLS encryption, and authentication using your mySMTP credentials."
+---
+
+Set up Outlook to send mail through mySMTP by updating the outgoing (SMTP) server on your existing account. Incoming mail settings stay unchanged.Set up Outlook to send mail through mySMTP by updating the outgoing (SMTP) server on your existing account. Incoming mail settings stay unchanged.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Outgoing mail server | `relayxx.mysmtp.com` (from your setup email) |
+| Outgoing mail server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Encryption | **STARTTLS** |
+| Authentication | Required |
+| Username / password | Your mySMTP SMTP username and password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure Outlook
+
+<Tabs>
+  <Tab title="Outlook 2025 (beta)">
+    The desktop client Outlook 2025 has not yet been announced final, so this is the guide for those testing the BETA version.
+
+    <Steps>
+      <Step title="Open account settings">
+        Open Outlook, click the **Settings** icon, and then click **Manage** for the email account you want to use with mySMTP.
+      </Step>
+      <Step title="Unlock account editing">
+        Type the **Password** for incoming email to enable account editing.
+      </Step>
+      <Step title="Enter the SMTP settings">
+        In the outgoing (SMTP) section, enter the server, port, encryption, username, and password from the table above.
+      </Step>
+      <Step title="Save">
+        Click **Continue** and wait for confirmation.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Outlook 2016 to 2025">
+    <Note>
+      Your account already uses IMAP for incoming mail. Follow the steps below to configure the outgoing SMTP server.
+    </Note>
+
+    <Steps>
+      <Step title="Open account settings">
+        Go to **File** > **Account Settings** > **Account Settings...**
+      </Step>
+      <Step title="Select your account">
+        Select your existing email account **(IMAP)** and click **Change...**
+      </Step>
+      <Step title="Set the outgoing server">
+        Set **Outgoing mail server** to your mySMTP server, then click **More Settings...**
+      </Step>
+      <Step title="Turn on authentication">
+        On the **Outgoing Server** tab, check **My outgoing server (SMTP) requires authentication**, then choose **Log on using** and enter your mySMTP username and password.
+
+        If your mySMTP login is the same as your incoming mail login, you can choose **Use same settings as my incoming mail server** instead.
+      </Step>
+      <Step title="Set port and encryption">
+        On the **Advanced** tab, set **Outgoing server (SMTP)** to **587** and **Use the following type of encrypted connection** to **STARTTLS**. Click **OK**.
+      </Step>
+      <Step title="Test and finish">
+        Click **Next** to test your settings. When the test succeeds, click **Close**, then **Finish**.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Troubleshooting
+
+- **Test fails on the outgoing server:** check that the username and password are your mySMTP SMTP credentials, not your mailbox login.
+- **Connection times out:** your network may block port 587. Try port **2525**.
+- **Relay denied:** make sure the sender address uses a domain authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).
+
+## Related articles
+
+- [Email clients overview](/email-configuration/email-clients)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)

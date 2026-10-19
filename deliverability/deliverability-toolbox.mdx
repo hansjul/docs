@@ -1,0 +1,86 @@
+---
+title: "mySMTP Deliverability Toolbox: Free Email Sender Tools"
+sidebarTitle: "Deliverability Toolbox"
+description: "Use the free mySMTP Deliverability Toolbox at toolbox.smtp.ai to check SPF, DKIM, DMARC, rDNS and MX, build BIMI records, plan IP warmup and clean lists."
+---
+
+No account is required and there are no rate limits. Every check runs in your browser, so your data is never sent to mySMTP servers.
+
+<Card title="Open the Deliverability Toolbox" icon="toolbox" horizontal href="https://toolbox.smtp.ai/">
+  19 free tools for DNS, authentication, deliverability and more
+</Card>
+
+## Tools by category
+
+<Tabs>
+  <Tab title="DNS & Authentication">
+    | Tool | Use it to |
+    | --- | --- |
+    | **SPF Validator** | Expand every `include:`, count DNS lookups (limit 10), and catch syntax errors and weak `~all` / `?all` endings |
+    | **DKIM Checker** | Verify a domain and selector, key type and key length (warns under 1024 bits) |
+    | **DMARC Wizard** | Build a DMARC record step by step: policy, alignment, report addresses and percentage |
+    | **One-Click SPF / DKIM / DMARC Checker** | Get a pass/warn/fail summary of all three, including alignment with your From domain |
+  </Tab>
+  <Tab title="Deliverability">
+    | Tool | Use it to |
+    | --- | --- |
+    | **Warmup Plan Generator** | Get a day-by-day warmup schedule for a new IP or domain |
+    | **Sender Readiness Checklist** | Run a pre-send check of authentication, rDNS, unsubscribe and list hygiene |
+    | **Blacklist Checker** | Check your sending IP and domain against major blocklists, with delisting links |
+    | **MailWizz Quota Optimizer** | Calculate batch sizes, delivery servers and schedule for MailWizz campaigns |
+  </Tab>
+  <Tab title="Branding & BIMI">
+    | Tool | Use it to |
+    | --- | --- |
+    | **BIMI Generator** | Create the BIMI TXT record for `default._bimi.yourdomain.com` and preview your logo |
+    | **BIMI SVG Converter** | Convert a standard SVG logo to the required SVG Tiny PS format |
+  </Tab>
+  <Tab title="Diagnostics">
+    | Tool | Use it to |
+    | --- | --- |
+    | **MX Lookup** | List a domain's mail servers, priorities and IP addresses |
+    | **PTR / rDNS Checker** | Confirm your sending IP has a matching reverse and forward DNS record (FCrDNS) |
+    | **Bounce Code Decoder** | Turn SMTP responses such as `550 5.1.1` into a plain-English cause and fix |
+    | **Email Header Analyzer** | Trace relay hops and delays and read SPF, DKIM and DMARC results |
+    | **What Is My IP** | See your public IPv4/IPv6 address, PTR and ASN |
+    | **CNAME Lookup** | Trace CNAME chains for tracking, bounce and DKIM domains |
+  </Tab>
+  <Tab title="Utilities">
+    | Tool | Use it to |
+    | --- | --- |
+    | **Email List Analyzer** | Find syntax errors, duplicates, role and disposable addresses before you import a list |
+    | **Email Template Verifier** | Check an HTML template for unsubscribe links, broken links and spam triggers |
+    | **Password Generator** | Create strong SMTP passwords locally in your browser |
+  </Tab>
+</Tabs>
+
+## Which tool to use when
+
+| Situation | Start with |
+| --- | --- |
+| Setting up a new sending domain | [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/), then the DMARC Wizard |
+| Starting on a new dedicated IP | PTR / rDNS Checker, then the Warmup Plan Generator |
+| Emails landing in spam | Sender Readiness Checklist and Email Header Analyzer |
+| A message bounced | Bounce Code Decoder |
+| Sending was suddenly blocked | Blacklist Checker |
+| Before importing a new list | Email List Analyzer |
+
+## Related guides
+
+<CardGroup cols={2}>
+  <Card title="SPF, DKIM, DMARC and BIMI" icon="key" href="/deliverability/spf-dkim-dmarc-and-bimi-explained">
+    What each record does and how to publish it
+  </Card>
+
+  <Card title="Warm-up plans" icon="temperature-arrow-up" href="/deliverability/warm-up-plans">
+    How to ramp up a new IP safely
+  </Card>
+
+  <Card title="Blacklists" icon="ban" href="/deliverability/blacklist-monitoring-and-delisting">
+    Monitoring and delisting
+  </Card>
+
+  <Card title="Common SMTP errors" icon="triangle-exclamation" href="/troubleshooting/common-smtp-errors">
+    Fix the most frequent sending errors
+  </Card>
+</CardGroup>

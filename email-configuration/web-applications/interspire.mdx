@@ -1,0 +1,61 @@
+---
+title: "Connect Interspire to mySMTP for authenticated sending"
+sidebarTitle: "Interspire"
+description: "Configure Interspire Email Marketer to send via mySMTP using TLS authentication on port 587. Enter your SMTP credentials and send a test email."
+---
+
+You need your mySMTP SMTP credentials and admin access to Interspire.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| SMTP Hostname | Your relay hostname from the setup email (for example, `relayxx.mysmtp.com`) |
+| SMTP Port | `587` |
+| SMTP Username | Your full mySMTP username |
+| SMTP Password | Your mySMTP password |
+| SMTP Encryption Type | `TLS` (or `STARTTLS` if listed) |
+| SMTP Authentication | Yes / Enabled |
+
+<Note>
+  Use the exact relay hostname from your setup email. Do not guess the hostname.
+</Note>
+
+## Configure mail settings
+
+<Steps>
+  <Step title="Open Mail Settings">
+    Log in to your Interspire admin panel (usually at `/admin`). Go to **Settings → Mail Settings**.
+  </Step>
+  <Step title="Choose SMTP">
+    Under **Mail Sending Settings**, select **Send using SMTP server**.
+  </Step>
+  <Step title="Enter mySMTP details">
+    Fill in the fields with the values from the table above, then save.
+  </Step>
+  <Step title="Send a test email">
+    Go to **Email Campaigns → Send Test Email** and send a message to your own address. Confirm it arrives.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Test email fails to send">
+    Confirm the hostname matches your setup email, the port is 587, and TLS is selected. If your network blocks 587, try port 2525.
+  </Accordion>
+
+  <Accordion title="Authentication failed (535)">
+    Re-enter your mySMTP username and password. Make sure authentication is enabled.
+  </Accordion>
+
+  <Accordion title="Relay access denied">
+    Ensure the sender domain is authenticated for your mySMTP account. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+
+    <Tip>
+      Check your domain authentication with the [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+</AccordionGroup>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

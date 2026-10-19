@@ -1,0 +1,63 @@
+---
+title: "Brug af mySMTP med Shopify: Hvad du kan og ikke kan goere"
+sidebarTitle: "Shopify"
+description: "Shopify tillader ikke brugerdefinerede SMTP-servere til butiksnotifikationer, men du kan stadig bruge mySMTP med backend-integrationer og marketing-apps."
+---
+
+Butiksnotifikationer som ordrebekraeftelser, forsendelsesopdateringer og nulstilling af adgangskoder gaar altid via Shopify. Denne side forklarer, hvor mySMTP passer ind i din eom ordrebekraeftelser, forsendelsesopdateringer og nulstilling af adgangskoder gaar altid via Shopify. Denne side forklarer, hvor mySMTP passer ind i din email-stack.
+
+## Hvorfor Shopify ikke understootter brugerdefineret SMTP
+
+Shopify haandterer alle butiksnotifikationsmails internt. Du kan ikke aendre den udgående SMTP-server, port eller loginoplysninger for disse emails i Shopify-admihaandterer alle butiksnotifikationsmails internt. Du kan ikke aendre den udgående SMTP-server, port eller loginoplysninger for disse emails i Shopify-admin. I stedet sender Shopify notifikationer fra sin egen infrastruktur.
+
+## Hvad du kan goeoere i stedet
+
+### Autentificer dit domaeAutentificer dit domaene med Shopify
+
+Hvis du vil have butiksnotifikationer til at fremstaa som om de kommer fra dit domaene, skal du tilfoeje Shopifys DNS-poster for at autentificere det. Shopify leverer de praecise DNS-poster (SPF, DKIM og DMARC-vejledning) i din admin under **Settings → Notifications**aa som om de kommer fra dit domaene, skal du tilfoeje Shopifys DNS-poster for at autentificere det. Shopify leverer de praecise DNS-poster (SPF, DKIM og DMARC-vejledning) i din admin under **Settings → Notifications**.
+
+<Steps>
+  <Step title="Aaben Notifications-Aaben Notifications-indstillinger">
+    I din Shopify-admin gaar du til **Settings → Notifications** gaar du til **Settings → Notifications**.
+  </Step>
+  <Step title="Verificer din afsendereemail">
+    Under **Sender email** bekræfter eller opdaterer du From-adressen til en email paa dit domaene (for eksempel `noreply@ditdomae`**`Sender email`**` bekræfter eller opdaterer du From-adressen til en email paa dit domaene (for eksempel noreply@ditdomaene.dk`).
+  </Step>
+  <Step title="Tilfoeoej Shopify DNS-poster">
+    Shopify viser de DNS-poster, du skal tilfoeje hos din domaeneregistrator. Tilfoej dem praecist som vist, og returner derefter til Shopify og klik pa **Authenticate**oeje hos din domaeneregistrator. Tilfoej dem praecist som vist, og returner derefter til Shopify og klik pa **Authenticate**.
+  </Step>
+</Steps>
+
+## Hvor mySMTP stadig passer ind
+
+Selvom Shopify stystyrer butiksnotifikationer, kan du bruge mySMTP i følgende scenarier:
+
+- **Brugerdefineret backend eller headless storefront:** hvis du haandterer en separat app eller server, der sender emails, kan du konfigurere den til at relaye via mySMTP ved at bruge dine loginstorefront: hvis du haandterer en separat app eller server, der sender emails, kan du konfigurere den til at relaye via mySMTP ved at bruge dine loginoplysninger.
+- **Email-marketing-integrationer:** nogle tredjeparts marketingvaerktoejer og apps understotter brugerdefineret SMTP. Indtast mySMTP-indstillinger der til kampagner, abandoned-cartmail-marketing-integrationer: nogle tredjeparts marketingvaerktoejer og apps understotter brugerdefineret SMTP. Indtast mySMTP-indstillinger der til kampagner, abandoned-cart-flows eller nyhedsbreve.
+- **Separate applikationer:** alt uden for Shopifys indbyggede notifikationssystem, der understoalt uden for Shopifys indbyggede notifikationssystem, der understotter SMTP, kan bruge mySMTP.
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Jeg kan ikke finde SMTP-indstillinger i Shopify">
+    Shopify eksponerer ikke SMTP-serverindstillinger for butiksnotifikationer. Dette er forventet. Hvis du har brug for mere kontrol over transaktionsmail, saa overvej en brugerdefineret backend-integration eller en marketing-app, der understomail, saa overvej en brugerdefineret backend-integration eller en marketing-app, der understotter brugerdefineret SMTP.
+  </Accordion>
+
+  <Accordion title="Shopify-emails havner i spam">
+    Domaeneautentificering er den bedste løsning. Tilfoej alle Shopify DNS-poster og vent paa propagation. Tjek ogsaa, at dit domaene har rene SPF, DKIMaeneautentificering er den bedste løsning. Tilfoej alle Shopify DNS-poster og vent paa propagation. Tjek ogsaa, at dit domaene har rene SPF, DKIM og DMARC-poster.
+
+    <Tip>
+      Brug mySMTP Deliverability Toolbox paa [toolbox.smtp.ai](https://toolbox.smtp.ai/) til at koere tjek paa din domaeneopsaeaa [toolbox.smtp.ai](https://toolbox.smtp.ai/) til at koere tjek paa din domaeneopsaetning.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Marketing-app beder om SMTP-loginoginoplysninger">
+    Hvis en Shopify-app beder om SMTP-loginoplysninger, skal du bruge indstillingerne fra din mySMTP-opsaetningsmail. Hosten er dit reelle mySMTP-hostnameoginoplysninger, skal du bruge indstillingerne fra din mySMTP-opsaetningsmail. Hosten er dit reelle mySMTP-hostname, port `587`, kryptering `TLS`, og dit mySMTP-brugernavn og -adgangskode.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [Opsaetning af SMTP-loginaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials)
+- [Understoottede SMTP-porte og kryptering](/da/getting-started/supported-smtp-ports-and-encryption)
+- [DNS-indstillinger,, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer)

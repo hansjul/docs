@@ -1,0 +1,99 @@
+---
+title: "Handle Bounces and Complaints with mySMTP"
+sidebarTitle: "Bounces & Complaints"
+description: "Learn how mySMTP handles hard bounces, soft bounces, and spam complaints. Protect your sender reputation with suppression lists and list hygiene."
+---
+
+<Tip>
+  Decode any SMTP bounce response with the mySMTP [Bounce Code Decoder](https://toolbox.smtp.ai/) at toolbox.smtp.ai. Paste the code and get a plain-English cause and fix.
+</Tip>
+
+## Bounce types
+
+| Type | Meaning | Action |
+| --- | --- | --- |
+| Hard bounce | Permanent failure. The address does not exist or the domain is invalid. | Remove immediately. |
+| Soft bounce | Temporary failure. Mailbox full, server down, or message too large. | Retry a few times, then treat as hard bounce if delivery keeps failing. |
+
+### Common hard bounce causes
+
+- The recipient email address does not exist
+- The domain name is misspelled or no longer active
+- The recipient server has blocked delivery permanently
+
+### Common soft bounce causes
+
+- The recipient mailbox is over quota
+- The receiving mail server is temporarily unavailable
+- The message exceeds the recipient size limit
+
+## Suppression lists
+
+mySMTP maintains suppression lists to prevent future sends to addresses that have already bounced, complained, or unsubscribed. This improves deliverability and compliance automatically.
+
+### Automatic suppression
+
+MailWizz adds an address to the suppression list when any of these events occur:
+
+- A hard bounce is received
+- A recipient submits a spam complaint via a feedback loop (FBL)
+- A recipient unsubscribes
+
+### Manual suppression
+
+You can also add addresses manually to prevent sending to contacts you no longer want to reach.
+
+## Handling complaints
+
+A complaint happens when a recipient clicks the spam or junk button in their email client. mySMTP integrates with feedback loops from major providers to detect these events and suppress the address automatically.
+
+### How to reduce complaints
+
+<Steps>
+  <Step title="Use confirmed opt-in">
+    Only send to recipients who have explicitly opted in. Confirmed (double) opt-in is the safest method.
+  </Step>
+  <Step title="Use a recognizable sender">
+    Use a from name and from address that recipients will recognize.
+  </Step>
+  <Step title="Make unsubscribing easy">
+    Include a visible, one-click unsubscribe link in every marketing message. Honor opt-out requests immediately.
+  </Step>
+  <Step title="Send relevant content">
+    Segment your lists and send targeted content. Avoid excessive frequency.
+  </Step>
+</Steps>
+
+<Warning>
+  Spam complaint rates above 0.1% are concerning. Rates above 0.3% can cause throttling or blocks at major providers like Gmail and Yahoo.
+</Warning>
+
+## Monitoring and best practices
+
+- Review bounce and complaint reports in your mySMTP dashboard regularly.
+- Remove hard bounces immediately. mySMTP suppresses them automatically.
+- Clean your lists periodically to remove inactive or invalid addresses.
+- Segment by engagement and remove subscribers who have not opened or clicked in 6 to 12 months.
+- Authenticate with SPF, DKIM, and DMARC to improve deliverability and reduce spoofing complaints.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Bounce rate is suddenly high">
+    Pause the campaign and review the bounce reasons. Check for list import errors, stale data, or a bad domain. Remove invalid addresses before resuming.
+  </Accordion>
+
+  <Accordion title="Complaint rate is climbing">
+    Reduce frequency, tighten opt-in practices, and review your from name. Make sure the unsubscribe link is visible and functional. Segment to engaged recipients only.
+  </Accordion>
+
+  <Accordion title="Soft bounces are not converting to hard bounces">
+    If an address soft-bounces repeatedly over several campaigns, treat it as a hard bounce and remove it manually.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [Improve email deliverability](/deliverability/improve-email-deliverability)
+- [DNS setup for authentication](/deliverability/dns-setup-for-authentication)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

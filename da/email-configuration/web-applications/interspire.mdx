@@ -1,0 +1,61 @@
+---
+title: "Forbind Interspire til mySMTP til godkendt afsendelse"
+sidebarTitle: "Interspire"
+description: "Konfigurer Interspire Email Marketer til at sende via mySMTP ved hjælp af TLS-godkendelse på port 587. Indtast dine SMTP-legitimationsoplysninger, og send en testmail."
+---
+
+Du skal bruge dine mySMTP SMTP-legitimationsoplysninger og adminadgang til Interspire.
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| SMTP Hostname | Dit relay-værtsnavn fra opsætningsmailen (for eksempel `relayxx.mysmtp.com`) |
+| SMTP Port | `587` |
+| SMTP Username | Dit fulde mySMTP-brugernavn |
+| SMTP Password | Dit mySMTP-adgangskode |
+| SMTP Encryption Type | `TLS` (eller `STARTTLS` hvis angivet) |
+| SMTP Authentication | Ja / Aktiveret |
+
+<Note>
+  Brug det nøjagtige relay-værtsnavn fra din opsætningsmail. Gæt ikke på værtsnavnet.
+</Note>
+
+## Konfigurer mailindstillinger
+
+<Steps>
+  <Step title="Åbn Mail Settings">
+    Log ind på dit Interspire-adminpanel (normalt på `/admin`). Gå til **Settings → Mail Settings**.
+  </Step>
+  <Step title="Vælg SMTP">
+    Under **Mail Sending Settings** skal du vælge **Send using SMTP server**.
+  </Step>
+  <Step title="Indtast mySMTP-detaljer">
+    Udfyld felterne med værdierne fra tabellen ovenfor, og gem derefter.
+  </Step>
+  <Step title="Send en testmail">
+    Gå til **Email Campaigns → Send Test Email**, og send en besked til din egen adresse. Bekræft, at den ankommer.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Testmail kunne ikke sendes">
+    Bekræft, at værtsnavnet matcher din opsætningsmail, at porten er 587, og at TLS er valgt. Hvis dit netværk blokerer 587, kan du prøve port 2525.
+  </Accordion>
+
+  <Accordion title="Godkendelse mislykkedes (535)">
+    Genindtast dit mySMTP-brugernavn og din adgangskode. Sørg for, at godkendelse er aktiveret.
+  </Accordion>
+
+  <Accordion title="Relay-adgang nægtet">
+    Sørg for, at afsenderdomænet er godkendt for din mySMTP-konto. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+
+    <Tip>
+      Tjek din domænegodkendelse med [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+</AccordionGroup>
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

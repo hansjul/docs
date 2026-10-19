@@ -1,0 +1,61 @@
+---
+title: "Set up mySMTP in Samsung Email"
+sidebarTitle: "Samsung Email"
+description: "Configure mySMTP in the Samsung Email app. Set the outgoing SMTP server, security type TLS/STARTTLS, port 587, and require authentication."
+---
+
+You need your mySMTP SMTP username, password, and relay hostname. Settings for the Samsung Email app differ slightly from the generic Android Mail app.You need your mySMTP SMTP username, password, and relay hostname. Settings for the Samsung Email app differ slightly from the generic Android Mail app.You need your mySMTP SMTP username, password, and relay hostname. Settings for the Samsung Email app differ slightly from the generic Android Mail app.
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated IP) | e.g. `relayxx.mysmtp.com` (your hostname is in the setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Security type | **TLS** / **STARTTLS** |
+| Require authentication | On |
+| User Name | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure Samsung Email
+
+<Steps>
+  <Step title="Open account settings">
+    Open the Samsung Email app, tap the menu icon, then tap **Settings**.
+  </Step>
+  <Step title="Select your account">
+    Tap the email account you want to configure.
+  </Step>
+  <Step title="Open server settings">
+    Tap **Server settings** or **Manage account**.
+  </Step>
+  <Step title="Edit the outgoing server">
+    Tap **Outgoing server** or **SMTP server**.
+  </Step>
+  <Step title="Enter the server details">
+    Fill in the fields:
+
+    - **SMTP server**: your relay hostname (e.g. `relayxx.mysmtp.com`)
+    - **Security type**: select **TLS** or **STARTTLS**
+    - **Port**: **587**
+    - **Require authentication**: turn **on**
+    - **User Name**: your mySMTP SMTP username
+    - **Password**: your mySMTP SMTP password
+  </Step>
+  <Step title="Save and test">
+    Tap **Done** or **Save**. Send a test email to confirm delivery.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+- **Cannot send mail:** verify the SMTP server matches the hostname in your setup email.
+- **Connection fails:** check that the security type is **TLS** or **STARTTLS** and the port is **587**. If your network blocks 587, try **2525**.
+- **Authentication error:** re-enter your mySMTP username and password, and confirm **Require authentication** is on.
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

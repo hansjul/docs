@@ -1,0 +1,76 @@
+---
+title: "Introduktion til mySMTP e-mailafsendelsestjeneste"
+sidebarTitle: "Introduktion"
+description: "Opdag hvad mySMTP tilbyder til afsendelse af marketing, transaktions- og forretnings-e-mails med pålidelig deliverability og sikkerhed."
+---
+
+mySMTP er en SMTP relay-tjeneste designet til afsendelse af alle typer udgående e-mail, fra forretningskorrespondance til transaktionsbeskeder. Infrastrukturen understøtter SPF, DKIM og DMARC-godkendelse og er hostet i EU.
+
+## Hvad du kan sende med mySMTP
+
+| Brugsscenarie | Eksempler |
+| --- | --- |
+| Marketing-e-mails | Nyhedsbreve, produktopdateringer, kampagner |
+| Transaktions-e-mails | Ordrebekræftelser, nulstilling af adgangskode, alarmer |
+| Forretnings-e-mail | Supportsager, serviceopdateringer, teamkommunikation |
+| Automatiserede notifikationer | IoT-beskeder, systemovervågning, fakturapåmindelser |
+
+## Hvorfor bruge mySMTP
+
+- **Fokus på deliverability.** SPF, DKIM og DMARC understøttes for at hjælpe beskeder med at nå indbakken.
+- **EU-hosting.** SMTP-infrastrukturen kører fuldstændigt i EU, uden involvering af amerikanske cloudtjenester.
+- **Hurtig opsætning.** Vælg en plan, følg opsætningsguiden, og send inden for få minutter.
+- **Gratis toolbox.** Tjek godkendelse, planlæg IP warm-up, og diagnosticer leveringsproblemer med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) uden omkostninger.
+
+## Dine data forbliver i EU
+
+mySMTP kører hele sin SMTP-infrastruktur inden for EU. De e-mails du sender, deres indhold og vedhæftninger, og afsendelseslogfilerne gemmes ikke eller behandles af eksterne amerikanske cloududbydere.
+
+<CardGroup cols={3}>
+  <Card title="Kun EU-infrastruktur" icon="earth-europe">
+    SMTP-servere, beskeddata og afsendelseslogfiler forbliver inden for EU.
+  </Card>
+
+  <Card title="Ingen amerikanske cloudtjenester" icon="cloud-slash">
+    Ingen eksterne amerikanske cloududbydere håndterer de e-mails du sender gennem mySMTP.
+  </Card>
+
+  <Card title="GDPR by design" icon="shield-check" href="/da/security-compliance/gdpr-and-data-protection">
+    Behandlingen følger EU's generelle databeskyttelsesforordning.
+  </Card>
+</CardGroup>
+
+<Note>
+  **Omfang:** dette gælder SMTP-infrastrukturen og de e-maildata den håndterer. Kundesupportværktøjer, såsom supportchatten, er separate tredjepartstjenester og er ikke en del af e-mailafsendelsesplatformen.
+</Note>
+
+### Hvad er US CLOUD Act?
+
+**CLOUD Act** (Clarifying Lawful Overseas Use of Data Act) er en amerikansk lov fra 2018. Den giver amerikanske myndigheder mulighed for at kræve, at amerikanske teknologi- og cloudvirksomheder udleverer data i deres besiddelse, varetægt eller kontrol, **uanset hvor disse data gemmes**. Dette inkluderer data opbevaret i datacentre inden for EU.
+
+**Hvad dette betyder, hvis du er i EU:**
+
+- **En "EU-region" er ikke nok i sig selv.** Hvis din e-mailudbyder er et amerikansk selskab, eller er afhængig af en amerikansk cloudplatform, kan dine e-maildata være underlagt amerikanske dataanmodninger, selv når de fysisk er gemt i Europa.
+- **Mulig konflikt med GDPR.** I henhold til GDPR artikel 48 kan en udenlandsk myndigheds anmodning kun retfærdiggøre overførsel af personoplysninger, når den er baseret på en international aftale, såsom en fælles retshjælpsaftale. En CLOUD Act-anmodning kan sætte en amerikansk udbyder i en situation, hvor vedkommende ikke kan overholde begge love samtidig.
+- **Du får det måske ikke at vide.** Anmodninger kan være underlagt fortrolighedskendelser, så kunden hvis data berøres, nødvendigvis ikke informeres.
+- **En EU-udbyder på EU-infrastruktur undgår denne vej.** Når hverken udbyderen eller dens infrastruktur er underlagt amerikansk jurisdiktion, giver CLOUD Act amerikanske myndigheder ingen direkte måde at kræve udlevering på. Adgang skal derefter gå gennem europæiske juridiske processer og domstole.
+
+Fordi mySMTP's SMTP-infrastruktur ikke kører på amerikanske cloudtjenester, er de e-mails du sender og deres logfiler ikke eksponeret for CLOUD Act gennem en amerikansk cloududbyder.
+
+<Info>
+  Dette afsnit er generel information, ikke juridisk rådgivning. Konsulter din databeskyttelsesrådgiver eller juridiske rådgiver ved beslutninger om din organisations overholdelse.
+</Info>
+
+## Næste trin
+
+<CardGroup cols={2}>
+  <Card title="Tilmeld dig og aktiver" icon="user-plus" href="/da/getting-started/sign-up-and-activate-your-account">
+    Opret din konto og modtag dine SMTP-legitimationsoplysninger.
+  </Card>
+
+  <Card title="Dedikeret vs delt IP" icon="server" href="/da/getting-started/shared-ips-or-dedicated">
+    Forstå forskellen og vælg den rigtige plan. Delt IP-planer er kun til DK.
+  </Card>
+</CardGroup>
+
+Hvis du har brug for hjælp, kan du kontakte [support@mysmtp.com](mailto:support@mysmtp.com).

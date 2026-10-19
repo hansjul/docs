@@ -1,0 +1,117 @@
+---
+title: "Send emails fra Laravel via mySMTP"
+sidebarTitle: "Laravel"
+description: "Konfigurer Laravel til at sende email via mySMTP ved at opdatere din .env-fil med SMTP-host, port og loginoplysninger, og test derefter med Tinker."
+---
+
+Laravels indbyggede mailsystem understotter SMTP out of the box. Peg det paa mySMTP ved at redigere din miljøfil og rydde konfigurationscachen.
+
+## Forudsaetninger
+
+- En Laravel-applikation
+- Dine mySMTP-loginoplysninger (se [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials))
+- Et verificeret afsenderdomaene
+
+## SMTP-indstillinger
+
+| Indstilling | Vaerdi |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (fra din opsaetningsmail) |
+| Host (shared IP, kun DK) | `mail.mysmtp.com` |
+| Port | `587` |
+| Kryptering | TLS (STARTTLS) |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Adgangskode | Dit mySMTP SMTP-adgangskode |
+
+<Note>
+  Shared IP-planer er kun tilgaengelige for kunder i Danmark.
+</Note>
+
+## Konfigurer Laravel SMTP
+
+<Steps>
+  <Step title="Opdater .env">
+    Aaben `.env` i roden af dit Laravel-projekt, og saet mail-variablerne. Brug den versionspecifikke krypteringsindstilling:
+
+    ```bash
+    MAIL_MAILER=smtp
+    MAIL_HOST=relayxx.mysmtp.com
+    MAIL_PORT=587
+    MAIL_USERNAME=dit-mysmtp-brugernavn
+    MAIL_PASSWORD=dit-mysmtp-adgangskode
+    MAIL_FROM_ADDRESS="noreply@ditdomaene.dk"
+    MAIL_FROM_NAME="Dit App-navn"
+    ```
+
+    For Laravel 11 og nyere skal du saette `MAIL_SCHEME=tls` i stedet for `MAIL_ENCRYPTION`:
+
+    ```bash
+    MAIL_SCHEME=tls
+    ```
+
+    For Laravel 10 og tidligere skal du saette:
+
+    ```bash
+    MAIL_ENCRYPTION=tls
+    ```
+  </Step>
+  <Step title="Ryd config cache">
+    Koer følgende kommando, saa Laravel bruger de nye vaerdier:
+
+    ```bash
+    php artisan config:clear
+    ```
+  </Step>
+  <Step title="Send en testmail med Tinker">
+    Start Tinker:
+
+    ```bash
+    php artisan tinker
+    ```
+
+    Koer derefter:
+
+    ```php
+    Mail::raw('Dette er en testmail fra Laravel via mySMTP.', function ($message) {
+        $message->to('din-email@eksempel.dk')
+                ->subject('mySMTP Test');
+    });
+    ```
+
+    Tjek din indbakke for beskeden.
+  </Step>
+</Steps>
+
+<Warning>
+  Commit aldrig `.env`-filer med rigtige adgangskoder til versionsstyring. Indlaes loginoplysninger fra miljøvariable, eller brug Laravels krypterede miljøfiler (Laravel 11+), naar det er muligt.
+</Warning>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Forbindelse afvist eller timeout">
+    Sorg for, at du bruger dit reelle mySMTP-hostname (ikke `relayxx.mysmtp.com`). Tjek, at din server tillader udgående forbindelser paa port 587. Hvis porten er blokeret, saa prov 2525 eller 465.
+  </Accordion>
+
+  <Accordion title="Godkendelse fejlede">
+    Genindtast dit mySMTP-brugernavn og -adgangskode i `.env`, og koer `php artisan config:clear` igen. Bekraeft, at der ikke er ekstra mellemrum eller anførselstegn.
+  </Accordion>
+
+  <Accordion title="Emails havner i spam">
+    Bekraeft, at SPF, DKIM og DMARC er konfigureret for dit afsenderdomaene. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) og [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Koer [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Testmailen ankommer ikke">
+    Tjek dine Laravel-logs (`storage/logs/laravel.log`) for SMTP-fejldetaljer. Bekraeft ogsaa, at `MAIL_FROM_ADDRESS` bruger et domaene autentificeret med mySMTP.
+  </Accordion>
+</AccordionGroup>
+
+## Relaterede artikler
+
+- [SMTP-graenser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)
+- [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials)

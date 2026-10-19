@@ -1,0 +1,179 @@
+---
+title: "Java Code Example for mySMTP with Jakarta Mail"
+sidebarTitle: "Java"
+description: "Send email from Java using Jakarta Mail (Angus Mail) with STARTTLS on port 587. Includes Maven and Gradle dependency examples for mySMTP."
+---
+
+Use Jakarta Mail, the official Java mail API, to send email through mySMTP with STARTTLS on port 587. The reference implementation is Angus Mail.
+
+## Prerequisites
+
+- Java 11 or later
+- Maven or Gradle
+- Your mySMTP username and password from the setup email
+- Your mySMTP hostname from the setup email (shown as `relayxx.mysmtp.com` in these examples)
+
+## Install Angus Mail
+
+<CodeGroup>
+
+```xml Maven
+<dependency>
+    <groupId>org.eclipse.angus</groupId>
+    <artifactId>angus-mail</artifactId>
+    <version>2.0.3</version>
+</dependency>
+```
+
+```groovy Gradle
+dependencies {
+    implementation 'org.eclipse.angus:angus-mail:2.0.3'
+}
+```
+
+</CodeGroup>
+
+## Basic send example
+
+```java
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+import java.util.Properties;
+
+public class MySmtpExample {
+    public static void main(String[] args) throws Exception {
+        String host = System.getenv().getOrDefault("MYSMTP_HOST", "relayxx.mysmtp.com");
+        String user = System.getenv("MYSMTP_USER");
+        String pass = System.getenv("MYSMTP_PASS");
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, pass);
+            }
+        });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("you@yourdomain.com", "Your Name"));
+        message.setRecipients(Message.RecipientType.TO,
+            InternetAddress.parse("recipient@example.com"));
+        message.setSubject("Test email from Java");
+        message.setText("This is a plain text test message sent through mySMTP.");
+
+        Transport.send(message);
+        System.out.println("Message sent successfully");
+    }
+}
+```
+
+<Note>
+  Replace `relayxx.mysmtp.com` with your real hostname from the mySMTP setup email. Load credentials from environment variables, never hardcode them in source files.
+</Note>
+
+## HTML email with attachment
+
+```java
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+import java.util.Properties;
+
+public class MySmtpHtmlExample {
+    public static void main(String[] args) throws Exception {
+        String host = System.getenv().getOrDefault("MYSMTP_HOST", "relayxx.mysmtp.com");
+        String user = System.getenv("MYSMTP_USER");
+        String pass = System.getenv("MYSMTP_PASS");
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, pass);
+            }
+        });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("you@yourdomain.com", "Your Name"));
+        message.setRecipients(Message.RecipientType.TO,
+            InternetAddress.parse("recipient@example.com"));
+        message.setSubject("HTML email with attachment");
+
+        MimeBodyPart textPart = new MimeBodyPart();
+        textPart.setText("This is the plain text fallback.", "utf-8");
+
+        MimeBodyPart htmlPart = new MimeBodyPart();
+        htmlPart.setContent(
+            "<h1>Hello</h1><p>This is an HTML message.</p>",
+            "text/html; charset=utf-8"
+        );
+
+        MimeMultipart alternative = new MimeMultipart("alternative");
+        alternative.addBodyPart(textPart);
+        alternative.addBodyPart(htmlPart);
+
+        MimeBodyPart attachmentPart = new MimeBodyPart();
+        attachmentPart.attachFile("/path/to/invoice.pdf");
+
+        MimeMultipart mixed = new MimeMultipart("mixed");
+        mixed.addBodyPart(new MimeBodyPart() {{ setContent(alternative); }});
+        mixed.addBodyPart(attachmentPart);
+
+        message.setContent(mixed);
+        Transport.send(message);
+        System.out.println("Message sent successfully");
+    }
+}
+```
+
+<Tabs>
+  <Tab title="Spring Boot application.properties">
+    If you use Spring Boot, add these settings to `application.properties`:
+
+    ```properties
+    spring.mail.host=${MYSMTP_HOST:relayxx.mysmtp.com}
+    spring.mail.port=587
+    spring.mail.username=${MYSMTP_USER}
+    spring.mail.password=${MYSMTP_PASS}
+    spring.mail.properties.mail.smtp.auth=true
+    spring.mail.properties.mail.smtp.starttls.enable=true
+    ```
+
+    Inject `JavaMailSender` and call `send(SimpleMailMessage)` or `send(MimeMessage)`.
+  </Tab>
+</Tabs>
+
+## Common errors
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Your username or password is incorrect, or your account is not yet activated. Re-enter credentials exactly as shown in the setup email. See [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout or refused">
+    Your network or host may block port 587. Try port 2525 with the same properties, or port 465 with `mail.smtp.ssl.enable=true`. See [Supported SMTP ports and encryption](/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    The encryption properties do not match the port. Use `mail.smtp.starttls.enable=true` for ports 587 and 2525. Use `mail.smtp.ssl.enable=true` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test your SPF, DKIM, and DMARC setup with the [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) before sending large volumes.
+</Tip>
+
+## Related articles
+
+- [Code Examples overview](/email-configuration/code-examples)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)

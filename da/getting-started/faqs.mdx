@@ -1,0 +1,37 @@
+---
+title: "Ofte stillede spørgsmål om at komme i gang"
+sidebarTitle: "FAQs"
+description: "Få svar på almindelige spørgsmål om mySMTP. Besøg vores generelle FAQ-side for mere information om vores e-mailleveringstjeneste."
+---
+
+For generelle spørgsmål om mySMTP, besøg [den generelle FAQ-side](https://mysmtp.com/solutions/faq). Spørgsmålene nedenfor kan besvares ud fra guiderne i dette hjælpecenter.
+
+<AccordionGroup>
+  <Accordion title="Hvordan vælger jeg mellem en delt IP og en dedikeret IP?">
+    Vælg en delt IP (kun DK), hvis du sender lavere volumener og ønsker en administreret reputation uden warm-up-periode. Vælg en dedikeret IP, hvis du sender større volumener og ønsker fuld kontrol over din afsenderreputation. For en fuld sammenligning, se [Delt IP eller dedikeret?](/da/getting-started/shared-ips-or-dedicated).
+  </Accordion>
+
+  <Accordion title="Hvilken SMTP-port skal jeg bruge?">
+    Brug port 587 med STARTTLS til udgående mail. Porte 2525 og 25 er alternativer, hvis 587 er blokeret. Se [SMTP-porte og kryptering](/da/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="Hvilke DNS-poster skal jeg tilføje?">
+    Tilføj SPF, DKIM og DMARC-poster for dit afsenderdomæne. Disse autoriserer mySMTP til at sende på dine vegne og forbedrer deliverability. Se [DNS-indstillinger, hurtig forklaring](/da/getting-started/dns-settings-quick-explainer) for de eksakte poster.
+  </Accordion>
+
+  <Accordion title="Hvordan opretter jeg yderligere SMTP-brugere?">
+    Hvis du har en dedikeret IP, opret nye SMTP-brugere i dashboardet under **SMTP Users**. Dette hjælper dig med at adskille trafik efter teammedlem eller integration. Se [Dedikeret IP-server-dashboard](/da/getting-started/dedicated-ip-server-dashboard).
+  </Accordion>
+
+  <Accordion title="Kan jeg begrænse SMTP-adgang til specifikke IP-adresser?">
+    Ja. Brug IP-whitelisting til kun at tillade godkendte kildeadresser. Dette er tilgængeligt i dashboardet under **IP Whitelisting** for dedikerede IP-konti. Se [Whitelisting og sikkerhed](/da/getting-started/whitelisting-and-security-best-practices).
+  </Accordion>
+
+  <Accordion title="Hvor kan jeg tjekke status på en e-mail?">
+    For dedikerede IP-konti, åbn **Log Reports** i dashboardet for at se tidsstempler, modtagere og leveringsstatus. Logfiler opbevares i 30 dage. Se [Dedikeret IP-server-dashboard](/da/getting-started/dedicated-ip-server-dashboard).
+  </Accordion>
+
+  <Accordion title="Hvordan får jeg hjælp, hvis min e-mail ikke ankommer?">
+    Start med [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors) og [E-mails der havner i spam](/da/troubleshooting/emails-going-to-spam). Hvis du stadig har brug for hjælp, kontakt [support@mysmtp.com](mailto:support@mysmtp.com) med afsendelsestidspunktet, afsender, modtager og enhver SMTP-respons.
+  </Accordion>
+</AccordionGroup>

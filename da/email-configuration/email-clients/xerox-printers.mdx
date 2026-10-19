@@ -1,0 +1,60 @@
+---
+title: "Xerox AltaLink og VersaLink SMTP-opsætning via EWS"
+sidebarTitle: "Xerox"
+description: "Konfigurer mySMTP på Xerox AltaLink og VersaLink-enheder via Embedded Web Server. Sæt SMTP-server, port 587, STARTTLS og login-credentials."
+---
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | `relayxx.mysmtp.com` (fra din opsætningsmail) |
+| Server (delt IP, DK kun) | `mail.mysmtp.com` |
+| Port | **587** |
+| Forbindelseskryptering | **STARTTLS** |
+| Login-credentials | Aktiveret |
+| Brugernavn | Dit mySMTP SMTP-brugernavn |
+| Kodeord | Dit mySMTP-kodeord |
+
+<Note>
+  Brug det præcise relay-hostnavn fra din mySMTP opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Note>
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark. Alle andre kunder bruger et dedikeret hostnavn.
+</Note>
+
+## Konfigurer enheden
+
+<Steps>
+  <Step title="Åbn Embedded Web Server">
+    Åbn en webbrowser, indtast enhedens IP-adresse, og log ind med admin-credentials.
+  </Step>
+  <Step title="Naviger til SMTP-indstillinger">
+    Gå til **Properties** eller **Connectivity** > **Setup** > **SMTP (Email)**.
+  </Step>
+  <Step title="Indtast serveradressen">
+    I **SMTP Server** skal du indtaste dit mySMTP relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+  </Step>
+  <Step title="Sæt port og kryptering">
+    Sæt **SMTP Port** til **587** og sæt **Connection Encryption** eller **Security** til **STARTTLS**.
+  </Step>
+  <Step title="Aktivér login-credentials">
+    Slå **Login Credentials** eller **SMTP Authentication** til, og indtast dit mySMTP **User Name** og **Password**.
+  </Step>
+  <Step title="Sæt enhedens email-adresse">
+    Indtast **Device E-mail Address** (for eksempel `printer@yourdomain.com`). Dette domæne skal være autentificeret for din mySMTP-konto.
+  </Step>
+  <Step title="Gem og test">
+    Klik på **Save** eller **Apply** for at bekræfte. Send en test scan-to-email eller en testalert for at verificere levering.
+  </Step>
+</Steps>
+
+## Fejlfinding
+
+- **Cannot reach server:** tjek at dit netværk tillader udgående forbindelser på port 587. Hvis den er blokeret, prøv port **2525** eller **25**.
+- **Login rejected:** verificer dit mySMTP brugernavn og kodeord. De er case-sensitive.
+- **Relay not allowed:** enhedens email-adresse skal bruge et domæne autentificeret på din mySMTP-konto. Se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+- **No STARTTLS option:** på nogle VersaLink-modeller skal du vælge **TLS** eller den højest tilgængelige krypteringsindstilling og sætte porten til 587.
+
+For mere hjælp, se [Scan to Email](/da/email-configuration/email-clients/scan-to-email) og [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

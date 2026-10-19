@@ -1,0 +1,63 @@
+---
+title: "Set up mySMTP in Windows Mail and Calendar"
+sidebarTitle: "Windows Mail"
+description: "Configure mySMTP in the retired Windows Mail and Calendar app. Use Advanced mailbox settings to set the outgoing SMTP server, port 587, and authentication."
+---
+
+Microsoft retired the Mail and Calendar app for Windows at the end of 2024.Microsoft retired the Mail and Calendar app for Windows at the end of 2024.Microsoft retired the Mail and Calendar app for Windows at the end of 2024.Microsoft retired the Mail and Calendar app for Windows at the end of 2024.Microsoft retired the Mail and Calendar app for Windows at the end of 2024.
+
+<Warning>
+  Windows Mail and Calendar is retired. Microsoft recommends switching to [New Outlook for Windows](/email-configuration/email-clients/new-outlook-windows).
+</Warning>
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Server (dedicated IP) | e.g. `relayxx.mysmtp.com` (your hostname is in the setup email) |
+| Server (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | **587** |
+| Encryption | **TLS** (labeled "Require SSL" in Windows Mail) |
+| Outgoing server requires authentication | On |
+| User Name | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure Windows Mail
+
+<Steps>
+  <Step title="Open account settings">
+    Open the Mail app, click **Settings** (gear icon), then click **Manage accounts**.
+  </Step>
+  <Step title="Select your account">
+    Click the email account you want to configure.
+  </Step>
+  <Step title="Open sync settings">
+    Click **Change mailbox sync settings**.
+  </Step>
+  <Step title="Open advanced settings">
+    Scroll down and click **Advanced mailbox settings**.
+  </Step>
+  <Step title="Enter the outgoing SMTP details">
+    Fill in the fields:
+
+    - **Outgoing (SMTP) email server**: your relay hostname followed by the port, e.g. `relayxx.mysmtp.com:587`
+    - **Outgoing server requires authentication**: check the box
+    - **Use the same user name and password for sending email**: check the box, or enter your mySMTP SMTP username and password
+    - **Require SSL for outgoing email**: check the box
+  </Step>
+  <Step title="Save and test">
+    Click **Done**, then **Save**. Send a test email to confirm delivery.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+- **Cannot send mail:** verify the outgoing server matches the hostname in your setup email.
+- **Connection fails:** check that the port is **587** and **Require SSL** is checked. If your network blocks 587, try **2525**.
+- **Authentication error:** re-enter your mySMTP username and password, and confirm **Outgoing server requires authentication** is checked.
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

@@ -1,0 +1,43 @@
+---
+title: "mySMTP Webhooks: E-mailhændelser i realtid (kommer i slutningen af Q4)"
+sidebarTitle: "Webhooks"
+description: "mySMTP webhooks til realtidslevering, bounce og complaint-hændelser kommer i slutningen af Q4 2026. Se hvad der er planlagt, og hvordan du sporer bounces i dag."
+tag: "Kommer snart"
+---
+
+mySMTP webhooks vil underrette din applikation i realtid, når noget sker med en e-mail du har sendt, såsom levering, bounce eller spam-complaint. Webhooks er planlagt til udgivelse i **slutningen af Q4 2026**, sammen med [Email API](/da/api/index).
+
+<Info>
+  Webhooks er ikke tilgængelige endnu. Hændelsestyper, payload-formater og opsætningstrin vil blive offentliggjort her ved lancering.
+</Info>
+
+## Hvad webhooks bruges til
+
+Typiske anvendelser af e-mail-webhooks inkluderer:
+
+- Automatisk fjernelse af hard-bounceadresser fra dine lister.
+- Undertrykkelse af modtagere der markerer din mail som spam.
+- Opdatering af leveringsstatus i dit CRM eller din applikation.
+- Advarsel af dit team, når bounce- eller complaint-rater stiger.
+
+## Spor bounces og complaints i dag
+
+Indtil webhooks lanceres, brug disse ressourcer til at overvåge levering og holde dine lister rene.
+
+<CardGroup cols={2}>
+  <Card title="Bounces og complaints" icon="rotate-left" href="/da/deliverability/handling-bounces-and-complaints">
+    Håndter hard bounces, soft bounces og spam complaints.
+  </Card>
+
+  <Card title="Logfiler og hoveder" icon="magnifying-glass" href="/da/troubleshooting/checking-email-logs-and-headers">
+    Tjek hvad der skete med en specifik besked.
+  </Card>
+
+  <Card title="SMTP-statuskoder" icon="list-ol" href="/da/email-configuration/smtp-status-codes">
+    Forstå koderne returneret af modtagende servere.
+  </Card>
+
+  <Card title="Deliverability Toolbox" icon="toolbox" href="https://toolbox.smtp.ai/">
+    Gratis værktøjer, inklusive en bounce code decoder.
+  </Card>
+</CardGroup>

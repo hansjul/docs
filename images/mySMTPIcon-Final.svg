@@ -1,0 +1,12 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+</style>
+<g>
+	<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="14.6754" y1="-2.343" x2="16.8741" y2="28.4394">
+		<stop offset="0" style="stop-color:#80BB51"/>
+		<stop offset="1" style="stop-color:#007F41"/>
+	</linearGradient>
+	<path class="st0" d="M19.16,2.86h-1.84v3.82L16,5.92l-1.32,0.76V2.86h-1.84v4.88l-5.75,3.32v10.28l5.75,3.32v4.48h1.84v-3.41&#xA;&#x9;&#x9;l0.7,0.4h1.94v3.01h1.84v-3.01h5.75V24.2h-8.56l-7.1-4.1v-7.8L16,8.4l6.75,3.9v6.04h-2.05l-0.84-0.95v-3.43L16,11.74l-3.86,2.23&#xA;&#x9;&#x9;v4.46L16,20.67l2.57-1.48l1.17,1.32h5.17v-9.44l-5.75-3.32V2.86z M17.71,17.19L16,18.18l-1.71-0.99v-1.98L16,14.23l1.71,0.99V17.19&#xA;&#x9;&#x9;z"/>
+</g>
+</svg>

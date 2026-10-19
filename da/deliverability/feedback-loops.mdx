@@ -1,0 +1,61 @@
+---
+title: "Forstaa e-mail-feedback-loops og klagerater"
+sidebarTitle: "Feedback Loops"
+description: "Laer, hvordan store ISP'er rapporterer spamklager via feedback loops, hvilke klagetarskler du skal holde dig under, og hvordan du handterer klager med mySMTP."
+---
+
+Feedback loops (FBLs) er programmer, der lader postkasseudbydere rapportere spamklager tilbage til afsendere. At holde din klageraete lav er afgorende for indbakkeplacering.
+
+## Hvad er en feedback loop
+
+Naar en modtager klikker paa "Rapportér spam" eller "Uonsket" i deres e-mailklient, kan postkasseudbyderen videresende en kopi af den meddelelse tilbage til afsenderen gennem en feedback loop. Rapporten sendes normalt i Abuse Reporting Format (ARF). Dette lader dig identificere, hvilke kampagner, lister eller indhold der genererede klager, sa du kan rette aarsagen.
+
+<Warning>
+  Klagdata er kun nyttige, hvis du handterer dem med det samme. Fjern klagere fra dine lister ojeblikkeligt.
+</Warning>
+
+## Store feedback-loop-programmer
+
+Ikke alle udbydere tilbyder traditionelle feedback loops, og tilmeldingsreglerne varierer.
+
+### Microsoft JMRP og SNDS
+
+Microsoft tilbyder Junk Mail Reporting Program (JMRP). Klagrapporter kommer gennem den samme portal som [Smart Network Data Services](https://sendersupport.olc.protection.outlook.com/snds) (SNDS). Du skal tilmelde dig SNDS og registrere dine IP'er for at modtage JMRP-data.
+
+### Yahoo Complaint Feedback Loop
+
+Yahoo leverer en [Complaint Feedback Loop](https://senders.yahooinc.com/), som er DKIM-baseret. Du skal tilmelde dig hos Yahoo, bevise domaeneejerskab og have gyldig DKIM-signering pa plads. Klager returneres i ARF-format.
+
+### Gmail
+
+Gmail tilbyder ikke en traditionel feedback loop. I stedet skal afsendere:
+
+- Tilfoje et `Feedback-ID`-header til kampagner til fejlfinding.
+- Bruge [Google Postmaster Tools](https://postmaster.google.com) til at overvage domaenereputation og spamrate.
+- Holde spamraten under 0,1% og aldrig na 0,3%.
+
+## Klagetarskler
+
+Klageraeter varierer efter branche, men de sikre maal er de samme for store modtagere:
+
+| Udbyder | Maal | Maksimum |
+| --- | --- | --- |
+| Gmail | Under 0,1% | Aldrig na 0,3% |
+| Yahoo | Under 0,1% | Aldrig na 0,3% |
+| Microsoft | Under 0,1% | Aldrig na 0,3% |
+
+Vedvarende rater over disse graenser foerer ofte til midlertidig drosling, placering i spam-mappen eller blokeringer.
+
+## Hvordan mySMTP handterer klager
+
+Klager skal fjernes fra dine mailinglister ojeblikkeligt. Dette beskytter baede din reputation og den delte infrastruktur. Hvis du er usikker paa, hvordan klagdata deles for din konto, sa kontakt [support@mysmtp.com](mailto:support@mysmtp.com).
+
+<Tip>
+  Kør [Sender Readiness Checklist](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox for at revidere din listehygiejne og afsendelsespraksis, foer du skalerer volumen.
+</Tip>
+
+## Relaterede artikler
+
+- [Handtering af bounces og klager](/da/deliverability/handling-bounces-and-complaints)
+- [Google Postmaster og Microsoft SNDS](/da/deliverability/google-postmaster-and-microsoft-snds)
+- [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained)

@@ -1,0 +1,61 @@
+---
+title: "Email-opsaetningsvejledninger: Klienter, apps og SMTP-konfiguration"
+sidebarTitle: "Oversigt"
+description: "Gennemse mySMTP-opsaetningsvejledninger til email-klienter, webapplikationer, Gmail, SMTP-graenser og afsendelseshastigheder. Find den konfiguration, du har brug for."
+---
+
+Hver artikel indeholder de korrekte serverindstillinger, porte og godkendelsestrin til shared IP- og dedikeret IP-konti.
+
+## Hurtigreference
+
+| Indstilling | Vaerdi |
+| --- | --- |
+| Server (dedikeret IP) | Dit relay-hostname fra opsaetningsmailen (fx `relayxx.mysmtp.com`) |
+| Server (shared IP, kun DK) | `mail.mysmtp.com` |
+| Port | **587** (primaer), 2525 eller 25 |
+| Kryptering | **STARTTLS** (eller TLS) |
+| Godkendelse | Normal adgangskode med dit SMTP-brugernavn |
+
+<Note>
+  Brug server-hostnamet fra din mySMTP-opsaetningsmail. Kunder med dedikeret IP modtager et specifikt relay-hostname som `relayxx.mysmtp.com`. Shared IP-planer bruger `mail.mysmtp.com` og er kun tilgaengelige i Danmark.
+</Note>
+
+## Opsaetningsvejledninger
+
+<CardGroup cols={2}>
+  <Card title="Email-klienter" icon="envelope" href="/da/email-configuration/email-clients">
+    Outlook, Mac Mail, Thunderbird, Exchange og Android Mail
+  </Card>
+
+  <Card title="Webapplikationer" icon="globe" href="/da/email-configuration/web-applications">
+    Instantly, MailWizz, Mumara, Interspire og flere
+  </Card>
+
+  <Card title="Kodeeksempler" icon="code" href="/da/email-configuration/code-examples">
+    PHP, Python, Node.js, .NET, Java og kommandolinjetests
+  </Card>
+
+  <Card title="CMS og frameworks" icon="layer-group" href="/da/email-configuration/platforms">
+    WordPress, WooCommerce, Magento, Odoo, Laravel, Django og flere
+  </Card>
+
+  <Card title="Migreringsvejledninger" icon="right-left" href="/da/email-configuration/migration">
+    Skift fra SendGrid, Mailgun, Amazon SES, Brevo eller Postmark
+  </Card>
+
+  <Card title="Gmail-opsaetning" icon="google" href="/da/email-configuration/connect-gmail">
+    Send mail som via mySMTP
+  </Card>
+
+  <Card title="SMTP-graenser" icon="gauge" href="/da/email-configuration/smtp-limits-and-sending-rates">
+    Afsendelseshastigheder, rate limits og warm-up-planer
+  </Card>
+
+  <Card title="Transaktionsmail vs marketingmail" icon="envelope" href="/da/email-configuration/transactional-vs-marketing-emails">
+    Hvornaar du skal bruge hver type, og hvordan du optimerer levering
+  </Card>
+
+  <Card title="SMTP-statuskoder" icon="code" href="/da/email-configuration/smtp-status-codes">
+    Forstaa 2xx, 4xx og 5xx-svarskoder
+  </Card>
+</CardGroup>

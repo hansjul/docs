@@ -1,0 +1,75 @@
+---
+title: "Opsæt Reverse DNS (PTR) for dedikeret IP-reputation"
+sidebarTitle: "Reverse DNS PTR"
+description: "Lær hvordan rDNS fungerer, hvorfor det betyder noget for dedikerede IP'er, og hvordan du anmoder om en brugerdefineret PTR-record fra mySMTP. Tjek rDNS med dig, nslookup eller Toolbox."
+---
+
+Reverse DNS (rDNS) hjælper modtagende servere med at verificere, at din afsendelses-IP matcher dit domænenavn. Forward-confirmed rDNS reducerer risikoen for, at din mail afvises eller filtreres som mistænkelig.
+
+## Hvad er PTR/rDNS
+
+En PTR-record mapper en IP-adresse tilbage til et hostnavn. Den er det modsatte af en almindelig DNS A-record, der mapper et hostnavn til en IP. Modtagende mailservere tjekker ofte, at den IP, der sender dem mail, har en gyldig PTR-record, og at det hostnavn, den peger på, peger tilbage på den samme IP (forward-confirmed rDNS).
+
+## Hvorfor modtagere tjekker rDNS
+
+Mailbox-udbydere og spamfiltre bruger rDNS som et grundlæggende tillidssignal:
+
+- IP'er uden PTR-records kan behandles som mindre reputable.
+- Manglende overensstemmelse mellem forward og reverse DNS ligner spoofing eller fejlkonfiguration.
+- Nogle modtagere afviser mail direkte fra IP'er, der består denne test.
+
+## Hvem sætter PTR-recorden
+
+Ejeren af IP-adressen styrer PTR-records. Da mySMTP ejer de IP-adresser, der er tildelt din konto, **sætter og administrerer mySMTP PTR-records for alle dedikerede IP'er**. Du kan ikke tilføje en PTR-record hos din egen DNS-udbyder.
+
+Hvis du ønsker, at din dedikerede IP skal pege på et hostnavn på dit eget domæne (for eksempel, `mail.yourdomain.com`), se [Branded rDNS](/da/deliverability/branded-rdns).
+
+<Note>
+  Delte IP-planer er kun tilgængelige for kunder i Danmark. PTR for delte IP'er administreres af mySMTP og kan ikke tilpasses.
+</Note>
+
+## Sådan tjekker du din nuværende PTR
+
+Du kan verificere den nuværende PTR-record for din IP ved hjælp af en af disse metoder.
+
+<Tabs>
+  <Tab title="dig">
+    Kør denne kommando, og erstat `DIN_IP` med din afsendelses-IP:
+
+    ```bash
+    dig -x DIN_IP +short
+    ```
+
+    Eksempel-output:
+
+    ```text
+    relayxx.mysmtp.com.
+    ```
+  </Tab>
+  <Tab title="nslookup">
+    Kør denne kommando, og erstat `DIN_IP` med din afsendelses-IP:
+
+    ```bash
+    nslookup DIN_IP
+    ```
+
+    Led efter "name"-linjen i svaret.
+  </Tab>
+  <Tab title="Toolbox">
+    Brug rDNS-checkeren i [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) til at slå PTR-records op uden at installere værktøjer.
+  </Tab>
+</Tabs>
+
+<Warning>
+  Brug altid hostnavnet fra din opsætnings-email. `relayxx.mysmtp.com` er et eksempel. Kunder med delt IP (kun DK) bruger `mail.mysmtp.com`.
+</Warning>
+
+## Delte IP-adfærd (kun DK)
+
+På delte IP-planer er PTR-recorden sat af mySMTP til et delt hostnavn. Individuelle kunder kan ikke anmode om brugerdefinerede PTR-navne på delte IP'er. Hvis du har brug for en brugerdefineret PTR, overvej at opgradere til en dedikeret IP-plan.
+
+## Relaterede artikler
+
+- [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained)
+- [DNS-opsætning til autentificering](/da/deliverability/dns-setup-for-authentication)
+- [IP-reputation: dedikerede vs. delte IP'er](/da/deliverability/ip-reputation-dedicated-vs-shared-ips)

@@ -1,0 +1,239 @@
+---
+title: "Configure Django email backend with mySMTP"
+sidebarTitle: "Django"
+description: "Set up Django to send email through mySMTP by configuring the SMTP backend in settings.py and testing with send_mail or a management command."
+---
+
+Django's email framework supports an SMTP backend natively. Route all application emails through mySMTP by updating your settings and running a quick test.
+
+## Prerequisites
+
+- A Django project
+- Your mySMTP credentials (see [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials))
+- A verified sending domain
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (from your setup email) |
+| Host (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Encryption | STARTTLS |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure settings.py
+
+<Steps>
+  <Step title="Add SMTP settings">
+    In your project's `settings.py`, add or update the email backend variables:
+
+    ```python
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'relayxx.mysmtp.com'  # replace with your real hostname
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = 'your-mysmtp-username'
+    EMAIL_HOST_PASSWORD = 'your-mysmtp-password'
+    DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
+    SERVER_EMAIL = 'noreply@yourdomain.com'
+    ```
+
+    <Warning>
+      Use `EMAIL_USE_TLS = True` with port 587. Do not enable `EMAIL_USE_SSL` at the same time; that setting is for implicit TLS on port 465.
+    </Warning>
+  </Step>
+  <Step title="Load credentials from environment">
+    For security, load sensitive values from environment variables instead of hardcoding them:
+
+    ```python
+    import os
+    
+    EMAIL_HOST = os.environ.get('MYSMTP_HOST', 'relayxx.mysmtp.com')
+    EMAIL_HOST_USER = os.environ.get('MYSMTP_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('MYSMTP_PASSWORD')
+    ```
+  </Step>
+  <Step title="Send a test email">
+    You can test from the Django shell:
+
+    ```bash
+    python manage.py shell
+    ```
+
+    Then run:
+
+    ```python
+    from django.core.mail import send_mail
+    send_mail(
+        'mySMTP Test',
+        'This is a test email from Django.',
+        'noreply@yourdomain.com',
+        ['your-email@example.com'],
+        fail_silently=False,
+    )
+    ```
+
+    Alternatively, use the built-in management command if it is available in your project:
+
+    ```bash
+    python manage.py sendtestemail your-email@example.com
+    ```
+  </Step>
+</Steps>
+
+<Warning>
+  Never commit passwords to version control. Use environment variables, a `.env` file with python-dotenv, or your deployment platform's secret management.
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection refused or timeout">
+    Confirm you are using your real mySMTP hostname (not `relayxx.mysmtp.com`). Check that your hosting environment allows outbound connections on port 587. If blocked, try port 2525.
+  </Accordion>
+
+  <Accordion title="Authentication failed">
+    Re-enter your mySMTP username and password. Verify there are no extra spaces or encoding issues. Test the exact credentials with a standalone script or [test.smtp.ai](https://test.smtp.ai) first.
+  </Accordion>
+
+  <Accordion title="Emails go to spam">
+    Verify SPF, DKIM, and DMARC are configured for your sending domain. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Test email does not arrive">
+    Check Django server logs for SMTP exceptions. Also confirm `DEFAULT_FROM_EMAIL` uses a domain authenticated with mySMTP.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+- [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials)
+
+Django's email framework supports an SMTP backend natively. Route all application emails through mySMTP by updating your settings and running a quick test.
+
+## Prerequisites
+
+- A Django project
+- Your mySMTP credentials (see [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials))
+- A verified sending domain
+
+## SMTP settings
+
+| Setting | Value |
+| --- | --- |
+| Host | `relayxx.mysmtp.com` (from your setup email) |
+| Host (shared IP, DK only) | `mail.mysmtp.com` |
+| Port | `587` |
+| Encryption | STARTTLS |
+| Username | Your mySMTP SMTP username |
+| Password | Your mySMTP SMTP password |
+
+<Note>
+  Shared IP plans are only available to customers in Denmark.
+</Note>
+
+## Configure settings.py
+
+<Steps>
+  <Step title="Add SMTP settings">
+    In your project's `settings.py`, add or update the email backend variables:
+
+    ```python
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'relayxx.mysmtp.com'  # replace with your real hostname
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = 'your-mysmtp-username'
+    EMAIL_HOST_PASSWORD = 'your-mysmtp-password'
+    DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'
+    SERVER_EMAIL = 'noreply@yourdomain.com'
+    ```
+
+    <Warning>
+      Use `EMAIL_USE_TLS = True` with port 587. Do not enable `EMAIL_USE_SSL` at the same time; that setting is for implicit TLS on port 465.
+    </Warning>
+  </Step>
+  <Step title="Load credentials from environment">
+    For security, load sensitive values from environment variables instead of hardcoding them:
+
+    ```python
+    import os
+    
+    EMAIL_HOST = os.environ.get('MYSMTP_HOST', 'relayxx.mysmtp.com')
+    EMAIL_HOST_USER = os.environ.get('MYSMTP_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('MYSMTP_PASSWORD')
+    ```
+  </Step>
+  <Step title="Send a test email">
+    You can test from the Django shell:
+
+    ```bash
+    python manage.py shell
+    ```
+
+    Then run:
+
+    ```python
+    from django.core.mail import send_mail
+    send_mail(
+        'mySMTP Test',
+        'This is a test email from Django.',
+        'noreply@yourdomain.com',
+        ['your-email@example.com'],
+        fail_silently=False,
+    )
+    ```
+
+    Alternatively, use the built-in management command if it is available in your project:
+
+    ```bash
+    python manage.py sendtestemail your-email@example.com
+    ```
+  </Step>
+</Steps>
+
+<Warning>
+  Never commit passwords to version control. Use environment variables, a `.env` file with python-dotenv, or your deployment platform's secret management.
+</Warning>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection refused or timeout">
+    Confirm you are using your real mySMTP hostname (not `relayxx.mysmtp.com`). Check that your hosting environment allows outbound connections on port 587. If blocked, try port 2525.
+  </Accordion>
+
+  <Accordion title="Authentication failed">
+    Re-enter your mySMTP username and password. Verify there are no extra spaces or encoding issues. Test the exact credentials with a standalone script or [test.smtp.ai](https://test.smtp.ai) first.
+  </Accordion>
+
+  <Accordion title="Emails go to spam">
+    Verify SPF, DKIM, and DMARC are configured for your sending domain. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained).
+
+    <Tip>
+      Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) and [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Test email does not arrive">
+    Check Django server logs for SMTP exceptions. Also confirm `DEFAULT_FROM_EMAIL` uses a domain authenticated with mySMTP.
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+- [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials)

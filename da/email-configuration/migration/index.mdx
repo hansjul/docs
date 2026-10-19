@@ -1,0 +1,71 @@
+---
+title: "Migrer til mySMTP fra enhver email-udbyder"
+sidebarTitle: "Migrer til mySMTP"
+description: "Skift din email-afsendelse til mySMTP sikkert uden at skade deliverability. Følg denne migrations-tjekliste, der daekker DNS, loginoplysninger, warm-up og overvågning."
+---
+
+At skifte SMTP-udbyder kan paavirke deliverability, hvis domaeneautentificering og IP-reputation ikke haandteres omhyggeligt. Denne vejledning guider dig gennem et sikkert cutover, saa dine beskeder fortsat lander i indbakken.
+
+## Før du starter
+
+- Hold din gamle udbyder aktiv, indtil cutover er fuldfoert og stabilt. At fjerne den for tidligt kan efterlade dig uden en fungerende afsendelsessti.
+- Hvis du bruger en dedikeret IP med mySMTP (standardplanen), skal du planlaegge at warme den op gradvist. Afsendelse af fuld volumen fra en cold IP kan udløse blokeringer.
+- Hvis du bruger en shared IP-plan (kun DK), kan du sende med normal volumen, naar DNS er verificeret.
+
+## Migrations-tjekliste
+
+<Steps>
+  <Step title="Tilmeld dig og fa logincplysninger">
+    Opret din konto paa [clients.mysmtp.com](https://clients.mysmtp.com), fuldfoer aktivering, og noter dit SMTP-hostname, brugernavn og adgangskode fra opsaetningsmailen. Se [Tilmeld dig og aktiver din konto](/da/getting-started/sign-up-and-activate-your-account) og [Opsaetning af SMTP-loginoplysninger](/da/getting-started/setting-up-smtp-credentials).
+  </Step>
+  <Step title="Tilfoej SPF og DKIM for mySMTP">
+    Tilfoej `include:spf1.mysmtp.com` til dit domaenes SPF-post. En ny post ser saaledes ud: `v=spf1 include:spf1.mysmtp.com ~all`; under migrationen skal du beholde den gamle udbyders include i den samme post. Tilfoej mySMTP DKIM TXT/CNAME-poster som vist i dit dashboard eller opsaetningsmail. Behold din gamle udbyders poster indtil videre. Se [DNS-opsaetning til autentificering](/da/deliverability/dns-setup-for-authentication).
+  </Step>
+  <Step title="Opsaet din applikation">
+    Opdater SMTP-hostname, port og loginoplysninger i dine apps, CMS eller kode. Brug hostnamet fra din opsaetningsmail (for eksempel `relayxx.mysmtp.com`) paa port `587` med STARTTLS. Se [Understottede SMTP-porte og kryptering](/da/getting-started/supported-smtp-ports-and-encryption).
+  </Step>
+  <Step title="Warm op din dedikerede IP gradvist">
+    Start med en lille daglig volumen og oeg langsomt over dage eller uger. Dette opbygger afsenderreputation paa din nye IP. Se [Warm-up-planer](/da/deliverability/warm-up-plans) og brug [warm-up-generatoren](https://toolbox.smtp.ai/#warmup-generator) i mySMTP Deliverability Toolbox.
+  </Step>
+  <Step title="Overvåg bounces, klager og levering">
+    Hold oje med dit afsendelsesdashboard og indbakkeplacering under overgangen. Brug [Sender Readiness Checklist](https://toolbox.smtp.ai/) og [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox til at verificere autentificering og headers.
+  </Step>
+  <Step title="Fjern gamle udbyders DNS-poster til sidst">
+    Først naar afsendelsen er stabil og reputation-metrics ser gode ud, fjerner du den gamle udbyders SPF-include og DKIM CNAME/TXT-poster. At opdatere DNS for tidligt kan bryde autentificeringen, hvis du har brug for at rulle tilbage.
+  </Step>
+</Steps>
+
+<Tip>
+  Brug den gratis [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) med 19 vaerktoejer inklusive SPF Validator, One-Click SPF/DKIM/DMARC Checker og Email Header Analyzer.
+</Tip>
+
+## Udbyderspecifikke migrationsvejledninger
+
+<CardGroup cols={2}>
+  <Card title="SendGrid" icon="arrow-right-arrow-left" href="/da/email-configuration/migration/sendgrid">
+    Skift fra SendGrid SMTP til mySMTP. Opdater hostname, loginoplysninger og SPF/DKIM-poster.
+  </Card>
+
+  <Card title="Mailgun" icon="arrow-right-arrow-left" href="/da/email-configuration/migration/mailgun">
+    Skift fra Mailgun SMTP til mySMTP. Opdater hostname, loginoplysninger og SPF/DKIM-poster.
+  </Card>
+
+  <Card title="Amazon SES" icon="arrow-right-arrow-left" href="/da/email-configuration/migration/amazon-ses">
+    Skift fra Amazon SES SMTP til mySMTP. Opdater hostname, loginoplysninger og SPF/DKIM-poster.
+  </Card>
+
+  <Card title="Brevo" icon="arrow-right-arrow-left" href="/da/email-configuration/migration/brevo">
+    Skift fra Brevo SMTP til mySMTP. Opdater hostname, loginoplysninger og SPF/DKIM-poster.
+  </Card>
+
+  <Card title="Postmark" icon="arrow-right-arrow-left" href="/da/email-configuration/migration/postmark">
+    Skift fra Postmark SMTP til mySMTP. Opdater hostname, loginoplysninger og SPF/DKIM-poster.
+  </Card>
+</CardGroup>
+
+## Relaterede artikler
+
+- [Warm-up-planer](/da/deliverability/warm-up-plans)
+- [DNS-opsaetning til autentificering](/da/deliverability/dns-setup-for-authentication)
+- [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained)
+- [SMTP-graenser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)

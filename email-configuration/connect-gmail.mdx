@@ -1,0 +1,80 @@
+---
+title: "Connect Gmail to mySMTP Using Custom Domain SMTP Relay"
+sidebarTitle: "Gmail Setup"
+description: "Configure Gmail to send emails through mySMTP using your own domain. Set up SMTP server settings, ports, TLS encryption, and verify your sender address."
+---
+
+This lets you compose in Gmail while delivering through your authenticated relay.
+
+<Steps>
+  <Step title="Open Gmail settings">
+    1. Go to [https://mail.google.com](https://mail.google.com).
+    2. Click the **gear icon** in the top-right corner.
+    3. Select **See all settings**.
+  </Step>
+  <Step title="Add another email address">
+    1. Click the **Accounts and Import** tab.
+    2. In the **Send mail as** section, click **Add another email address**.
+  </Step>
+  <Step title="Enter your identity">
+    Fill in the pop-up window:
+
+    | Field | Value |
+    | --- | --- |
+    | Name | Your sender name (for example, "Support") |
+    | Email address | Your address, for example `you@yourdomain.com` |
+    | Treat as an alias | Yes |
+
+    Click **Next Step**.
+  </Step>
+  <Step title="Enter mySMTP server settings">
+    Use the credentials from your setup email:
+
+    | Field | Value |
+    | --- | --- |
+    | SMTP Server | Your relay hostname (for example, `relayxx.mysmtp.com`) |
+    | Port | **587** |
+    | Username | Your mySMTP SMTP username |
+    | Password | Your mySMTP SMTP password |
+    | Secured connection | **TLS** |
+
+    Click **Add Account**.
+
+    <Note>
+      Use the exact relay hostname from your mySMTP setup email. Do not guess the server name.
+    </Note>
+
+    <Note>
+      Shared IP plans use `mail.mysmtp.com` and are only available to customers in Denmark.
+    </Note>
+  </Step>
+  <Step title="Verify the address">
+    1. Gmail sends a verification code to the address you just added.
+    2. Retrieve the code from your mailbox or from the mySMTP logs.
+    3. Enter the code in Gmail and click **Verify**.
+  </Step>
+</Steps>
+
+After verification, select [**you@yourdomain.com**](mailto:you@yourdomain.com) from the **From** dropdown when composing a message in Gmail.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Gmail rejects the server or credentials">
+    Confirm you are using port **587** with **TLS**, not port 465. Double-check that the relay hostname and password match the values in your mySMTP setup email.
+  </Accordion>
+
+  <Accordion title="Verification email never arrives">
+    Check that the sender domain is authenticated in mySMTP and that DNS records (SPF, DKIM, DMARC) are published. You can verify your records with the mySMTP [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/). See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+
+  <Accordion title="Messages go to spam">
+    Authentication and list hygiene matter even for Gmail-to-Gmail relay. Ensure SPF, DKIM, and DMARC are configured. See [Improve email deliverability](/deliverability/improve-email-deliverability).
+  </Accordion>
+</AccordionGroup>
+
+## Related articles
+
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)
+- [SPF, DKIM, DMARC, and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained)

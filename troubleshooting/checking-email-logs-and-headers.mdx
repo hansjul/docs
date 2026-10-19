@@ -1,0 +1,118 @@
+---
+title: "Checking Email Logs & Headers"
+sidebarTitle: "Logs & Headers"
+description: "Access mySMTP logs and analyze email headers to diagnose delivery delays, rejections, and failures. Step-by-step debugging guide for senders."
+---
+
+## View email logs in mySMTP
+
+<Steps>
+  <Step title="Log in to the correct dashboard">
+    Go to the [Dedicated Server Dashboard](https://app.mysmtp.com) for dedicated IP plans, or log in at [mysmtp.com](https://mysmtp.com) for shared IP plans (DK only).
+  </Step>
+  <Step title="Open the logs or statistics section">
+    Look for **Search Logs** or **Statistics** in the dashboard menu.
+  </Step>
+  <Step title="Filter the results">
+    Use filters such as sender, recipient, date range, or status to narrow down the log entries you need.
+  </Step>
+  <Step title="View the details">
+    Click a specific email entry to see the status code, timestamps, and delivery attempts.
+  </Step>
+  <Step title="Export if needed">
+    Use the export option (CSV, when available) to save logs for offline analysis or support tickets.
+  </Step>
+</Steps>
+
+## Key log fields
+
+| Log field | What it tells you |
+| --- | --- |
+| Timestamp | When the email was processed |
+| Sender | The address the message was sent from |
+| Recipient | The destination address |
+| Status | Whether the message succeeded, failed, or was deferred |
+| Error code | SMTP response codes such as 550 for rejection or 421 for temporary issues |
+
+## View email headers in popular clients
+
+Headers are the technical metadata that travel with every email. They show the message route, authentication results, and any filtering that happened along the way.
+
+<Tabs>
+  <Tab title="Gmail">
+    <Steps>
+      <Step title="Open the message">
+        In your Gmail inbox, open the email you want to inspect.
+      </Step>
+      <Step title="Open the menu">
+        Click the **three dots** next to the Reply button, then select **Show original**.
+      </Step>
+      <Step title="Review the headers">
+        The original message opens in a new tab with the full header block at the top, followed by the message body or Base64-encoded content.
+      </Step>
+      <Step title="Download or copy">
+        Use the **Download Original** button to save the .eml file, or copy the raw text for analysis.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Outlook (web)">
+    <Steps>
+      <Step title="Open the message">
+        In Outlook on the web, open the email you want to inspect.
+      </Step>
+      <Step title="Open the actions menu">
+        Click the **three dots** in the top-right of the message, then choose **View > View message details**.
+      </Step>
+      <Step title="Review the headers">
+        A pane appears showing the full message headers. Copy the text for analysis.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Apple Mail (macOS)">
+    <Steps>
+      <Step title="Open the message">
+        Open the email in Apple Mail.
+      </Step>
+      <Step title="View all headers">
+        Go to **View > Message > All Headers** (or **View > Message > Default Headers** to return to the default view).
+      </Step>
+      <Step title="Copy the headers">
+        Click in the header area and select all, then copy to paste into a header analyzer.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## How to read common header fields
+
+| Header field | Purpose |
+| --- | --- |
+| `Received` | Lists every server the message passed through. Read from bottom to top to trace the path and identify delays. |
+| `Message-ID` | A unique identifier for the message that helps track a specific email across systems. |
+| `Return-Path` | The address that receives bounce and delivery failure notifications. |
+| `DKIM-Signature` | The digital signature added to verify the message was not altered in transit. |
+| `Authentication-Results` | The verdict from the receiving server on SPF, DKIM, and DMARC checks. This is often the key field for deliverability debugging. |
+
+<Tip>
+  Look for `Authentication-Results` near the top of the header block. A typical line looks like this: `Authentication-Results: mx.google.com; spf=pass; dkim=pass; dmarc=pass` If any of these say `fail` or `none`, focus your fix on that specific record.
+</Tip>
+
+<Tip>
+  Paste raw headers into the [Email Header Analyzer](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox to trace relay hops, delays, and authentication results automatically.
+</Tip>
+
+## Common header issues and fixes
+
+| Symptom | What to check | Fix |
+| --- | --- | --- |
+| Delayed delivery | Multiple `Received` timestamps with large gaps | Identify the slow hop and query that server, or contact mySMTP support with the header |
+| Rejected with 550 | `Authentication-Results` shows SPF or DKIM failure | Review your DNS records and fix the failing authentication record |
+| Marked as spam | `X-Spam-Status` or `Authentication-Results` shows DMARC policy mismatch | Align your SPF and DKIM with your `From` domain, and ensure DMARC is set correctly |
+
+## Need more help?
+
+If mySMTP logs and message headers do not explain the issue:
+
+1. Check [status.mysmtp.com](https://status.mysmtp.com) for known service disruptions.
+2. Review your sender reputation with [Google Postmaster Tools](https://postmaster.google.com).
+3. Contact mySMTP support at [support@mysmtp.com](mailto:support@mysmtp.com) and include the full message headers along with any relevant log entries.

@@ -1,0 +1,117 @@
+---
+title: "Send Firewall- og Router-alerts via mySMTP"
+sidebarTitle: "Firewalls & Routere"
+description: "Konfigurer pfSense, Fortinet FortiGate og UniFi-enheder til at sende systemalerts og logs via mySMTP ved hjælp af port 587 og STARTTLS."
+---
+
+## SMTP-indstillinger
+
+| Indstilling | Værdi |
+| --- | --- |
+| Server | Dit dedikerede hostnavn fra opsætningsmailen, f.eks. `relayxx.mysmtp.com` |
+| Port | **587** |
+| Sikkerhed | **STARTTLS** |
+| Autentificering | SMTP-brugernavn og -kodeord fra mySMTP |
+
+<Note>
+  Server (delt IP, DK kun) | `mail.mysmtp.com` / Delte IP-planer er kun tilgængelige for kunder i Danmark.
+</Note>
+
+<Tip>
+  Brug det præcise relay-hostnavn fra din opsætningsmail. `relayxx.mysmtp.com` er kun et eksempel.
+</Tip>
+
+## Konfigurer din enhed
+
+<Tabs>
+  <Tab title="pfSense">
+    <Steps>
+      <Step title="Åbn Notifications">
+        Log ind på pfSense webinterfacet. Gå til **System** > **Advanced** > **Notifications**.
+      </Step>
+      <Step title="Aktivér SMTP-notifikationer">
+        1. Sæt flueben i **Enable SMTP Notifications**.
+        2. **E-Mail server:** dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+        3. **SMTP Port of E-Mail server:** `587`.
+        4. Sæt flueben i **Secure SMTP Connection** og vælg **STARTTLS**.
+        5. **SMTP Authentication Mechanism:** vælg **PLAIN** eller **LOGIN**.
+        6. **Username:** dit mySMTP SMTP-brugernavn.
+        7. **Password:** dit mySMTP SMTP-kodeord.
+        8. **Notification E-Mail address:** den adresse, alerts skal komme fra (skal være et verificeret domæne).
+        9. Klik på **Save**.
+      </Step>
+      <Step title="Send en testnotifikation">
+        Klik på **Test SMTP E-Mail** og verificer at meddelelsen ankommer i modtagerens indbakke.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Fortinet FortiGate">
+    <Steps>
+      <Step title="Åbn Email Service indstillinger">
+        Log ind på FortiGate webinterfacet. Gå til **System** > **Settings** > **Email Service**.
+      </Step>
+      <Step title="Konfigurer brugerdefineret SMTP">
+        1. Sæt **Email Service** til **Custom**.
+        2. **Server:** dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+        3. **Port:** `587`.
+        4. **Security:** vælg **STARTTLS**.
+        5. **Authentication:** aktivér den.
+        6. **Username:** dit mySMTP SMTP-brugernavn.
+        7. **Password:** dit mySMTP SMTP-kodeord.
+        8. Klik på **Apply**.
+      </Step>
+      <Step title="Sæt notifikationsmodtagere">
+        Gå til **System** > **Settings** > **Alert** og sæt de email-adresser, der skal modtage alerts.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="UniFi">
+    <Steps>
+      <Step title="Åbn SMTP-indstillinger">
+        Den præcise menusti varierer efter UniFi-controller og firmware-version. Prøv en af følgende:
+
+        - **UniFi Network Settings** > **System** > **Notifications** > **SMTP Server**
+        - **UniFi OS Settings** > **System** > **SMTP Server**
+        - **Settings** (gear) > **Controller** > **Mail Server**
+      </Step>
+      <Step title="Indtast SMTP-detaljer">
+        1. **SMTP Server:** dit relay-hostnavn (f.eks. `relayxx.mysmtp.com`).
+        2. **Port:** `587`.
+        3. **Enable encryption:** vælg STARTTLS- eller TLS-indstillingen (nogle enheder kalder den "SSL/TLS").
+        4. **Username:** dit mySMTP SMTP-brugernavn.
+        5. **Password:** dit mySMTP SMTP-kodeord.
+        6. **Sender Address:** den adresse, alerts skal komme fra (skal være et verificeret domæne).
+        7. Klik på **Apply** eller **Save**.
+      </Step>
+      <Step title="Send en testmail">
+        Hvis en testknap er tilgængelig, skal du klikke på den. Ellers skal du udløse en event (såsom en enhedsfrakobling) og tjekke din indbakke.
+      </Step>
+    </Steps>
+
+    <Note>
+      UniFi firmware-versioner varierer. Hvis du ikke ser en SMTP-sektion på det ene sted, skal du tjekke de andre stier anført ovenfor eller konsultere Ubiquitis dokumentation for din specifikke controller-version.
+    </Note>
+  </Tab>
+</Tabs>
+
+## Fejlfinding
+
+<AccordionGroup>
+  <Accordion title="Testmail fejler">
+    Dobbelt-tjek at servernavnet matcher det i din mySMTP opsætningsmail præcist. Verificer at brugernavn og kodeord er korrekte. Se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).
+  </Accordion>
+
+  <Accordion title="Connection timeout på port 587">
+    Din upstream-firewall eller internetudbyder kan blokkere udgående port 587. Prøv port **2525**.
+  </Accordion>
+
+  <Accordion title="Autentificering afvist">
+    Bekræft at autentificeringsmekanismen er sat til **PLAIN** eller **LOGIN** (ikke OAuth eller NTLM). Indtast brugernavn og kodeord omhyggeligt igen.
+  </Accordion>
+
+  <Accordion title="Afsenderadresse afvist">
+    Sørg for at afsenderadressen bruger et domæne autentificeret for din mySMTP-konto. Se [DNS-indstillinger hurtig forklaring](/da/getting-started/dns-settings-quick-explainer).
+  </Accordion>
+</AccordionGroup>
+
+For flere fejlkoder, se [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors).

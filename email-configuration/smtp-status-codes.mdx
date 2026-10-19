@@ -1,0 +1,132 @@
+---
+title: "SMTP Status Codes: Decode 2xx, 4xx, and 5xx Replies"
+sidebarTitle: "Status Codes"
+description: "Decode SMTP response codes from 2xx success to 5xx permanent failures. Includes enhanced status codes and example transaction walkthroughs."
+---
+
+SMTP servers reply to every command with a three-digit numeric response code. The first digit tells you the result category: success, temporary failure, or permanent failure. The next two digits add detail.
+
+Some replies also include an enhanced status code such as `5.7.1` after the base code. This gives you more precise information about why a message was rejected so you can fix the issue faster.
+
+## 2xx – Success codes
+
+| Code | Enhanced | Meaning |
+| --- | --- | --- |
+| 200 |  | Nonstandard success response |
+| 211 |  | System status or help reply |
+| 214 |  | Help message |
+| 220 |  | Service ready |
+| 221 |  | Service closing transmission channel |
+| 235 |  | Authentication succeeded |
+| 250 |  | Requested action completed |
+| 251 |  | User not local; will forward to `<forward path>` |
+| 252 |  | Cannot verify user; will attempt delivery anyway |
+
+## 3xx – Data and authentication
+
+| Code | Meaning |
+| --- | --- |
+| 334 | Response to an authentication challenge; base64 prompt |
+| 354 | Start mail input; end with `<CRLF>.<CRLF>` |
+
+## 4xx – Temporary failures
+
+These errors mean the operation failed now but may succeed if you retry later.
+
+| Code | Enhanced | Meaning |
+| --- | --- | --- |
+| 421 |  | Service not available; closing connection |
+| 450 |  | Mailbox unavailable; try again later |
+| 451 |  | Local error in processing |
+| 452 |  | Insufficient system storage |
+| 454 |  | Temporary authentication failure |
+| 4.7.23 |  | PTR record missing or mismatched (Gmail) |
+| 4.7.27 |  | SPF authentication did not pass (Gmail) |
+| 4.7.29 |  | Message not sent over TLS (Gmail) |
+| 4.7.30 |  | DKIM authentication did not pass (Gmail) |
+| 4.7.31 |  | DMARC record missing or invalid (Gmail) |
+| 4.7.32 |  | From header not aligned with SPF or DKIM (Gmail) |
+
+## 5xx – Permanent failures
+
+These errors mean the message was rejected and should not be retried without a change.
+
+| Code | Enhanced | Meaning |
+| --- | --- | --- |
+| 500 |  | Syntax error, command unrecognized |
+| 501 |  | Syntax error in parameters or arguments |
+| 502 |  | Command not implemented |
+| 503 |  | Bad sequence of commands |
+| 504 |  | Command parameter not implemented |
+| 521 |  | Server does not accept mail |
+| 535 |  | Authentication failed; incorrect credentials |
+| 550 |  | Mailbox unavailable; recipient rejected |
+| 550 | 5.1.1 | User unknown; mailbox does not exist |
+| 551 |  | User not local; please try `<forward path>` |
+| 552 |  | Exceeded storage allocation |
+| 553 |  | Mailbox name not allowed |
+| 554 |  | Transaction failed or no SMTP service here |
+| 5.7.1 |  | Delivery not authorized; message refused |
+| 5.7.25 |  | PTR record missing or mismatched (Gmail) |
+| 5.7.26 |  | Sender ID policy mismatch |
+| 5.7.27 |  | SPF authentication did not pass (Gmail) |
+| 5.7.28 |  | SPF policy failure |
+| 5.7.29 |  | Message not sent over TLS (Gmail) |
+| 5.7.30 |  | DKIM authentication did not pass (Gmail) |
+
+<Tip>
+  Paste any bounce code into the mySMTP [Bounce Code Decoder](https://toolbox.smtp.ai/) for a plain-English explanation and fix.
+</Tip>
+
+<Note>
+  Gmail enhanced status codes such as `4.7.23` and `5.7.27` help you identify exactly which sender requirement is failing. You can also look up authentication issues using [Google Postmaster Tools](https://postmaster.google.com).
+</Note>
+
+<Note>
+  The transaction examples below use a dedicated relay hostname such as `relayxx.mysmtp.com`. Shared IP plans use `mail.mysmtp.com` and are only available in Denmark.
+</Note>
+
+## Example SMTP transactions
+
+### Successful delivery
+
+```plaintext
+S: 220 relayxx.mysmtp.com ESMTP ready
+C: HELO client.example.com
+S: 250 relayxx.mysmtp.com Hello client.example.com
+C: MAIL FROM:<sender@example.com>
+S: 250 OK
+C: RCPT TO:<recipient@example.com>
+S: 250 OK
+C: DATA
+S: 354 Start mail input; end with <CRLF>.<CRLF>
+C: Subject: Hello
+C:
+C: This is a test message.
+C: .
+S: 250 OK, message accepted for delivery
+C: QUIT
+S: 221 Goodbye
+```
+
+### Authentication error
+
+```plaintext
+S: 220 relayxx.mysmtp.com ESMTP ready
+C: AUTH LOGIN
+S: 334 VXNlcm5hbWU6
+C: <base64 username>
+S: 334 UGFzc3dvcmQ6
+C: <base64 password>
+S: 535 Authentication failed
+```
+
+<Warning>
+  If you receive repeated 535 errors, verify your SMTP username and password in the mySMTP dashboard. See [Setting up SMTP credentials](/getting-started/setting-up-smtp-credentials).
+</Warning>
+
+## Related articles
+
+- [Common SMTP errors](/troubleshooting/common-smtp-errors)
+- [SMTP limits and sending rates](/email-configuration/smtp-limits-and-sending-rates)
+- [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer)

@@ -1,0 +1,118 @@
+---
+title: "Tjek af e-mail logs og headers"
+sidebarTitle: "Logs og headers"
+description: "Få adgang til mySMTP logs og analyser e-mail headers til at diagnosticere leveringsforsinkelser, afvisninger og fejl. Trin-for-trin debug guide for afsendere."
+---
+
+## Se e-mail logs i mySMTP
+
+<Steps>
+  <Step title="Log ind på det korrekte dashboard">
+    Gå til [Dedicated Server Dashboard](https://app.mysmtp.com) for dedikerede IP planer, eller log ind på [mysmtp.com](https://mysmtp.com) for delte IP planer (kun DK).
+  </Step>
+  <Step title="Åbn logs eller statistik sektionen">
+    Kig efter **Search Logs** eller **Statistics** i dashboard menuen.
+  </Step>
+  <Step title="Filtrer resultaterne">
+    Brug filtre som afsender, modtager, datointerval eller status for at afgrænse de logposter, du har brug for.
+  </Step>
+  <Step title="Vis detaljerne">
+    Klik på en specifik e-mail post for at se statuskoden, tidsstempler og leveringsforsøg.
+  </Step>
+  <Step title="Eksporter om nødvendigt">
+    Brug eksportmuligheden (CSV, når tilgængelig) for at gemme logs til offline analyse eller supportsager.
+  </Step>
+</Steps>
+
+## Nøgle logfelter
+
+| Log felt | Hvad det fortæller dig |
+| --- | --- |
+| Timestamp | Hvornår e-mailen blev behandlet |
+| Sender | Den adresse, beskeden blev sendt fra |
+| Recipient | Destinationsadressen |
+| Status | Om beskeden lykkedes, fejlede eller blev udsat |
+| Fejlkode | SMTP responskoder som 550 for afvisning eller 421 for midlertidige problemer |
+
+## Se e-mail headers i populære klienter
+
+Headers er de tekniske metadata, der rejser med hver e-mail. De viser beskedens rute, autentificeringsresultater og enhver filtrering, der fandt sted undervejs.
+
+<Tabs>
+  <Tab title="Gmail">
+    <Steps>
+      <Step title="Åbn beskeden">
+        Åbn den e-mail, du vil inspicere, i din Gmail indbakke.
+      </Step>
+      <Step title="Åbn menuen">
+        Klik på de **tre prikker** ved siden af Svar knappen, og vælg derefter **Show original**.
+      </Step>
+      <Step title="Gennemgå headers">
+        Den originale besked åbner på en ny fane med det fulde header blok øverst, efterfulgt af beskedkroppen eller Base64-kodet content.
+      </Step>
+      <Step title="Download eller kopier">
+        Brug knappen **Download Original** til at gemme .eml filen, eller kopier råteksten til analyse.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Outlook (web)">
+    <Steps>
+      <Step title="Åbn beskeden">
+        Åbn den e-mail, du vil inspicere, i Outlook på web.
+      </Step>
+      <Step title="Åbn handlingsmenuen">
+        Klik på de **tre prikker** øverst til højre i beskeden, og vælg derefter **View > View message details**.
+      </Step>
+      <Step title="Gennemgå headers">
+        En rude viser de fulde besked headers. Kopier teksten til analyse.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Apple Mail (macOS)">
+    <Steps>
+      <Step title="Åbn beskeden">
+        Åbn e-mailen i Apple Mail.
+      </Step>
+      <Step title="Vis alle headers">
+        Gå til **View > Message > All Headers** (eller **View > Message > Default Headers** for at vende tilbage til standardvisningen).
+      </Step>
+      <Step title="Kopier headers">
+        Klik i header området og vælg alle, kopier derefter for at indsætte i en header analyzer.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Sådan læser du almindelige header felter
+
+| Header felt | Formål |
+| --- | --- |
+| `Received` | Viser alle servere, beskeden passerede igennem. Læs fra bunden til top for at spore ruten og identificere forsinkelser. |
+| `Message-ID` | En unik identifikator for beskeden, der hjælper med at spore en specifik e-mail på tværs af systemer. |
+| `Return-Path` | Den adresse, der modtager bounce og leveringsfejl meddelelser. |
+| `DKIM-Signature` | Den digitale signatur, der tilføjes for at verificere, at beskeden ikke blev ændret under transport. |
+| `Authentication-Results` | Resultatet fra modtagerserveren på SPF, DKIM og DMARC kontroller. Dette er ofte nøglefeltet for debug af leveringsevne. |
+
+<Tip>
+  Kig efter `Authentication-Results` nær toppen af header blokken. En typisk linje ser sådan ud: `Authentication-Results: mx.google.com; spf=pass; dkim=pass; dmarc=pass` Hvis nogen af disse siger `fail` eller `none`, skal du fokusere din rettelse på den specifikke record.
+</Tip>
+
+<Tip>
+  Indsæt rå headers i [Email Header Analyzer](https://toolbox.smtp.ai/) i mySMTP Deliverability Toolbox for automatisk at spore relay hops, forsinkelser og autentificeringsresultater.
+</Tip>
+
+## Almindelige header problemer og rettelser
+
+| Symptom | Hvad du skal tjekke | Løsning |
+| --- | --- | --- |
+| Forsinket levering | Flere `Received` tidsstempler med store huller | Identificer det langsomme hop og forespørg den server, eller kontakt mySMTP support med headeren |
+| Afvist med 550 | `Authentication-Results` viser SPF eller DKIM fejl | Gennemgå dine DNS records og ret den fejlende autentificeringsrecord |
+| Markeret som spam | `X-Spam-Status` eller `Authentication-Results` viser DMARC politik mismatch | Justér din SPF og DKIM til dit `From` domæne, og sørg for, at DMARC er sat korrekt |
+
+## Har du brug for mere hjælp?
+
+Hvis mySMTP logs og besked headers ikke forklarer problemet:
+
+1. Tjek [status.mysmtp.com](https://status.mysmtp.com) for kendte serviceforstyrrelser.
+2. Gennemgå din afsenderreputation med [Google Postmaster Tools](https://postmaster.google.com).
+3. Kontakt mySMTP support på [support@mysmtp.com](mailto:support@mysmtp.com) og inkluder de fulde besked headers sammen med relevante logposter.

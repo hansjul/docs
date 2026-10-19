@@ -1,0 +1,179 @@
+---
+title: "Java-kodeeksempel for mySMTP med Jakarta Mail"
+sidebarTitle: "Java"
+description: "Send email fra Java ved hjælp af Jakarta Mail (Angus Mail) med STARTTLS på port 587. Inkluderer Maven- og Gradle-afhængighedseksempler for mySMTP."
+---
+
+Brug Jakarta Mail, den officielle Java-mail-API, til at sende email gennem mySMTP med STARTTLS på port 587. Reference-implementeringen er Angus Mail.
+
+## Forudsætninger
+
+- Java 11 eller nyere
+- Maven eller Gradle
+- Dit mySMTP-brugernavn og -adgangskode fra opsætningsemailen
+- Dit mySMTP-hostnavn fra opsætningsemailen (vist som `relayxx.mysmtp.com` i disse eksempler)
+
+## Installer Angus Mail
+
+<CodeGroup>
+
+```xml Maven
+<dependency>
+    <groupId>org.eclipse.angus</groupId>
+    <artifactId>angus-mail</artifactId>
+    <version>2.0.3</version>
+</dependency>
+```
+
+```groovy Gradle
+dependencies {
+    implementation 'org.eclipse.angus:angus-mail:2.0.3'
+}
+```
+
+</CodeGroup>
+
+## Grundlæggende afsendelseseksempel
+
+```java
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+import java.util.Properties;
+
+public class MySmtpExample {
+    public static void main(String[] args) throws Exception {
+        String host = System.getenv().getOrDefault("MYSMTP_HOST", "relayxx.mysmtp.com");
+        String user = System.getenv("MYSMTP_USER");
+        String pass = System.getenv("MYSMTP_PASS");
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, pass);
+            }
+        });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("dig@ditdomæne.com", "Dit navn"));
+        message.setRecipients(Message.RecipientType.TO,
+            InternetAddress.parse("modtager@example.com"));
+        message.setSubject("Testemail fra Java");
+        message.setText("Dette er en almindelig teksttestbesked sendt gennem mySMTP.");
+
+        Transport.send(message);
+        System.out.println("Besked sendt succesfuldt");
+    }
+}
+```
+
+<Note>
+  Erstat `relayxx.mysmtp.com` med dit rigtige hostnavn fra mySMTP-opsætningsemailen. Indlæs autentificeringsoplysninger fra miljøvariabler, og indsæt dem aldrig direkte i kildefiler.
+</Note>
+
+## HTML-email med vedhæftet fil
+
+```java
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+import java.util.Properties;
+
+public class MySmtpHtmlExample {
+    public static void main(String[] args) throws Exception {
+        String host = System.getenv().getOrDefault("MYSMTP_HOST", "relayxx.mysmtp.com");
+        String user = System.getenv("MYSMTP_USER");
+        String pass = System.getenv("MYSMTP_PASS");
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, pass);
+            }
+        });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("dig@ditdomæne.com", "Dit navn"));
+        message.setRecipients(Message.RecipientType.TO,
+            InternetAddress.parse("modtager@example.com"));
+        message.setSubject("HTML-email med vedhæftet fil");
+
+        MimeBodyPart textPart = new MimeBodyPart();
+        textPart.setText("Dette er fallback-teksten i almindeligt tekstformat.", "utf-8");
+
+        MimeBodyPart htmlPart = new MimeBodyPart();
+        htmlPart.setContent(
+            "<h1>Hej</h1><p>Dette er en HTML-besked.</p>",
+            "text/html; charset=utf-8"
+        );
+
+        MimeMultipart alternative = new MimeMultipart("alternative");
+        alternative.addBodyPart(textPart);
+        alternative.addBodyPart(htmlPart);
+
+        MimeBodyPart attachmentPart = new MimeBodyPart();
+        attachmentPart.attachFile("/sti/til/faktura.pdf");
+
+        MimeMultipart mixed = new MimeMultipart("mixed");
+        mixed.addBodyPart(new MimeBodyPart() {{ setContent(alternative); }});
+        mixed.addBodyPart(attachmentPart);
+
+        message.setContent(mixed);
+        Transport.send(message);
+        System.out.println("Besked sendt succesfuldt");
+    }
+}
+```
+
+<Tabs>
+  <Tab title="Spring Boot application.properties">
+    Hvis du bruger Spring Boot, tilføj disse indstillinger til `application.properties`:
+
+    ```properties
+    spring.mail.host=${MYSMTP_HOST:relayxx.mysmtp.com}
+    spring.mail.port=587
+    spring.mail.username=${MYSMTP_USER}
+    spring.mail.password=${MYSMTP_PASS}
+    spring.mail.properties.mail.smtp.auth=true
+    spring.mail.properties.mail.smtp.starttls.enable=true
+    ```
+
+    Injicer `JavaMailSender` og kald `send(SimpleMailMessage)` eller `send(MimeMessage)`.
+  </Tab>
+</Tabs>
+
+## Almindelige fejl
+
+<AccordionGroup>
+  <Accordion title="535 Authentication failed">
+    Dit brugernavn eller din adgangskode er forkert, eller din konto er endnu ikke aktiveret. Indtast autentificeringsoplysningerne præcis som vist i opsætningsemailen. Se [Opsætning af SMTP-oplysninger](/da/getting-started/setting-up-smtp-credentials).
+  </Accordion>
+
+  <Accordion title="Connection timeout eller refused">
+    Dit netværk eller din vært kan blokere port 587. Prøv port 2525 med de samme egenskaber, eller port 465 med `mail.smtp.ssl.enable=true`. Se [Understøttede SMTP-porte og kryptering](/da/getting-started/supported-smtp-ports-and-encryption).
+  </Accordion>
+
+  <Accordion title="TLS handshake failure">
+    Krypteringsindstillingerne passer ikke til porten. Brug `mail.smtp.starttls.enable=true` for porte 587 og 2525. Brug `mail.smtp.ssl.enable=true` for port 465.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Test din SPF-, DKIM- og DMARC-opsætning med [mySMTP Deliverability Toolbox](https://toolbox.smtp.ai/) inden du sender store mængder.
+</Tip>
+
+## Relaterede artikler
+
+- [Kodeeksempler - oversigt](/da/email-configuration/code-examples)
+- [SMTP-grænser og afsendelseshastigheder](/da/email-configuration/smtp-limits-and-sending-rates)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

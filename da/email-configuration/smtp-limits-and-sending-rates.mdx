@@ -1,0 +1,110 @@
+---
+title: "SMTP-begrænsninger, rate-optimering og IP-opvarmningsguide"
+sidebarTitle: "Begrænsninger og hastigheder"
+description: "Forstå mySMTP-afsendelsesgrænser, rate-kontroller, IP-opvarmning og bedste praksis for høj-volumen e-mail-levering uden reputationskade."
+---
+
+Grænser varierer efter plan, IP-type, destinationsdomæne og afsendelseshistorik.
+
+## Hvordan grænser bestemmes
+
+| Faktor | Effekt |
+| --- | --- |
+| Plan | Højere-tier planer inkluderer større daglige eller månedlige tilladelser |
+| IP-type | Dedikerede IP'er har højere grænser end delte IP'er (delt IP er kun DK) |
+| Afsendelsesvolumen | Pludselige stigninger kan udløse midlertidig throttling |
+| Modtagerdomæne | Hver udbyder håndhæver sine egne time- og dagsgrænser |
+| Bounce- og spam-rate | Høje rater fører til automatisk rate-reduktion eller blokeringer |
+
+<Warning>
+  Overskridelse af grænser kan resultere i midlertidig throttling, udskydelser eller blokeringer. mySMTP overvåger bounce- og klagrater automatisk.
+</Warning>
+
+## IP-opvarmningsstrategi
+
+Nye IP'er har ingen reputation. At sende stor volumen med det samme ser mistænksomt ud for Gmail, Outlook, Yahoo og andre udbydere.
+
+<Steps>
+  <Step title="Start småt">
+    Send til dine mest engagerede modtagere først. Brugere, der åbner og klikker, bygger positive reputationssignaler.
+  </Step>
+  <Step title="Øg volumen gradvist">
+    Fordobl eller tredobbel din daglige volumen hver par dage i stedet for at springe til din fulde kvote.
+  </Step>
+  <Step title="Overvåg bounces og klager">
+    Fjern ugyldige adresser og undertryk brugere, der markerer spam. Begge målinger bør holde sig under 2% og 0,3% henholdsvis.
+  </Step>
+  <Step title="Godkend hver besked">
+    Brug SPF, DKIM og DMARC på dit afsenderdomæne. Se [DNS-opsætning til godkendelse](/da/deliverability/dns-setup-for-authentication).
+  </Step>
+</Steps>
+
+<Tip>
+  Brug den gratis mySMTP [Warmup Plan Generator](https://toolbox.smtp.ai/#warmup-generator) til at bygge en dag-for-dag-plan for en ny IP eller domæne, og tjek din IP mod større blocklists med [Blacklist Checker](https://toolbox.smtp.ai/).
+</Tip>
+
+## Rate-grænser efter destinationsudbyder
+
+Dette er estimater baseret på nuværende industriskik. Faktiske grænser ændrer sig og afhænger af din IP-reputation.
+
+| Udbyder | Ny IP (pr. time) | Opvarmet IP (pr. time) | Omtrentlig dagsgrænse |
+| --- | --- | --- | --- |
+| Gmail | 500–1.000 | 5.000+ | 50.000 |
+| Yahoo / AOL | 1.000 | 10.000+ | 100.000 |
+| Outlook / Hotmail | 500 | 3.000+ | 30.000 |
+| iCloud Mail | 500 | 2.000+ | 10.000 |
+
+<Note>
+  Adskil dine e-mail-strømme efter type og domæne. Send for eksempel transaktionspost fra `notifications.ditdomæne.dk` og marketingpost fra `marketing.ditdomæne.dk`. Dette beskytter hver strøms reputation.
+</Note>
+
+## Krav til masseafsendere (2025)
+
+Gmail, Yahoo og Microsoft håndhæver nu minimumsstandarder for masseafsendere. At opfylde dem forbedrer levering gennem mySMTP.
+
+| Krav | Detalje |
+| --- | --- |
+| Godkendelse | Både SPF og DKIM kræves for masseafsendere; DMARC ved `p=none` minimum |
+| Justering | Fra-domæne skal justere med SPF eller DKIM |
+| TLS | Alle beskeder skal sendes over TLS |
+| Et-kliks afmelding | Marketingbeskeder kræver RFC 8058 List-Unsubscribe-headers |
+| Spam-rate | Hold brugerrapporteret spam under 0,3%; ideelt under 0,1% |
+| Afmeldingsforsinkelse | Honorér afmeldingsanmodninger inden for 48 timer |
+
+<Warning>
+  Masseafsendere, der spoof'er gmail.com eller sender uden TLS, vil modtage midlertidige eller permanente fejl og kan miste adgang til Gmail-mitigeringsstøtte.
+</Warning>
+
+## Throttling og fejlkoder
+
+Når du rammer en grænse, fortæller SMTP-responsen dig, hvad der skete.
+
+| Fejl | Betydning | Næste trin |
+| --- | --- | --- |
+| 421 | For mange forbindelser | Sænk forbindelsesantallet; prøv igen med backoff |
+| 450 | Postkasse utilgængelig | Prøv igen senere; kan være et midlertidigt udbyderproblem |
+| 451 | Lokal server-overbelastning | Sænk afsendelseshastigheden |
+| 550 | Blokeret eller afvist | Fjern dårlige adresser; tjek reputation |
+| 554 | Markeret som spam | Gennemgå indhold og godkendelsesopsætning |
+
+Aktivér SMTP-logning i din applikation for at fange disse koder. Hvis du ser gentagne blokeringer, skal du pause afsendelsen og gennemgå din listehygiejne og godkendelsesopsætning.
+
+## Skalering til enterprise-volumen
+
+Hvis du har brug for at sende én million eller flere e-mails om dagen, skal du overveje:
+
+- Flere mySMTP dedikerede IP'er roteret for lastfordeling
+- Postmulti-serveropsætninger til at sprede trafik over relays
+- Segregerede afsenderdomæner for hver mailstrøm
+- Engagement-baserede afsendelsesstrategier, der reducerer volumen til inaktive abonnenter
+
+<Note>
+  Enterprise-brugere kan anmode om tilpassede rate-grænser og prioritets SMTP-køer gennem mySMTP-support.
+</Note>
+
+## Relaterede artikler
+
+- [Opvarmningsplaner](/da/deliverability/warm-up-plans)
+- [Håndtering af bounces og klager](/da/deliverability/handling-bounces-and-complaints)
+- [DNS-opsætning til godkendelse](/da/deliverability/dns-setup-for-authentication)
+- [Almindelige SMTP-fejl](/da/troubleshooting/common-smtp-errors)

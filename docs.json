@@ -1,0 +1,562 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "mySMTP Documentation",
+  "colors": {
+    "primary": "#198754",
+    "light": "#07C983",
+    "dark": "#15803D"
+  },
+  "favicon": {
+    "light": "/images/mySMTPIcon-Final.svg",
+    "dark": "/images/mySMTPIcon-Final.svg"
+  },
+  "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Deliverability Toolbox",
+          "icon": "toolbox",
+          "href": "https://toolbox.smtp.ai/"
+        },
+        {
+          "anchor": "Service Status",
+          "icon": "signal",
+          "href": "https://status.mysmtp.com/"
+        },
+        {
+          "anchor": "Blog",
+          "href": "https://mysmtp.com/blog",
+          "icon": "newspaper"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "language": "en",
+        "default": true,
+        "groups": [
+          {
+            "group": "Home",
+            "icon": "house",
+            "pages": [
+              "index"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "icon": "rocket",
+            "expanded": true,
+            "root": "getting-started/index",
+            "pages": [
+              "getting-started/introduction-to-the-service",
+              "getting-started/shared-ips-or-dedicated",
+              "getting-started/sign-up-and-activate-your-account",
+              "getting-started/setting-up-smtp-credentials",
+              "getting-started/supported-smtp-ports-and-encryption",
+              "getting-started/dns-settings-quick-explainer",
+              "getting-started/dedicated-ip-server-dashboard",
+              "getting-started/whitelisting-and-security-best-practices"
+            ]
+          },
+          {
+            "group": "Setup Guides",
+            "icon": "gear",
+            "root": "email-configuration/index",
+            "pages": [
+              {
+                "group": "Email Clients & Devices",
+                "root": "email-configuration/email-clients/index",
+                "pages": [
+                  {
+                    "group": "Email Apps",
+                    "pages": [
+                      "email-configuration/email-clients/outlook-2025",
+                      "email-configuration/email-clients/new-outlook-windows",
+                      "email-configuration/email-clients/outlook-mobile",
+                      "email-configuration/email-clients/mac-mail-2025",
+                      "email-configuration/email-clients/iphone-ipad-mail",
+                      "email-configuration/email-clients/thunderbird",
+                      "email-configuration/email-clients/em-client",
+                      "email-configuration/email-clients/android-mail",
+                      "email-configuration/email-clients/samsung-email",
+                      "email-configuration/email-clients/windows-mail"
+                    ]
+                  },
+                  {
+                    "group": "Mail Servers",
+                    "pages": [
+                      "email-configuration/email-clients/microsoft-exchange",
+                      "email-configuration/email-clients/microsoft-365-connector",
+                      "email-configuration/email-clients/google-workspace-relay",
+                      "email-configuration/email-clients/postfix",
+                      "email-configuration/email-clients/hmailserver-mdaemon"
+                    ]
+                  },
+                  {
+                    "group": "Printers & Scanners",
+                    "pages": [
+                      "email-configuration/email-clients/scan-to-email",
+                      "email-configuration/email-clients/hp-printers",
+                      "email-configuration/email-clients/canon-printers",
+                      "email-configuration/email-clients/ricoh-printers",
+                      "email-configuration/email-clients/konica-minolta-printers",
+                      "email-configuration/email-clients/xerox-printers",
+                      "email-configuration/email-clients/brother-kyocera-sharp-printers"
+                    ]
+                  },
+                  {
+                    "group": "Devices & Appliances",
+                    "pages": [
+                      "email-configuration/email-clients/synology-qnap-nas",
+                      "email-configuration/email-clients/security-cameras",
+                      "email-configuration/email-clients/firewalls-routers"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Web Applications",
+                "root": "email-configuration/web-applications/index",
+                "pages": [
+                  "email-configuration/web-applications/instantly",
+                  "email-configuration/web-applications/mumara",
+                  "email-configuration/web-applications/interspire",
+                  "email-configuration/web-applications/mailwizz",
+                  "email-configuration/web-applications/hosted-mailwizz",
+                  "email-configuration/web-applications/atomic-mail-sender",
+                  "email-configuration/web-applications/easysendy",
+                  "email-configuration/web-applications/sendblaster"
+                ]
+              },
+              {
+                "group": "Code Examples",
+                "root": "email-configuration/code-examples/index",
+                "pages": [
+                  "email-configuration/code-examples/php",
+                  "email-configuration/code-examples/python",
+                  "email-configuration/code-examples/nodejs",
+                  "email-configuration/code-examples/dotnet",
+                  "email-configuration/code-examples/java",
+                  "email-configuration/code-examples/command-line-test"
+                ]
+              },
+              {
+                "group": "CMS & Frameworks",
+                "root": "email-configuration/platforms/index",
+                "pages": [
+                  "email-configuration/platforms/wordpress",
+                  "email-configuration/platforms/woocommerce",
+                  "email-configuration/platforms/magento",
+                  "email-configuration/platforms/prestashop",
+                  "email-configuration/platforms/shopify",
+                  "email-configuration/platforms/odoo",
+                  "email-configuration/platforms/laravel",
+                  "email-configuration/platforms/django"
+                ]
+              },
+              {
+                "group": "Migration Guides",
+                "root": "email-configuration/migration/index",
+                "pages": [
+                  "email-configuration/migration/sendgrid",
+                  "email-configuration/migration/mailgun",
+                  "email-configuration/migration/amazon-ses",
+                  "email-configuration/migration/brevo",
+                  "email-configuration/migration/postmark"
+                ]
+              },
+              "email-configuration/connect-gmail",
+              "email-configuration/smtp-limits-and-sending-rates",
+              "email-configuration/transactional-vs-marketing-emails"
+            ]
+          },
+          {
+            "group": "Deliverability",
+            "icon": "paper-plane",
+            "root": "deliverability/index",
+            "pages": [
+              "deliverability/deliverability-toolbox",
+              "deliverability/improve-email-deliverability",
+              "deliverability/dns-setup-for-authentication",
+              "deliverability/spf-dkim-dmarc-and-bimi-explained",
+              "deliverability/warm-up-plans",
+              "deliverability/ip-reputation-dedicated-vs-shared-ips",
+              "deliverability/blacklist-monitoring-and-delisting",
+              "deliverability/rephero",
+              "deliverability/handling-bounces-and-complaints",
+              "deliverability/reverse-dns-ptr",
+              "deliverability/branded-rdns",
+              "deliverability/feedback-loops",
+              "deliverability/google-postmaster-and-microsoft-snds"
+            ]
+          },
+          {
+            "group": "API & Webhooks",
+            "icon": "code",
+            "tag": "Q4 2026",
+            "pages": [
+              "api/index",
+              "api/webhooks"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "icon": "wrench",
+            "root": "troubleshooting/index",
+            "pages": [
+              "troubleshooting/common-smtp-errors",
+              "email-configuration/smtp-status-codes",
+              "troubleshooting/emails-going-to-spam",
+              "troubleshooting/checking-email-logs-and-headers",
+              "troubleshooting/email-attachments-size",
+              "troubleshooting/check-smtp-port-with-telnet"
+            ]
+          },
+          {
+            "group": "Account & Support",
+            "icon": "life-ring",
+            "root": "support/index",
+            "pages": [
+              "support/contact-support",
+              "getting-started/faqs",
+              "support/status-page-and-incident-reports",
+              {
+                "group": "Billing",
+                "icon": "credit-card",
+                "root": "billing/index",
+                "pages": [
+                  "billing/manual-account-setup",
+                  "billing/changing-your-plan",
+                  "billing/invoices-and-vat",
+                  "billing/refund-and-cancellation-policy"
+                ]
+              },
+              {
+                "group": "Security & Compliance",
+                "icon": "shield-check",
+                "root": "security-compliance/index",
+                "pages": [
+                  "security-compliance/gdpr-and-data-protection",
+                  "security-compliance/data-processing-agreement",
+                  "security-compliance/can-spam-and-email-compliance",
+                  "security-compliance/report-abuse-and-spam-complaints"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "   \ntitle: \"Refunderings  og afbestillingspolitik\"\nsidebarTitle: \"Refunderinger og afbestillinger\"\ndescription: \"Forstå mySMTP's 14 Dages refunderings  og afbestillingsrettigheder under den danske forbrugerbeskyttelseslov. Lær hvornår og hvordan du anmoder om refundering.\"\n   \n\n## Afbestillingsret\n\nDu har **14 dage** fra aftalens indgåelse til at træde tilbage og anmode om refundering.\n\n| Betingelse | Detalje |\n|     |     |\n| Afbestillingsperiode | 14 dage fra aftaledato |\n| Sådan afbestiller du | Send en e Mail til [support@mysmtp.com](mailto:support@mysmtp.com) |\n| Hvornår retten udløber | Når du begynder at bruge services |\n\n<Warning>\n  **Afbestillings  og refunderingsrettigheden ophører**, når du tager services i brug. Når du begynder at sende e Mails eller aktivt konfigurerer din konto, slutter 14 Dages fortrydelsesperioden.\n<",
+            "pages": [
+              {
+                "group": "Warning>\n\n## Sådan anmoder du om refundering\n\nFor at gøre brug af din afbestillingsret skal du underrette mySMTP ved at sende en e Mail til [support@mysmtp.com](mailto:support@mysmtp.com) inden for 14 Dages vinduet. Medtag dine kontodetaljer og begrundelsen for afbestillingen.\n\n## Serviceregler\n\nFor de fulde regler, se [mySMTP serviceregler](https:",
+                "pages": [
+                  {
+                    "group": "Mysmtp.com",
+                    "pages": [
+                      {
+                        "group": "Terms Of Service).\n\n## Relaterede artikler\n\n  [Tilmeld og aktiver din konto](",
+                        "pages": [
+                          {
+                            "group": "Da",
+                            "pages": [
+                              {
+                                "group": "Getting Started",
+                                "pages": [
+                                  {
+                                    "group": "Sign Up And Activate Your Account)\n  [Kontakt support](",
+                                    "pages": [
+                                      {
+                                        "group": "Da",
+                                        "pages": [
+                                          {
+                                            "group": "Support",
+                                            "pages": [
+                                              "---\ntitle: \"Refunderings- og afbestillingspolitik\"\nsidebarTitle: \"Refunderinger og afbestillinger\"\ndescription: \"Forstå mySMTP's 14-dages refunderings- og afbestillingsrettigheder under den danske forbrugerbeskyttelseslov. Lær hvornår og hvordan du anmoder om refundering.\"\n---\n\n## Afbestillingsret\n\nDu har **14 dage** fra aftalens indgåelse til at træde tilbage og anmode om refundering.\n\n| Betingelse | Detalje |\n| --- | --- |\n| Afbestillingsperiode | 14 dage fra aftaledato |\n| Sådan afbestiller du | Send en e-mail til [support@mysmtp.com](mailto:support@mysmtp.com) |\n| Hvornår retten udløber | Når du begynder at bruge services |\n\n<Warning>\n  **Afbestillings- og refunderingsrettigheden ophører**, når du tager services i brug. Når du begynder at sende e-mails eller aktivt konfigurerer din konto, slutter 14-dages fortrydelsesperioden.\n</Warning>\n\n## Sådan anmoder du om refundering\n\nFor at gøre brug af din afbestillingsret skal du underrette mySMTP ved at sende en e-mail til [support@mysmtp.com](mailto:support@mysmtp.com) inden for 14-dages vinduet. Medtag dine kontodetaljer og begrundelsen for afbestillingen.\n\n## Serviceregler\n\nFor de fulde regler, se [mySMTP serviceregler](https://mysmtp.com/terms-of-service).\n\n## Relaterede artikler\n\n- [Tilmeld og aktiver din konto](/da/getting-started/sign-up-and-activate-your-account)\n- [Kontakt support](/da/support/contact-support)\n"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "da",
+        "groups": [
+          {
+            "group": "Hjem",
+            "icon": "house",
+            "pages": [
+              "da/index"
+            ]
+          },
+          {
+            "group": "Kom godt i gang",
+            "icon": "rocket",
+            "expanded": true,
+            "root": "da/getting-started/index",
+            "pages": [
+              "da/getting-started/introduction-to-the-service",
+              "da/getting-started/shared-ips-or-dedicated",
+              "da/getting-started/sign-up-and-activate-your-account",
+              "da/getting-started/setting-up-smtp-credentials",
+              "da/getting-started/supported-smtp-ports-and-encryption",
+              "da/getting-started/dns-settings-quick-explainer",
+              "da/getting-started/dedicated-ip-server-dashboard",
+              "da/getting-started/whitelisting-and-security-best-practices"
+            ]
+          },
+          {
+            "group": "Opsætningsguides",
+            "icon": "gear",
+            "root": "da/email-configuration/index",
+            "pages": [
+              {
+                "group": "E-mailklienter & enheder",
+                "root": "da/email-configuration/email-clients/index",
+                "pages": [
+                  {
+                    "group": "E-mail-apps",
+                    "pages": [
+                      "da/email-configuration/email-clients/outlook-2025",
+                      "da/email-configuration/email-clients/new-outlook-windows",
+                      "da/email-configuration/email-clients/outlook-mobile",
+                      "da/email-configuration/email-clients/mac-mail-2025",
+                      "da/email-configuration/email-clients/iphone-ipad-mail",
+                      "da/email-configuration/email-clients/thunderbird",
+                      "da/email-configuration/email-clients/em-client",
+                      "da/email-configuration/email-clients/android-mail",
+                      "da/email-configuration/email-clients/samsung-email",
+                      "da/email-configuration/email-clients/windows-mail"
+                    ]
+                  },
+                  {
+                    "group": "Mailservere",
+                    "pages": [
+                      "da/email-configuration/email-clients/microsoft-exchange",
+                      "da/email-configuration/email-clients/microsoft-365-connector",
+                      "da/email-configuration/email-clients/google-workspace-relay",
+                      "da/email-configuration/email-clients/postfix",
+                      "da/email-configuration/email-clients/hmailserver-mdaemon"
+                    ]
+                  },
+                  {
+                    "group": "Printere & scannere",
+                    "pages": [
+                      "da/email-configuration/email-clients/scan-to-email",
+                      "da/email-configuration/email-clients/hp-printers",
+                      "da/email-configuration/email-clients/canon-printers",
+                      "da/email-configuration/email-clients/ricoh-printers",
+                      "da/email-configuration/email-clients/konica-minolta-printers",
+                      "da/email-configuration/email-clients/xerox-printers",
+                      "da/email-configuration/email-clients/brother-kyocera-sharp-printers"
+                    ]
+                  },
+                  {
+                    "group": "Enheder & udstyr",
+                    "pages": [
+                      "da/email-configuration/email-clients/synology-qnap-nas",
+                      "da/email-configuration/email-clients/security-cameras",
+                      "da/email-configuration/email-clients/firewalls-routers"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Webapplikationer",
+                "root": "da/email-configuration/web-applications/index",
+                "pages": [
+                  "da/email-configuration/web-applications/instantly",
+                  "da/email-configuration/web-applications/mumara",
+                  "da/email-configuration/web-applications/interspire",
+                  "da/email-configuration/web-applications/mailwizz",
+                  "da/email-configuration/web-applications/hosted-mailwizz",
+                  "da/email-configuration/web-applications/atomic-mail-sender",
+                  "da/email-configuration/web-applications/easysendy",
+                  "da/email-configuration/web-applications/sendblaster"
+                ]
+              },
+              {
+                "group": "Kodeeksempler",
+                "root": "da/email-configuration/code-examples/index",
+                "pages": [
+                  "da/email-configuration/code-examples/php",
+                  "da/email-configuration/code-examples/python",
+                  "da/email-configuration/code-examples/nodejs",
+                  "da/email-configuration/code-examples/dotnet",
+                  "da/email-configuration/code-examples/java",
+                  "da/email-configuration/code-examples/command-line-test"
+                ]
+              },
+              {
+                "group": "CMS & frameworks",
+                "root": "da/email-configuration/platforms/index",
+                "pages": [
+                  "da/email-configuration/platforms/wordpress",
+                  "da/email-configuration/platforms/woocommerce",
+                  "da/email-configuration/platforms/magento",
+                  "da/email-configuration/platforms/prestashop",
+                  "da/email-configuration/platforms/shopify",
+                  "da/email-configuration/platforms/odoo",
+                  "da/email-configuration/platforms/laravel",
+                  "da/email-configuration/platforms/django"
+                ]
+              },
+              {
+                "group": "Migreringsguides",
+                "root": "da/email-configuration/migration/index",
+                "pages": [
+                  "da/email-configuration/migration/sendgrid",
+                  "da/email-configuration/migration/mailgun",
+                  "da/email-configuration/migration/amazon-ses",
+                  "da/email-configuration/migration/brevo",
+                  "da/email-configuration/migration/postmark"
+                ]
+              },
+              "da/email-configuration/connect-gmail",
+              "da/email-configuration/smtp-limits-and-sending-rates",
+              "da/email-configuration/transactional-vs-marketing-emails"
+            ]
+          },
+          {
+            "group": "Leveringsevne",
+            "icon": "paper-plane",
+            "root": "da/deliverability/index",
+            "pages": [
+              "da/deliverability/deliverability-toolbox",
+              "da/deliverability/improve-email-deliverability",
+              "da/deliverability/dns-setup-for-authentication",
+              "da/deliverability/spf-dkim-dmarc-and-bimi-explained",
+              "da/deliverability/warm-up-plans",
+              "da/deliverability/ip-reputation-dedicated-vs-shared-ips",
+              "da/deliverability/blacklist-monitoring-and-delisting",
+              "da/deliverability/rephero",
+              "da/deliverability/handling-bounces-and-complaints",
+              "da/deliverability/reverse-dns-ptr",
+              "da/deliverability/branded-rdns",
+              "da/deliverability/feedback-loops",
+              "da/deliverability/google-postmaster-and-microsoft-snds"
+            ]
+          },
+          {
+            "group": "API & webhooks",
+            "icon": "code",
+            "tag": "Q4 2026",
+            "pages": [
+              "da/api/index",
+              "da/api/webhooks"
+            ]
+          },
+          {
+            "group": "Fejlfinding",
+            "icon": "wrench",
+            "root": "da/troubleshooting/index",
+            "pages": [
+              "da/troubleshooting/common-smtp-errors",
+              "da/email-configuration/smtp-status-codes",
+              "da/troubleshooting/emails-going-to-spam",
+              "da/troubleshooting/checking-email-logs-and-headers",
+              "da/troubleshooting/email-attachments-size",
+              "da/troubleshooting/check-smtp-port-with-telnet"
+            ]
+          },
+          {
+            "group": "Konto & support",
+            "icon": "life-ring",
+            "root": "da/support/index",
+            "pages": [
+              "da/support/contact-support",
+              "da/getting-started/faqs",
+              "da/support/status-page-and-incident-reports",
+              {
+                "group": "Fakturering",
+                "icon": "credit-card",
+                "root": "da/billing/index",
+                "pages": [
+                  "da/billing/manual-account-setup",
+                  "da/billing/changing-your-plan",
+                  "da/billing/invoices-and-vat",
+                  "da/billing/refund-and-cancellation-policy"
+                ]
+              },
+              {
+                "group": "Sikkerhed & compliance",
+                "icon": "shield-check",
+                "root": "da/security-compliance/index",
+                "pages": [
+                  "da/security-compliance/gdpr-and-data-protection",
+                  "da/security-compliance/data-processing-agreement",
+                  "da/security-compliance/can-spam-and-email-compliance",
+                  "da/security-compliance/report-abuse-and-spam-complaints"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/images/mySMTPLogo-Final(TransparentBG).png",
+    "dark": "/images/mysmtp-dark-mode.png",
+    "href": "https://documentation.mysmtp.com/"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:support@mysmtp.com"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "mySMTP.com",
+      "href": "https://mysmtp.com"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "linkedin": "https://www.linkedin.com/company/mysmtp",
+      "facebook": "https://facebook.com/mysmtp",
+      "x": "https://x.com/mysmtp"
+    }
+  },
+  "fonts": {
+    "family": "Source Sans 3"
+  },
+  "styling": {
+    "eyebrows": "breadcrumbs"
+  },
+  "description": "Documentation about sending transactional emails and guides to best practices on delivery in the email sending landscape",
+  "appearance": {
+    "default": "system"
+  },
+  "variables": {
+    "toolbox_url": "https://toolbox.smtp.ai"
+  }
+}

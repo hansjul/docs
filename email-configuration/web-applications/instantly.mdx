@@ -1,0 +1,99 @@
+---
+title: "Connect Instantly to mySMTP for cold email campaigns"
+sidebarTitle: "Instantly"
+description: "Integrate mySMTP with Instantly by adding a custom SMTP server. Use port 587 and TLS with your dedicated IP credentials to send cold emails."
+---
+
+You need an active mySMTP account with a dedicated IP and your SMTP credentials.
+
+## Before you start
+
+Have these details from your mySMTP setup email ready:
+
+| Setting | Value |
+| --- | --- |
+| SMTP host | e.g. `relayxx.mysmtp.com` (from your setup email) |
+| Port | `587` |
+| Encryption | `TLS` |
+| Username | Your mySMTP username |
+| Password | Your mySMTP password |
+
+<Note>
+  Use the exact relay hostname from your setup email. `relayxx.mysmtp.com` is only an example.
+</Note>
+
+## Add mySMTP to Instantly
+
+<Steps>
+  <Step title="Open Email Accounts">
+    Sign in to [https://app.instantly.ai](https://app.instantly.ai). In the left menu, click **Email Accounts**, then click **\+ Add Email Account**.
+  </Step>
+  <Step title="Choose Custom SMTP">
+    In the provider list, scroll down and select **Other SMTP** or **Custom SMTP**.
+  </Step>
+  <Step title="Enter SMTP credentials">
+    Fill in the fields with your mySMTP details:
+
+    | Field | Value |
+    | --- | --- |
+    | SMTP Username | Your mySMTP username |
+    | SMTP Password | Your mySMTP password |
+    | SMTP Host | `relayxx.mysmtp.com` (from setup email) |
+    | SMTP Port | `587` |
+    | Encryption | `TLS` |
+    | From Name | Your name or brand |
+    | From Email | `you@yourdomain.com` (must match your SPF/DKIM domain) |
+  </Step>
+  <Step title="Send a test email">
+    Click **Send Test**. If the connection succeeds, you will see a green confirmation.
+  </Step>
+  <Step title="Save the account">
+    Click **Save & Continue**. The account is now ready for campaigns in Instantly.
+  </Step>
+</Steps>
+
+## DNS and deliverability
+
+Make sure your sending domain has the correct TXT records to reach the inbox:
+
+| Record | Value |
+| --- | --- |
+| SPF | `v=spf1 include:spf1.mysmtp.com ~all` |
+| DKIM | Set up in your [mySMTP dashboard](https://dashboard.mysmtp.com) |
+| DMARC | Start with `v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com` |
+
+<Tip>
+  Validate your DNS records with the [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) or build a DMARC record with the [DMARC Wizard](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox.
+</Tip>
+
+## Warm-up tips
+
+Before launching large campaigns, warm up the mailbox to build sender reputation:
+
+- Start with 10 to 20 emails per day.
+- Gradually increase volume over 2 to 4 weeks.
+- Mix in replies and engagement.
+
+You can also use Instantly's built-in warm-up automation if it is available on your plan.
+
+<Tip>
+  Generate a day-by-day schedule with the [Warmup Plan Generator](https://toolbox.smtp.ai/#warmup-generator) in the mySMTP Deliverability Toolbox.
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="SMTP connection fails">
+    Confirm the host matches your setup email exactly, the port is 587, and TLS is selected. If your network blocks 587, try port 2525.
+  </Accordion>
+
+  <Accordion title="Authentication error (535)">
+    Re-enter your mySMTP username and password. Make sure there are no extra spaces.
+  </Accordion>
+
+  <Accordion title="Emails land in spam">
+    Verify SPF, DKIM, and DMARC are set up for the domain in your From Email. See [DNS settings quick explainer](/getting-started/dns-settings-quick-explainer) and [Improve email deliverability](/deliverability/improve-email-deliverability).
+  </Accordion>
+</AccordionGroup>
+
+For more error codes, see [Common SMTP errors](/troubleshooting/common-smtp-errors).

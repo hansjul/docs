@@ -1,0 +1,80 @@
+---
+title: "Transactional vs marketing emails: vigtige forskelle"
+sidebarTitle: "Transactional vs marketing"
+description: "Lær forskellene mellem transaktions- og marketingemails, samt bedste praksis for SMTP-opsætning, compliance og deliverability."
+---
+
+Adskillelse af disse to streams beskytter dit afsenderomdømme og holder vigtige beskeder uden for spam-mappen.
+
+## Hvad er en transaktionsemail?
+
+En transaktionsemail udløses af en specifik brugerhandling eller et systemhændelse. Den leverer information, som modtageren forventer og har brug for.
+
+### Almindelige eksempler
+
+| Type | Eksempel på emnelinje |
+| --- | --- |
+| Ordrebekræftelse | Din ordre #12345 er modtaget |
+| Nulstilling af adgangskode | Nulstil din adgangskode nu |
+| Kontoverificering | Verificer din email-adresse |
+| Forsendelsesopdatering | Din pakke er på vej |
+| Betalingskvittering | Betaling behandlet |
+
+### Bedste praksis for transaktionsemail
+
+- **Brug en dedikeret SMTP-server eller dedikeret IP** så promotionsafsendelse ikke forsinker nulstillinger af adgangskoder eller kvitteringer.
+- **Send fra et subdomæne** som `notifications.yourdomain.com` for at isolere omdømme.
+- **Autentificer med SPF, DKIM og DMARC** for at forhindre spoofing og øge tilliden hos mailbox-udbydere.
+- **Lever inden for sekunder** fra trigger-hændelsen. Brug en højtydende relay med lav latency.
+- **Undgå promotionsindhold** i transaktionsbeskeder. Blanding af marketingsprog kan føre til placering i spam-mappen.
+
+## Hvad er en marketingemail?
+
+En marketingemail promoterer et produkt, en tjeneste eller et brand og sendes i bulk til en liste. Den kræver udtrykkeligt brugersamtykke under regler som GDPR, CAN-SPAM og CCPA.
+
+### Almindelige eksempler
+
+| Type | Eksempel på emnelinje |
+| --- | --- |
+| Nyhedsbrev | Februar-industrieindsigt |
+| Kampagne | Spar 20 % på din næste ordre |
+| Produktannoncering | Vi introducerer vores nye funktion |
+| Genengagement | Vi savner dig. Her er et særligt tilbud |
+| Eventinvitation | Deltag i vores webinar om emailsikkerhed |
+
+### Bedste praksis for marketingemail
+
+- **Send fra et separat subdomæne** som `marketing.yourdomain.com`.
+- **Inkluder et fungerende afmeldingslink** i hver besked. For masseafsendere, implementer RFC 8058 one-click-unsubscribe-headers.
+- **Brug bekræftet opt-in** så kun brugere der eksplicit tilmelder sig, modtager dine emails.
+- **Warm up din IP** før høj-volumen kampagner for at opbygge afsenderomdømme gradvist.
+- **Overvåg afsenderomdømme** med Google Postmaster Tools og hold spam-klager under 0,3 %.
+
+## Sammenligning side om side
+
+| Funktion | Transaktionsemails | Marketingemails |
+| --- | --- | --- |
+| Formål | Give konto- eller transaktionsopdateringer | Promovere produkter, tjenester eller brand |
+| Udløser | Brugerhandling eller systemhændelse | Planlagt kampagne eller automation |
+| Opt-in påkrævet | Nej (underforstået af relationen) | Ja (udtrykkeligt samtykke påkrævet) |
+| Afmeldingslink | Valgfrit | Påkrævet i hver besked |
+| Leveringshastighed | Øjeblikkelig (inden for sekunder) | Batched over minutter eller timer |
+| SMTP-opsætning | Dedikeret transaktionsrelay | Bulk-afsendelsesplatform eller marketing-IP |
+| Afsenderdomæne | `notifications.yourdomain.com` | `marketing.yourdomain.com` |
+| Promotionsindhold | Undgå | Forventet og opmuntret |
+
+## Test din autentificeringsopsætning
+
+Uanset om du sender transaktions- eller marketingemails, skal du altid verificere din autentificering før lancering.
+
+- Tjek SPF, DKIM og DMARC-poster med mySMTP [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/).
+- Kør [Sender Readiness Checklist](https://toolbox.smtp.ai/) for at gennemgå autentificering, rDNS, afmeldingsopsætning og listehåndtering.
+- Verificer dine HTML-skabeloner med [Email Template Verifier](https://toolbox.smtp.ai/) før en stor kampagne.
+- Send en testbesked til en Gmail- og Outlook-postkasse og inspicer headers.
+
+## Relaterede artikler
+
+- [DNS-opsætning til autentificering](/da/deliverability/dns-setup-for-authentication)
+- [SPF, DKIM, DMARC og BIMI forklaret](/da/deliverability/spf-dkim-dmarc-and-bimi-explained)
+- [SMTP-grænser og afsendelsesrater](/da/email-configuration/smtp-limits-and-sending-rates)
+- [CAN-SPAM og email compliance](/da/security-compliance/can-spam-and-email-compliance)

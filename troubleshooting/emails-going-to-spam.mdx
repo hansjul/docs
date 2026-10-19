@@ -1,0 +1,99 @@
+---
+title: "Why Are My Emails Going to Spam?"
+sidebarTitle: "Emails Going to Spam"
+description: "Discover why your emails land in spam folders and fix the root causes. Learn sender reputation, authentication, list quality, and content best practices for mySMTP."
+---
+
+<AccordionGroup>
+  <Accordion title="Poor sender reputation">
+    Your domain or IP address may have a low sender score due to previous spam complaints or poor engagement.
+
+    **What to do:** Check your sender reputation with [Google Postmaster Tools](https://postmaster.google.com) and third-party reputation services. If you are on a shared IP (DK only), other senders' behavior can affect your score. Consider upgrading to a [dedicated IP](/getting-started/shared-ips-or-dedicated) for full reputation control.
+  </Accordion>
+
+  <Accordion title="Missing or incorrect authentication (SPF, DKIM, DMARC)">
+    Email providers use authentication records to verify that you are authorized to send from your domain.
+
+    **What to do:** Set up [SPF, DKIM, and DMARC records](/deliverability/spf-dkim-dmarc-and-bimi-explained) for your sending domain. Use the [One-Click SPF / DKIM / DMARC Checker](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox to verify that your messages pass all checks before you send at scale.
+  </Accordion>
+
+  <Accordion title="High spam complaint rate">
+    When recipients mark your emails as spam, email providers will lower your sender score and may filter future messages.
+
+    **What to do:** Provide a clear, working unsubscribe link in every marketing email. Honor opt-out requests quickly. Use [double opt-in](/deliverability/improve-email-deliverability) so only subscribers who actively confirm receive your messages.
+  </Accordion>
+
+  <Accordion title="Poor list quality and high bounce rate">
+    Sending to invalid, inactive, or purchased addresses increases bounce rates and hurts your reputation.
+
+    **What to do:** Clean your email list regularly. Remove hard bounces immediately. Verify new addresses before adding them. Use double opt-in to confirm that recipients genuinely want your emails.
+  </Accordion>
+
+  <Accordion title="Spam trigger words and content issues">
+    Certain terms, excessive punctuation, all-caps subject lines, or misleading content can trigger spam filters. Emails with too many images and too little text may also be flagged.
+
+    **What to do:** Write balanced, honest subject lines. Avoid all caps and excessive exclamation marks. Maintain a reasonable text-to-image ratio. Test your email content with a spam checker before sending.
+  </Accordion>
+
+  <Accordion title="Sudden volume spikes">
+    Sending a large blast from a new or low-reputation domain looks suspicious to inbox providers.
+
+    **What to do:** Warm up your sending volume gradually. Follow the [IP warm-up plans](/deliverability/warm-up-plans) to build reputation over time instead of sending your full quota on day one.
+  </Accordion>
+
+  <Accordion title="Blacklisted IP or domain">
+    Your sending IP or domain may be on a blocklist due to prior spam activity or a compromised account.
+
+    **What to do:** Check blocklists with the [Blacklist Checker](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox. If you are listed, follow the provider's delisting procedure. See [Blacklist monitoring](/deliverability/blacklist-monitoring-and-delisting) for detailed steps.
+  </Accordion>
+
+  <Accordion title="Misconfigured email headers">
+    Incomplete or improperly formatted headers can cause messages to be flagged.
+
+    **What to do:** Make sure your email application or service includes valid headers, including a correct `From` address, `Message-ID`, and `Date`. For more guidance, see [Checking email logs and headers](/troubleshooting/checking-email-logs-and-headers).
+  </Accordion>
+
+  <Accordion title="Low engagement">
+    Low open rates and click-through rates signal to inbox providers that your emails are not wanted.
+
+    **What to do:** Segment your audience and send relevant content. Personalize subject lines. Remove subscribers who have not engaged for a long period.
+  </Accordion>
+
+  <Accordion title="Shared IP reputation issues">
+    On a shared IP (DK only), other customers' sending practices can affect your deliverability.
+
+    **What to do:** If you send at high volume or need full control over your reputation, switch to a [dedicated IP](/getting-started/shared-ips-or-dedicated). Shared IP plans are only available to customers in Denmark.
+  </Accordion>
+
+  <Accordion title="Poor email design">
+    Emails that are not mobile-friendly or contain broken HTML may be filtered or display incorrectly.
+
+    **What to do:** Use responsive email templates. Preview your design across different devices and clients. Avoid embedding large files or using excessive styling.
+  </Accordion>
+
+  <Accordion title="Missing or broken unsubscribe option">
+    Failing to provide a clear, working unsubscribe link increases spam complaints.
+
+    **What to do:** Include a one-click unsubscribe link that complies with RFC 8058. Make sure it is visible and processes opt-outs promptly.
+  </Accordion>
+
+  <Accordion title="Excessive use of attachments">
+    Sending large or unexpected attachments can trigger spam filters and increase bounces.
+
+    **What to do:** Keep attachments small. Use cloud storage links instead of attaching large files. See [Email attachment size limits](/troubleshooting/email-attachments-size) for exact mySMTP limits.
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+  Run the [Sender Readiness Checklist](https://toolbox.smtp.ai/) in the mySMTP Deliverability Toolbox before your next campaign. It checks authentication, rDNS, unsubscribe setup and list hygiene in one pass.
+</Tip>
+
+## Improve your deliverability
+
+| Action | How to start |
+| --- | --- |
+| Authenticate your domain | [SPF, DKIM, DMARC and BIMI explained](/deliverability/spf-dkim-dmarc-and-bimi-explained) |
+| Warm up a new IP | [Warm-up plans](/deliverability/warm-up-plans) |
+| Clean your list and remove bounces | [Handling bounces and complaints](/deliverability/handling-bounces-and-complaints) |
+| Monitor reputation and blocklists | [Blacklist monitoring and delisting](/deliverability/blacklist-monitoring-and-delisting) |
+| Check logs and headers for errors | [Checking email logs and headers](/troubleshooting/checking-email-logs-and-headers) |
